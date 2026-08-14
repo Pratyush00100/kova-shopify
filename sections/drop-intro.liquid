@@ -1,0 +1,212 @@
+<section
+  class="drop-intro full-width"
+  {% if section.settings.anchor_id != blank %}
+    id="{{ section.settings.anchor_id | handle }}"
+  {% endif %}
+>
+  <div class="drop-intro__inner">
+    <div class="drop-intro__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="drop-intro__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="drop-intro__title">{{ section.settings.title | escape }}</h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="drop-intro__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a
+          class="drop-intro__cta"
+          href="{{ section.settings.button_link | default: '#shop' }}"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="drop-intro__media">
+      {% if section.settings.image != blank %}
+        {{
+          section.settings.image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'drop-intro__image',
+            widths: '600, 900, 1200, 1500, 1800',
+            sizes: '(min-width: 900px) 55vw, 100vw',
+            loading: 'lazy'
+        }}
+      {% else %}
+        <div class="drop-intro__placeholder" role="img" aria-label="{{ 'accessibility.image_placeholder' | t }}">
+          <span>{{ section.settings.placeholder_label | escape }}</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .drop-intro {
+    padding-block: clamp(4rem, 10vw, 7.5rem);
+  }
+
+  .drop-intro__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+  }
+
+  .drop-intro__copy {
+    display: grid;
+    align-content: start;
+    gap: 1.25rem;
+    max-width: 32rem;
+    padding-top: 0.5rem;
+  }
+
+  .drop-intro__eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+
+  .drop-intro__title {
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .drop-intro__description {
+    color: var(--color-foreground-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 34ch;
+  }
+
+  .drop-intro__description p {
+    margin: 0;
+  }
+
+  .drop-intro__cta {
+    justify-self: start;
+    margin-top: 0.5rem;
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.2rem;
+  }
+
+  .drop-intro__media {
+    min-height: clamp(22rem, 55vw, 40rem);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .drop-intro__image {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
+  }
+
+  .drop-intro__placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    border: 1px solid var(--color-border);
+    background:
+      linear-gradient(135deg, var(--color-surface) 0%, color-mix(in srgb, var(--color-foreground) 8%, var(--color-background)) 100%);
+    color: var(--color-foreground-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .drop-intro__inner {
+      grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
+      align-items: stretch;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.drop_intro",
+  "tag": "div",
+  "class": "section-drop-intro",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "t:labels.anchor_id",
+      "default": "drop"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "DROP 001"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "VELOCITY"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "<p>Laser-cut metal wall art engineered for presence. Limited run. Built to hold the wall.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "VIEW THE DROP"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:labels.button_link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_label",
+      "label": "t:labels.placeholder_label",
+      "default": "Drop imagery"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.drop_intro"
+    }
+  ]
+}
+{% endschema %}

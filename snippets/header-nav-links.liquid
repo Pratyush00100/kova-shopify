@@ -1,0 +1,45 @@
+{% doc %}
+  Renders header navigation links from a menu or fallback settings.
+
+  @param {object} section - The header section object
+{% enddoc %}
+
+{% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
+  {% for link in section.settings.menu.links %}
+    <a
+      class="header__nav-link"
+      href="{{ link.url }}"
+      {% if link.current %}
+        aria-current="page"
+      {% endif %}
+    >
+      {{ link.title | escape }}
+    </a>
+  {% endfor %}
+{% else %}
+  {% if section.settings.link_1_label != blank %}
+    <a class="header__nav-link" href="{{ section.settings.link_1_url | default: '#drop' }}">
+      {{ section.settings.link_1_label | escape }}
+    </a>
+  {% endif %}
+  {% if section.settings.link_2_label != blank %}
+    <a class="header__nav-link" href="{{ section.settings.link_2_url | default: '#shop' }}">
+      {{ section.settings.link_2_label | escape }}
+    </a>
+  {% endif %}
+  {% if section.settings.link_3_label != blank %}
+    <a class="header__nav-link" href="{{ section.settings.link_3_url | default: '#build' }}">
+      {{ section.settings.link_3_label | escape }}
+    </a>
+  {% endif %}
+  {% if section.settings.link_4_label != blank %}
+    <a class="header__nav-link" href="{{ section.settings.link_4_url | default: '#manifesto' }}">
+      {{ section.settings.link_4_label | escape }}
+    </a>
+  {% endif %}
+  {% if section.settings.link_5_label != blank %}
+    <a class="header__nav-link" href="{{ section.settings.link_5_url | default: '#notify' }}">
+      {{ section.settings.link_5_label | escape }}
+    </a>
+  {% endif %}
+{% endif %}

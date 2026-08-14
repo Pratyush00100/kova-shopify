@@ -14,8 +14,14 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "brand_label": "KOVA",
+        "link_1_label": "DROP",
+        "link_2_label": "SHOP",
+        "link_3_label": "BUILD",
+        "link_4_label": "MANIFESTO",
+        "instagram_label": "INSTAGRAM",
+        "copyright_text": "KOVA",
+        "show_payment_icons": false
       }
     }
   },

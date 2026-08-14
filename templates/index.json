@@ -9,12 +9,41 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "anchor_id": "top",
+        "brand_text": "KOVA",
+        "heading": "DROP 001 — VELOCITY",
+        "subheading": "LIVE NOW",
+        "button_label": "EXPLORE DROP 001",
+        "button_link": "#drop"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "text": "KOVA • DROP 001 • VELOCITY • LIMITED RUN • KOVA",
+        "accessibility_label": "Announcement",
+        "reduce_motion": false
+      }
+    },
+    "drop_intro": {
+      "type": "drop-intro",
+      "settings": {
+        "anchor_id": "drop",
+        "eyebrow": "DROP 001",
+        "title": "VELOCITY",
+        "description": "<p>Laser-cut metal wall art engineered for presence. Limited run. Built to hold the wall.</p>",
+        "button_label": "VIEW THE DROP",
+        "button_link": "#shop",
+        "placeholder_label": "Drop imagery"
+      }
     }
   },
   "order": [
-    "main"
+    "hero",
+    "marquee",
+    "drop_intro"
   ]
 }

@@ -4,6 +4,14 @@
     "not_found": "Page not found.",
     "back_to_shopping": "Back to shopping"
   },
+  "accessibility": {
+    "cart_count": "{{ count }} items in cart",
+    "footer_navigation": "Footer",
+    "image_placeholder": "Image placeholder",
+    "main_navigation": "Primary",
+    "mobile_navigation": "Mobile",
+    "skip_to_content": "Skip to content"
+  },
   "blog": {
     "article_comments": "Comments",
     "article_metadata_html": "{{ date }} by {{ author }}",

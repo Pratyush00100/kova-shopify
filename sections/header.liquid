@@ -1,70 +1,343 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+<a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
+<header class="header full-width">
+  <div class="header__inner">
+    <a class="header__wordmark" href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 240
+          | image_tag:
+            class: 'header__logo',
+            alt: shop.name,
+            widths: '120, 180, 240',
+            sizes: '120px'
+        }}
+      {% else %}
+        <span class="header__wordmark-text">{{ section.settings.wordmark | escape }}</span>
       {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
+
+    <nav class="header__nav header__nav--desktop" aria-label="{{ 'accessibility.main_navigation' | t }}">
+      {% render 'header-nav-links', section: section %}
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__cart" href="{{ routes.cart_url }}">
+        <span>{{ section.settings.cart_label | escape }}</span>
+        {% if cart.item_count > 0 %}
+          <sup aria-hidden="true">{{ cart.item_count }}</sup>
+          <span class="visually-hidden">{{ 'accessibility.cart_count' | t: count: cart.item_count }}</span>
+        {% endif %}
+      </a>
+
+      <details class="header__menu-drawer">
+        <summary class="header__menu-toggle">
+          <span class="header__menu-toggle-label header__menu-toggle-label--open">
+            {{ section.settings.menu_label | escape }}
+          </span>
+          <span class="header__menu-toggle-label header__menu-toggle-label--close">
+            {{ section.settings.menu_close_label | escape }}
+          </span>
+        </summary>
+
+        <nav class="header__nav header__nav--mobile" aria-label="{{ 'accessibility.mobile_navigation' | t }}">
+          {% render 'header-nav-links', section: section %}
+          <a class="header__mobile-cart" href="{{ routes.cart_url }}">
+            {{ section.settings.cart_label | escape }}
+            {% if cart.item_count > 0 %}
+              <sup>{{ cart.item_count }}</sup>
+            {% endif %}
+          </a>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .section-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
-  header a {
+
+  .header {
     position: relative;
+    min-height: var(--header-height);
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-background) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .header__inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: var(--header-height);
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+  }
+
+  .header__wordmark {
     text-decoration: none;
     color: var(--color-foreground);
+    line-height: 1;
+  }
+
+  .header__wordmark-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .header__logo {
+    display: block;
+    width: auto;
+    height: 1.25rem;
+  }
+
+  .header__nav {
     display: flex;
     align-items: center;
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  .header__nav--desktop {
     justify-content: center;
   }
-  header a sup {
+
+  .header__nav-link,
+  .header__cart,
+  .header__mobile-cart,
+  .header__menu-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .header__nav-link::after,
+  .header__cart::after {
+    content: '';
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+    left: 0;
+    bottom: 0.1rem;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-out);
   }
-  header svg {
-    width: 2rem;
+
+  .header__nav-link:hover::after,
+  .header__nav-link:focus-visible::after,
+  .header__cart:hover::after,
+  .header__cart:focus-visible::after {
+    transform: scaleX(1);
   }
-  header .header__menu,
-  header .header__icons {
+
+  .header__actions {
     display: flex;
+    align-items: center;
     gap: 1rem;
+    justify-self: end;
+  }
+
+  .header__cart sup,
+  .header__mobile-cart sup {
+    font-size: 0.65rem;
+    letter-spacing: 0;
+  }
+
+  .header__menu-drawer {
+    display: none;
+    position: static;
+  }
+
+  .header__menu-drawer > summary {
+    list-style: none;
+  }
+
+  .header__menu-drawer > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .header__menu-toggle-label--close {
+    display: none;
+  }
+
+  .header__menu-drawer[open] .header__menu-toggle-label--open {
+    display: none;
+  }
+
+  .header__menu-drawer[open] .header__menu-toggle-label--close {
+    display: inline;
+  }
+
+  .header__nav--mobile {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 1.25rem var(--page-margin) 1.75rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-background);
+  }
+
+  .header__nav--mobile .header__nav-link,
+  .header__mobile-cart {
+    width: 100%;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.85rem;
+  }
+
+  .header__nav--mobile .header__nav-link::after {
+    display: none;
+  }
+
+  @media (max-width: 899px) {
+    .header__inner {
+      grid-template-columns: 1fr auto;
+    }
+
+    .header__nav--desktop,
+    .header__cart {
+      display: none;
+    }
+
+    .header__menu-drawer {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header__nav-link::after,
+    .header__cart::after,
+    .skip-link {
+      transition: none;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.header",
+  "class": "section-header",
   "settings": [
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "t:labels.wordmark",
+      "default": "KOVA"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo"
+    },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "t:labels.menu",
+      "info": "t:info.header_menu"
+    },
+    {
+      "type": "header",
+      "content": "t:general.fallback_navigation"
+    },
+    {
+      "type": "text",
+      "id": "link_1_label",
+      "label": "t:labels.link_1_label",
+      "default": "DROP"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "t:labels.link_1_url"
+    },
+    {
+      "type": "text",
+      "id": "link_2_label",
+      "label": "t:labels.link_2_label",
+      "default": "SHOP"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "t:labels.link_2_url"
+    },
+    {
+      "type": "text",
+      "id": "link_3_label",
+      "label": "t:labels.link_3_label",
+      "default": "BUILD"
+    },
+    {
+      "type": "url",
+      "id": "link_3_url",
+      "label": "t:labels.link_3_url"
+    },
+    {
+      "type": "text",
+      "id": "link_4_label",
+      "label": "t:labels.link_4_label",
+      "default": "MANIFESTO"
+    },
+    {
+      "type": "url",
+      "id": "link_4_url",
+      "label": "t:labels.link_4_url"
+    },
+    {
+      "type": "text",
+      "id": "link_5_label",
+      "label": "t:labels.link_5_label",
+      "default": "NOTIFY"
+    },
+    {
+      "type": "url",
+      "id": "link_5_url",
+      "label": "t:labels.link_5_url"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "t:labels.cart_label",
+      "default": "CART"
+    },
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "t:labels.menu_label",
+      "default": "MENU"
+    },
+    {
+      "type": "text",
+      "id": "menu_close_label",
+      "label": "t:labels.menu_close_label",
+      "default": "CLOSE"
     },
     {
       "type": "link_list",

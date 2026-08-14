@@ -13,6 +13,11 @@
     --page-margin: {{ settings.min_page_margin }}px;
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
+    --color-foreground-muted: color-mix(in srgb, {{ settings.foreground_color }} 58%, {{ settings.background_color }});
+    --color-border: color-mix(in srgb, {{ settings.foreground_color }} 12%, {{ settings.background_color }});
+    --color-surface: color-mix(in srgb, {{ settings.foreground_color }} 4%, {{ settings.background_color }});
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --header-height: 4.25rem;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   }
 {% endstyle %}

@@ -1,0 +1,248 @@
+<section
+  class="hero full-width"
+  {% if section.settings.anchor_id != blank %}
+    id="{{ section.settings.anchor_id | handle }}"
+  {% endif %}
+>
+  {% if section.settings.image != blank %}
+    <div class="hero__media" aria-hidden="true">
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'hero__image',
+          widths: '750, 1100, 1500, 1800, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high'
+      }}
+      <div class="hero__scrim"></div>
+    </div>
+  {% endif %}
+
+  <div class="hero__content{% if section.settings.image != blank %} hero__content--over-media{% endif %}">
+    <p class="hero__brand" aria-hidden="true">{{ section.settings.brand_text | escape }}</p>
+
+    <div class="hero__copy">
+      {% if section.settings.heading != blank %}
+        <h1 class="hero__heading">{{ section.settings.heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="hero__subheading">{{ section.settings.subheading | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a
+          class="hero__cta"
+          href="{{ section.settings.button_link | default: '#drop' }}"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+    isolation: isolate;
+    min-height: min(92svh, 58rem);
+    display: grid;
+    align-items: stretch;
+    overflow: hidden;
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .hero:not(:has(.hero__media)) {
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--color-foreground) 96%, #3a3a3a) 0%,
+        var(--color-foreground) 48%,
+        color-mix(in srgb, var(--color-foreground) 88%, #5a5a5a) 100%
+      );
+  }
+
+  .hero__media,
+  .hero__content {
+    grid-area: 1 / 1;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        115deg,
+        rgb(0 0 0 / 78%) 8%,
+        rgb(0 0 0 / 42%) 48%,
+        rgb(0 0 0 / 28%) 100%
+      );
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 10vh, 7rem) var(--page-margin) clamp(3rem, 8vh, 5rem);
+    animation: hero-rise 0.9s var(--ease-out) both;
+  }
+
+  .hero__brand {
+    margin: 0;
+    font-size: clamp(4.5rem, 18vw, 14rem);
+    font-weight: 700;
+    line-height: 0.82;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 1rem;
+    max-width: 34rem;
+  }
+
+  .hero__heading {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+
+  .hero__subheading {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-background) 72%, transparent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .hero__cta {
+    justify-self: start;
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.85rem;
+    padding: 0.85rem 1.35rem;
+    border: 1px solid color-mix(in srgb, var(--color-background) 70%, transparent);
+    color: var(--color-background);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s var(--ease-out),
+      color 0.3s var(--ease-out),
+      border-color 0.3s var(--ease-out);
+  }
+
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    border-color: var(--color-background);
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__content {
+      animation: none;
+    }
+
+    .hero__cta {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.hero",
+  "tag": "div",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "t:labels.anchor_id",
+      "default": "top"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "t:labels.brand_text",
+      "default": "KOVA"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "DROP 001 — VELOCITY"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "LIVE NOW"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "EXPLORE DROP 001"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:labels.button_link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.hero_image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.hero"
+    }
+  ]
+}
+{% endschema %}

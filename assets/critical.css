@@ -13,6 +13,11 @@ body {
   min-height: 100svh;
 }
 
+#MainContent {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
 html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
@@ -74,8 +79,56 @@ p:empty {
 /** Theme styles below */
 body {
   font-family: var(--font-primary--family);
+  font-style: var(--font-primary--style);
+  font-weight: var(--font-primary--weight);
   background-color: var(--color-background);
   color: var(--color-foreground);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+summary {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: var(--page-margin);
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  text-decoration: none;
+  transform: translateY(-120%);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0.75rem);
 }
 
 /** Section layout utilities */

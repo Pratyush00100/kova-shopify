@@ -131,6 +131,126 @@ summary {
   transform: translateY(0.75rem);
 }
 
+/** KOVA shared utilities */
+
+.page-inner {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+.section-pad {
+  padding-block: clamp(3.5rem, 9vw, 7rem);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-foreground-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.display-title {
+  margin: 0;
+  font-size: clamp(2.75rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.rte {
+  color: var(--color-foreground-muted);
+  line-height: 1.7;
+}
+
+.rte > * + * {
+  margin-top: 1rem;
+}
+
+.rte a {
+  color: var(--color-foreground);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.9rem 1.5rem;
+  border: 1px solid var(--color-foreground);
+  background: var(--color-foreground);
+  color: var(--color-background);
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: transparent;
+  color: var(--color-foreground);
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-foreground);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.link-underline {
+  display: inline-block;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid currentcolor;
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.media-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface);
+  fill: color-mix(in srgb, var(--color-foreground) 22%, var(--color-background));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+
 /** Section layout utilities */
 
 /**

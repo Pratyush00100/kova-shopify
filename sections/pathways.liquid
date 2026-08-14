@@ -1,0 +1,193 @@
+{% comment %}
+  Editorial entry points that route visitors from the homepage into the
+  dedicated BUILD, MANIFESTO and DROP pages. Each pathway is a block.
+{% endcomment %}
+
+<section class="pathways full-width section-pad">
+  <div class="pathways__inner page-inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="section-title">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    <ul class="pathways__list" role="list">
+      {% for block in section.blocks %}
+        <li class="pathways__item" {{ block.shopify_attributes }}>
+          <a class="pathways__link" href="{{ block.settings.link | default: '#' }}">
+            <span class="pathways__index" aria-hidden="true">
+              {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+            </span>
+
+            <span class="pathways__body">
+              <span class="pathways__title">{{ block.settings.title | escape }}</span>
+
+              {% if block.settings.description != blank %}
+                <span class="pathways__description">{{ block.settings.description | escape }}</span>
+              {% endif %}
+            </span>
+
+            <span class="pathways__arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pathways {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pathways__inner {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .pathways__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pathways__item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .pathways__link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(1rem, 4vw, 3rem);
+    padding-block: clamp(1.25rem, 3vw, 2rem);
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: padding-inline 0.4s var(--ease-out);
+  }
+
+  .pathways__link:hover,
+  .pathways__link:focus-visible {
+    padding-inline: 0.75rem;
+  }
+
+  .pathways__index {
+    color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .pathways__body {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .pathways__title {
+    font-size: clamp(1.5rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .pathways__description {
+    color: var(--color-foreground-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    max-width: 46ch;
+  }
+
+  .pathways__arrow {
+    font-size: 1.25rem;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .pathways__link:hover .pathways__arrow,
+  .pathways__link:focus-visible .pathways__arrow {
+    transform: translateX(0.4rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pathways__link,
+    .pathways__arrow {
+      transition: none;
+    }
+
+    .pathways__link:hover {
+      padding-inline: 0;
+    }
+
+    .pathways__link:hover .pathways__arrow {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.pathways",
+  "tag": "div",
+  "class": "section-pathways",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "INSIDE KOVA"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pathway",
+      "name": "t:general.pathway",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.title",
+          "default": "BUILD"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "t:labels.description",
+          "default": "How each piece is drawn, cut and finished."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:labels.link_url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.pathways",
+      "blocks": [
+        {
+          "type": "pathway",
+          "settings": {
+            "title": "DROP 001",
+            "description": "Velocity. A limited run of laser-cut steel wall pieces."
+          }
+        },
+        {
+          "type": "pathway",
+          "settings": {
+            "title": "BUILD",
+            "description": "How each piece is drawn, cut and finished."
+          }
+        },
+        {
+          "type": "pathway",
+          "settings": {
+            "title": "MANIFESTO",
+            "description": "What we make, and why we make it this way."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

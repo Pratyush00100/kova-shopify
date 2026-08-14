@@ -9,12 +9,24 @@
  */
 {
   "sections": {
+    "banner": {
+      "type": "collection-banner",
+      "settings": {
+        "eyebrow": "KOVA",
+        "show_image": true
+      }
+    },
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "columns": 3,
+        "products_per_page": 12,
+        "show_price": true
+      }
     }
   },
   "order": [
+    "banner",
     "main"
   ]
 }

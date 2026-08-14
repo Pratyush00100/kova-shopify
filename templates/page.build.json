@@ -1,0 +1,88 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "page-hero",
+      "settings": {
+        "eyebrow": "BUILD",
+        "heading": "HOW KOVA IS MADE",
+        "description": "<p>Placeholder copy. Every KOVA piece is drawn as a vector, cut from sheet steel and finished by hand in a small run.</p>",
+        "show_image": true
+      }
+    },
+    "process": {
+      "type": "process-steps",
+      "blocks": {
+        "draw": {
+          "type": "step",
+          "settings": {
+            "title": "DRAW",
+            "description": "<p>Every form starts as a vector drawing, tuned until the negative space carries the weight.</p>"
+          }
+        },
+        "cut": {
+          "type": "step",
+          "settings": {
+            "title": "CUT",
+            "description": "<p>Sheet steel is laser-cut to a fine kerf so edges stay crisp at close range.</p>"
+          }
+        },
+        "finish": {
+          "type": "step",
+          "settings": {
+            "title": "FINISH",
+            "description": "<p>Pieces are deburred, then powder-coated in a matte finish built to resist marks.</p>"
+          }
+        },
+        "ship": {
+          "type": "step",
+          "settings": {
+            "title": "SHIP",
+            "description": "<p>Each piece is packed flat with its mounting hardware and a numbered drop card.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "draw",
+        "cut",
+        "finish",
+        "ship"
+      ],
+      "settings": {
+        "eyebrow": "PROCESS",
+        "heading": "FROM DRAWING TO WALL"
+      }
+    },
+    "page_content": {
+      "type": "page",
+      "settings": {
+        "show_title": false
+      }
+    },
+    "notify": {
+      "type": "notify",
+      "settings": {
+        "anchor_id": "notify",
+        "eyebrow": "NOTIFY",
+        "heading": "BE FIRST ON DROP 002",
+        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
+        "button_label": "NOTIFY ME",
+        "customer_tag": "drop-notify"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "process",
+    "page_content",
+    "notify"
+  ]
+}

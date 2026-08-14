@@ -1,0 +1,204 @@
+{% comment %}
+  Numbered process steps used on the BUILD page. Each step is a block so the
+  merchant can add, remove and reorder stages from the theme editor.
+{% endcomment %}
+
+<section class="process full-width section-pad">
+  <div class="process__inner page-inner">
+    <header class="process__header">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="section-title process__heading">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+    </header>
+
+    <ol class="process__list">
+      {% for block in section.blocks %}
+        <li class="process__step" {{ block.shopify_attributes }}>
+          <p class="process__number" aria-hidden="true">
+            {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+          </p>
+
+          <div class="process__media">
+            {% if block.settings.image != blank %}
+              {{
+                block.settings.image
+                | image_url: width: 1000
+                | image_tag:
+                  class: 'process__image',
+                  widths: '400, 600, 800, 1000',
+                  sizes: '(min-width: 900px) 30vw, 88vw',
+                  loading: 'lazy'
+              }}
+            {% else %}
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'media-placeholder' }}
+            {% endif %}
+          </div>
+
+          <h3 class="process__title">{{ block.settings.title | escape }}</h3>
+
+          {% if block.settings.description != blank %}
+            <div class="rte process__description">{{ block.settings.description }}</div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{% stylesheet %}
+  .process__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .process__heading {
+    margin-top: 0.6rem;
+  }
+
+  .process__list {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process__step {
+    display: grid;
+    gap: 0.85rem;
+    align-content: start;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .process__number {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .process__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .process__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .process__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .process__description {
+    font-size: 0.92rem;
+  }
+
+  @media (min-width: 750px) {
+    .process__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .process__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.process_steps",
+  "tag": "div",
+  "class": "section-process",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "PROCESS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "FROM DRAWING TO WALL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "t:general.step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.title",
+          "default": "DRAW"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:labels.description",
+          "default": "<p>Every form starts as a vector drawing, tuned until the negative space carries the weight.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.process_steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "DRAW",
+            "description": "<p>Every form starts as a vector drawing, tuned until the negative space carries the weight.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "CUT",
+            "description": "<p>Sheet steel is laser-cut to a fine kerf so edges stay crisp at close range.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "FINISH",
+            "description": "<p>Pieces are deburred, then powder-coated in a matte finish built to resist marks.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "SHIP",
+            "description": "<p>Each piece is packed flat with its mounting hardware and a numbered drop card.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

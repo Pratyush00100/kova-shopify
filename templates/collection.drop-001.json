@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "collection-banner",
+      "settings": {
+        "eyebrow": "DROP 001",
+        "heading": "VELOCITY",
+        "description": "<p>Placeholder copy for the first KOVA release. Laser-cut steel, finished by hand, produced in a limited run.</p>",
+        "show_image": true
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "text": "DROP 001 • VELOCITY • LIMITED RUN • KOVA",
+        "accessibility_label": "Drop announcement",
+        "reduce_motion": false
+      }
+    },
+    "main": {
+      "type": "collection",
+      "settings": {
+        "columns": 3,
+        "products_per_page": 12,
+        "show_price": true
+      }
+    },
+    "notify": {
+      "type": "notify",
+      "settings": {
+        "anchor_id": "notify",
+        "eyebrow": "NOTIFY",
+        "heading": "BE FIRST ON DROP 002",
+        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
+        "button_label": "NOTIFY ME",
+        "customer_tag": "drop-notify"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "marquee",
+    "main",
+    "notify"
+  ]
+}

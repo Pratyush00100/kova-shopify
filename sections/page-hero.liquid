@@ -1,0 +1,132 @@
+{% comment %}
+  Reusable editorial page header. Used by the BUILD and MANIFESTO pages, and
+  available for any other page template. Falls back to the page title so the
+  section stays useful when a merchant leaves the heading empty.
+{% endcomment %}
+
+{% liquid
+  assign hero_heading = section.settings.heading
+  if hero_heading == blank
+    assign hero_heading = page.title
+  endif
+%}
+
+<section class="page-hero full-width">
+  <div class="page-hero__inner page-inner">
+    <div class="page-hero__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if hero_heading != blank %}
+        <h1 class="display-title">{{ hero_heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="rte page-hero__description">{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_image %}
+      <div class="page-hero__media">
+        {% if section.settings.image != blank %}
+          {{
+            section.settings.image
+            | image_url: width: 1600
+            | image_tag:
+              class: 'page-hero__image',
+              widths: '600, 900, 1200, 1600',
+              sizes: '(min-width: 900px) 45vw, 100vw',
+              loading: 'eager'
+          }}
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'media-placeholder' }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .page-hero {
+    padding-block: clamp(3rem, 8vw, 6rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: end;
+  }
+
+  .page-hero__copy {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46ch;
+  }
+
+  .page-hero__description {
+    font-size: 1rem;
+  }
+
+  .page-hero__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .page-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 900px) {
+    .page-hero__inner:has(.page-hero__media) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.page_hero",
+  "tag": "div",
+  "class": "section-page-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "info": "t:info.heading_fallback"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "t:labels.show_image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.page_hero"
+    }
+  ]
+}
+{% endschema %}

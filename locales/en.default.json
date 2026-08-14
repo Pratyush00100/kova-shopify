@@ -5,11 +5,13 @@
     "back_to_shopping": "Back to shopping"
   },
   "accessibility": {
+    "breadcrumb": "Breadcrumb",
     "cart_count": "{{ count }} items in cart",
     "footer_navigation": "Footer",
     "image_placeholder": "Image placeholder",
     "main_navigation": "Primary",
     "mobile_navigation": "Mobile",
+    "pagination": "Pagination",
     "skip_to_content": "Skip to content"
   },
   "blog": {
@@ -23,9 +25,18 @@
   },
   "cart": {
     "checkout": "Checkout",
+    "continue_shopping": "Continue shopping",
+    "empty": "Your cart is empty",
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "quantity": "Quantity",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "taxes_note": "Taxes and shipping calculated at checkout.",
     "title": "Cart",
-    "update": "Update",
-    "remove": "Remove"
+    "update": "Update"
   },
   "customers": {
     "login": {
@@ -36,7 +47,13 @@
     }
   },
   "collections": {
-    "title": "Collections"
+    "empty": "No pieces in this drop yet",
+    "product_count": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    },
+    "title": "Collections",
+    "view_all": "View all"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -45,10 +62,23 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "newsletter": {
+    "email_label": "Email address",
+    "email_placeholder": "Email address",
+    "success": "You're on the list."
+  },
   "password": {
     "title": "This shop is private",
     "password": "Password",
     "enter": "Enter"
+  },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "coming_soon": "Coming soon",
+    "quantity": "Quantity",
+    "sale_price": "Sale price",
+    "sold_out": "Sold out",
+    "variant": "Variant"
   },
   "search": {
     "title": "Search",

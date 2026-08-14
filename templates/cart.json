@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "cart",
-      "settings": {}
+      "settings": {
+        "heading": "CART"
+      }
     }
   },
   "order": [

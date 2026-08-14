@@ -16,9 +16,13 @@
       "settings": {
         "brand_label": "KOVA",
         "link_1_label": "DROP",
+        "link_1_url": "/collections/drop-001",
         "link_2_label": "SHOP",
+        "link_2_url": "/collections/all",
         "link_3_label": "BUILD",
+        "link_3_url": "/pages/build",
         "link_4_label": "MANIFESTO",
+        "link_4_url": "/pages/manifesto",
         "instagram_label": "INSTAGRAM",
         "copyright_text": "KOVA",
         "show_payment_icons": false

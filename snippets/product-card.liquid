@@ -1,0 +1,137 @@
+{% doc %}
+  Renders a KOVA product card linking to the product page.
+
+  Falls back to a Shopify placeholder illustration when the product has no image,
+  so the grid stays intact before final photography is available.
+
+  @param {object} product - The product to render
+  @param {string} [placeholder] - Placeholder SVG name used when the product has no image
+  @param {boolean} [show_price] - Whether the price is displayed. Defaults to true
+
+  @example
+  {% render 'product-card', product: product %}
+  {% render 'product-card', product: product, placeholder: 'product-2', show_price: false %}
+{% enddoc %}
+
+{% liquid
+  assign placeholder_name = placeholder | default: 'product-1'
+  if show_price == nil
+    assign show_price = true
+  endif
+%}
+
+<a class="product-card" href="{{ product.url }}">
+  <div class="product-card__media">
+    {% if product.featured_image %}
+      {{
+        product.featured_image
+        | image_url: width: 1400
+        | image_tag:
+          class: 'product-card__image',
+          widths: '300, 500, 700, 900, 1200, 1400',
+          sizes: '(min-width: 900px) 32vw, 88vw',
+          loading: 'lazy'
+      }}
+    {% else %}
+      {{ placeholder_name | placeholder_svg_tag: 'media-placeholder product-card__placeholder' }}
+    {% endif %}
+
+    {% unless product.available %}
+      <span class="product-card__badge">{{ 'products.sold_out' | t }}</span>
+    {% endunless %}
+  </div>
+
+  <div class="product-card__info">
+    <h3 class="product-card__title">{{ product.title | escape }}</h3>
+
+    {% if show_price %}
+      <p class="product-card__price">
+        {% if product.compare_at_price > product.price %}
+          <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+          {{ product.price | money }}
+          <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
+        {% else %}
+          {{ product.price | money }}
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+</a>
+
+{% stylesheet %}
+  .product-card {
+    display: grid;
+    gap: 0.9rem;
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+
+  .product-card__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .product-card:hover .product-card__image,
+  .product-card:focus-visible .product-card__image {
+    transform: scale(1.03);
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .product-card__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .product-card__title {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .product-card__price {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .product-card__price-compare {
+    color: var(--color-foreground-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-card__image {
+      transition: none;
+    }
+
+    .product-card:hover .product-card__image {
+      transform: none;
+    }
+  }
+{% endstylesheet %}

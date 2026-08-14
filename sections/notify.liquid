@@ -1,0 +1,195 @@
+{% comment %}
+  Drop notification signup. Uses Shopify's built-in customer form so no
+  additional app or dependency is required.
+{% endcomment %}
+
+<section
+  class="notify full-width section-pad"
+  {% if section.settings.anchor_id != blank %}
+    id="{{ section.settings.anchor_id | handle }}"
+  {% endif %}
+>
+  <div class="notify__inner page-inner">
+    <div class="notify__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow notify__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="section-title">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="rte notify__description">{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+
+    <div class="notify__form-wrapper">
+      {% form 'customer', class: 'notify__form' %}
+        {% if form.posted_successfully? %}
+          <p class="notify__message" role="status">{{ 'newsletter.success' | t }}</p>
+        {% else %}
+          <input type="hidden" name="contact[tags]" value="{{ section.settings.customer_tag | escape }}">
+
+          <label class="visually-hidden" for="NotifyEmail-{{ section.id }}">
+            {{ 'newsletter.email_label' | t }}
+          </label>
+
+          <div class="notify__field">
+            <input
+              id="NotifyEmail-{{ section.id }}"
+              class="notify__input"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="{{ 'newsletter.email_placeholder' | t }}"
+              autocomplete="email"
+              required
+            >
+
+            <button class="btn notify__submit" type="submit">
+              {{ section.settings.button_label | escape }}
+            </button>
+          </div>
+
+          {% if form.errors %}
+            <p class="notify__message notify__message--error" role="alert">
+              {{ form.errors.messages['email'] }}
+            </p>
+          {% endif %}
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .notify {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .notify__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .notify__copy {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 40ch;
+  }
+
+  .notify__eyebrow,
+  .notify__description {
+    color: color-mix(in srgb, var(--color-background) 65%, transparent);
+  }
+
+  .notify__field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    max-width: 34rem;
+  }
+
+  .notify__input {
+    flex: 1 1 16rem;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-background) 45%, transparent);
+    background: transparent;
+    color: var(--color-background);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+  }
+
+  .notify__input::placeholder {
+    color: color-mix(in srgb, var(--color-background) 55%, transparent);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+  }
+
+  .notify__submit {
+    border-color: var(--color-background);
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .notify__submit:hover,
+  .notify__submit:focus-visible {
+    background: transparent;
+    color: var(--color-background);
+  }
+
+  .notify__message {
+    margin: 1rem 0 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .notify__message--error {
+    color: #ff8f7a;
+  }
+
+  @media (min-width: 900px) {
+    .notify__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.notify",
+  "tag": "div",
+  "class": "section-notify",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "t:labels.anchor_id",
+      "default": "notify"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "NOTIFY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "BE FIRST ON DROP 002"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "NOTIFY ME"
+    },
+    {
+      "type": "text",
+      "id": "customer_tag",
+      "label": "t:labels.customer_tag",
+      "default": "drop-notify",
+      "info": "t:info.customer_tag"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.notify"
+    }
+  ]
+}
+{% endschema %}

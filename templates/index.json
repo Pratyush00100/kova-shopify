@@ -17,7 +17,7 @@
         "heading": "DROP 001 — VELOCITY",
         "subheading": "LIVE NOW",
         "button_label": "EXPLORE DROP 001",
-        "button_link": "#drop"
+        "button_link": "/collections/drop-001"
       }
     },
     "marquee": {
@@ -36,14 +36,76 @@
         "title": "VELOCITY",
         "description": "<p>Laser-cut metal wall art engineered for presence. Limited run. Built to hold the wall.</p>",
         "button_label": "VIEW THE DROP",
-        "button_link": "#shop",
+        "button_link": "/collections/drop-001",
         "placeholder_label": "Drop imagery"
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "DROP 001",
+        "heading": "SELECTED PIECES",
+        "products_to_show": 3,
+        "columns": 3,
+        "link_label": "VIEW ALL",
+        "link_url": "/collections/drop-001"
+      }
+    },
+    "pathways": {
+      "type": "pathways",
+      "blocks": {
+        "drop": {
+          "type": "pathway",
+          "settings": {
+            "title": "DROP 001",
+            "description": "Velocity. A limited run of laser-cut steel wall pieces.",
+            "link": "/collections/drop-001"
+          }
+        },
+        "build": {
+          "type": "pathway",
+          "settings": {
+            "title": "BUILD",
+            "description": "How each piece is drawn, cut and finished.",
+            "link": "/pages/build"
+          }
+        },
+        "manifesto": {
+          "type": "pathway",
+          "settings": {
+            "title": "MANIFESTO",
+            "description": "What we make, and why we make it this way.",
+            "link": "/pages/manifesto"
+          }
+        }
+      },
+      "block_order": [
+        "drop",
+        "build",
+        "manifesto"
+      ],
+      "settings": {
+        "heading": "INSIDE KOVA"
+      }
+    },
+    "notify": {
+      "type": "notify",
+      "settings": {
+        "anchor_id": "notify",
+        "eyebrow": "NOTIFY",
+        "heading": "BE FIRST ON DROP 002",
+        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
+        "button_label": "NOTIFY ME",
+        "customer_tag": "drop-notify"
       }
     }
   },
   "order": [
     "hero",
     "marquee",
-    "drop_intro"
+    "drop_intro",
+    "featured_products",
+    "pathways",
+    "notify"
   ]
 }

@@ -1,0 +1,157 @@
+{% comment %}
+  Large editorial statements used on the MANIFESTO page. Each statement is a
+  block so the copy can be rewritten entirely from the theme editor.
+{% endcomment %}
+
+<section class="statements full-width section-pad">
+  <div class="statements__inner page-inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="section-title statements__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    <ol class="statements__list">
+      {% for block in section.blocks %}
+        <li class="statements__item" {{ block.shopify_attributes }}>
+          <p class="statements__index" aria-hidden="true">
+            {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+          </p>
+
+          <div class="statements__body">
+            {% if block.settings.statement != blank %}
+              <p class="statements__statement">{{ block.settings.statement | escape }}</p>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <div class="rte statements__description">{{ block.settings.description }}</div>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{% stylesheet %}
+  .statements__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  .statements__list {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .statements__item {
+    display: grid;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .statements__index {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .statements__body {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .statements__statement {
+    margin: 0;
+    font-size: clamp(1.35rem, 3.2vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .statements__description {
+    max-width: 52ch;
+  }
+
+  @media (min-width: 900px) {
+    .statements__item {
+      grid-template-columns: 6rem 1fr;
+      gap: 2rem;
+    }
+
+    .statements__body {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.statements",
+  "tag": "div",
+  "class": "section-statements",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "PRINCIPLES"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "statement",
+      "name": "t:general.statement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "statement",
+          "label": "t:labels.statement",
+          "default": "Metal should feel considered, not decorative."
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:labels.description",
+          "default": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.statements",
+      "blocks": [
+        {
+          "type": "statement",
+          "settings": {
+            "statement": "Metal should feel considered, not decorative.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        },
+        {
+          "type": "statement",
+          "settings": {
+            "statement": "We release in drops, not seasons.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        },
+        {
+          "type": "statement",
+          "settings": {
+            "statement": "Made in India, built for anywhere.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

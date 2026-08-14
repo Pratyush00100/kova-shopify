@@ -1,0 +1,67 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "page-hero",
+      "settings": {
+        "eyebrow": "MANIFESTO",
+        "heading": "WHAT WE STAND FOR",
+        "description": "<p>Placeholder copy. KOVA makes a small number of metal pieces each year, built to sit on a wall for a long time.</p>",
+        "show_image": false
+      }
+    },
+    "statements": {
+      "type": "statements",
+      "blocks": {
+        "one": {
+          "type": "statement",
+          "settings": {
+            "statement": "Metal should feel considered, not decorative.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        },
+        "two": {
+          "type": "statement",
+          "settings": {
+            "statement": "We release in drops, not seasons.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        },
+        "three": {
+          "type": "statement",
+          "settings": {
+            "statement": "Made in India, built for anywhere.",
+            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three"
+      ],
+      "settings": {
+        "heading": "PRINCIPLES"
+      }
+    },
+    "page_content": {
+      "type": "page",
+      "settings": {
+        "show_title": false
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "statements",
+    "page_content"
+  ]
+}

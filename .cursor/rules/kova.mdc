@@ -1,24 +1,44 @@
 ---
 alwaysApply: true
 description: Core KOVA business, product, design, architecture, and development rules
------------------
+---
 
 # KOVA PROJECT
 
+## Source of truth
+
+* Detailed V1 product, navigation, homepage, product-page, BUILD, video, sizing, and V1/V2 decisions live in `KOVA_PROJECT_SPEC.md`.
+* Shopify Liquid and Skeleton architecture live in `AGENTS.md`. Do not duplicate or rewrite that file.
+* If this file or the spec conflicts with older theme copy, an older prompt, or the current storefront, the latest KOVA decision wins.
+* Do not reintroduce superseded patterns: `DROP 001 — VELOCITY`, scrolling marquees, customer-facing "metal wall art", or separate V1 Drop and Shop destinations.
+* Never invent missing business facts. Flag them instead.
+
 ## Business
 
-* KOVA is a premium design brand selling laser-cut metal wall art.
+* KOVA is a premium design brand creating precision-cut metal objects for interiors.
 * Domain: kova.cool
-* First collection: Drop 001 — VELOCITY.
-* Initial catalog: approximately 8–10 products.
-* Initial products are wall art, including automotive-inspired and other original designs.
-* Products have S, M, L sizes.
-* Initial finishes: Carbon Black and Raw Metal.
-* Material is fixed in V1; customers do not choose materials.
-* Products are primarily made-to-order after initial sample stock.
-* Typical production time is expected to be short, but never invent a delivery promise.
-* Small objects made from production remnants/offcuts may be included as complimentary KOVA fragments.
-* Future drops are planned roughly monthly to every two months.
+* Shopify development store: kova-9882
+* GitHub repository: kova-shopify
+* First release: Drop 001 // VELOCITY.
+* Initial go-live catalog: maximum 8 products.
+* Products are primarily automotive-inspired and other original design pieces.
+* V1 product sizing is sold as editions:
+  - Studio Edition — 27 inches × 2.3 feet
+  - Signature Edition — 37 inches × 3.3 feet
+  - Collection Edition — coming soon
+* Represent editions with Shopify variants when that data exists. Do not hardcode edition prices or inventory.
+* Do not describe KOVA products on the website as "metal wall art". Use premium language such as:
+  - design pieces
+  - wall pieces
+  - objects
+  - editions
+  - KOVA pieces
+  Choose the wording based on context.
+* Material/finish is fixed in V1 unless a product explicitly requires otherwise.
+* Products are primarily made to order after a small amount of sample stock.
+* Do not invent production, shipping or delivery promises.
+* Small objects made from production remnants/offcuts may be included as complimentary KOVA Fragments.
+* New drops are expected approximately monthly to every two months.
 
 ## Commerce
 
@@ -59,6 +79,7 @@ Do NOT use:
 * Generic stock photography
 * Marketing filler copy
 * Unnecessary UI components
+* Scrolling/moving marquees
 
 Use Apple, high-end design brands and strong ecommerce experiences as references for information hierarchy, merchandising and clarity only. Never copy another brand's design, layout, copy or branding.
 
@@ -66,7 +87,7 @@ Use Apple, high-end design brands and strong ecommerce experiences as references
 
 The homepage is a curated entry point, not a giant page containing every piece of information.
 
-Core pages:
+Core page types:
 
 * Home
 * Drop / Collection
@@ -74,6 +95,12 @@ Core pages:
 * BUILD
 * Manifesto
 * Cart
+
+V1 navigation:
+
+* In V1, Drop 001 and Shop are one shopping destination.
+* Do not create separate Drop and Shop navigation destinations until multiple drops exist.
+* Do not invent the remaining shopping-label wording. If it is not specified, keep it configurable or ask.
 
 The homepage should:
 
@@ -89,16 +116,55 @@ Detailed shopping information belongs on product/collection pages.
 Detailed manufacturing storytelling belongs on BUILD.
 Detailed brand philosophy belongs on Manifesto.
 
+## V1 vs V2
+
+V1:
+
+* One live drop: Drop 001 // VELOCITY
+* Maximum 8 products
+* Studio and Signature editions for sale; Collection Edition is coming soon
+* One shopping destination, not separate Drop and Shop
+* Guest checkout
+* Fixed material/finish unless a product requires otherwise
+* One short factory laser-cutting video, used with restraint
+* Homepage sells the brand and current release; product pages sell the piece
+
+V2:
+
+* Separate Drop and Shop destinations once multiple drops exist
+* Collection Edition
+* Richer BUILD storytelling with authentic factory imagery/video
+* Additional drops on the existing monthly-to-two-month cadence
+
+Do not build V2 navigation, edition, or catalog behavior in V1.
+
+## Current V1 Design Direction
+
+* Hero is predominantly black.
+* Hero uses a large KOVA wordmark positioned lower in the composition.
+* Hero visual should blend a real automotive/product image into the black background rather than using a separate rectangular image card.
+* Primary collection naming format: "DROP 001 // VELOCITY".
+* Do not use "DROP 001 — VELOCITY".
+* Remove the scrolling/moving marquee from the homepage and collection pages.
+* Avoid visual patterns that make the website feel AI-generated or template-generated.
+* Use motion only when it supports the product or story.
+* Use authentic product photography and real factory video as primary visual assets.
+* One short laser-cutting video may autoplay, muted and looped, when its section enters the viewport. Honor `prefers-reduced-motion`.
+* Product pages should be detailed and commerce-focused, with inspiration from strong specialist ecommerce sites such as Modello Turbo, without copying their design.
+* The homepage should sell the brand and current release; detailed product information belongs on product pages.
+* Do not use generic "metal wall art" terminology in customer-facing copy.
+
 ## BUILD
 
 KOVA's manufacturing capability is a major trust and differentiation asset.
 
-The BUILD experience should eventually communicate:
+The BUILD experience should communicate:
 CAD/design → laser cutting → finishing → inspection → packaging.
 
 Use authentic factory imagery/video when available.
 
 Do not invent manufacturing claims.
+Do not keep the older DRAW / CUT / FINISH / SHIP framing when updating BUILD.
 
 ## Product experience
 
@@ -108,7 +174,7 @@ Product pages must clearly communicate:
 * Drop
 * Images
 * Price
-* Size
+* Size / edition
 * Exact dimensions
 * Material
 * Finish
@@ -133,6 +199,7 @@ Do not design around placeholder imagery once real photography is available.
 ## Development rules
 
 * Inspect existing code before changing it.
+* Consult `KOVA_PROJECT_SPEC.md` before homepage, navigation, product-page, BUILD, video, or sizing work.
 * Do not modify unrelated files.
 * Do not install dependencies unless there is a clear requirement.
 * Do not change working Shopify commerce functionality unnecessarily.
@@ -145,6 +212,12 @@ Do not design around placeholder imagery once real photography is available.
 * Before major architectural changes, explain the intended changes.
 * After significant milestones, summarize files changed and tests performed.
 * Never assume missing business requirements; ask or leave configurable placeholders.
+* Never use generic ecommerce phrases such as:
+  "premium quality"
+  "elevate your space"
+  "designed for modern living"
+  "where art meets innovation"
+  unless the sentence communicates something specific about KOVA.
 
 ## Git
 

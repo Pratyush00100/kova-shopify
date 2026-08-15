@@ -1,3 +1,162 @@
 ---
 alwaysApply: true
----
+description: Core KOVA business, product, design, architecture, and development rules
+-----------------
+
+# KOVA PROJECT
+
+## Business
+
+* KOVA is a premium design brand selling laser-cut metal wall art.
+* Domain: kova.cool
+* First collection: Drop 001 — VELOCITY.
+* Initial catalog: approximately 8–10 products.
+* Initial products are wall art, including automotive-inspired and other original designs.
+* Products have S, M, L sizes.
+* Initial finishes: Carbon Black and Raw Metal.
+* Material is fixed in V1; customers do not choose materials.
+* Products are primarily made-to-order after initial sample stock.
+* Typical production time is expected to be short, but never invent a delivery promise.
+* Small objects made from production remnants/offcuts may be included as complimentary KOVA fragments.
+* Future drops are planned roughly monthly to every two months.
+
+## Commerce
+
+* Shopify is the commerce platform and source of truth.
+* Shopify manages products, variants, inventory, customers, carts, checkout, orders, payments, shipping, discounts and store administration.
+* Do not build a custom backend for normal commerce functionality.
+* Do not recreate Shopify checkout, payment processing, cart state or order management.
+* Never hardcode product prices, inventory or variant data when Shopify data is available.
+* Product and collection data should come from Shopify.
+* Guest checkout is preferred for V1.
+* Do not invent shipping, tax, refund or delivery policies.
+
+## Brand and design
+
+KOVA should feel like a real premium design brand, not an AI-generated ecommerce template.
+
+Design direction:
+
+* Industrial
+* Editorial
+* Minimal
+* Premium
+* Strong typography
+* Generous whitespace
+* Black, off-white and neutral tones
+* High-quality photography
+* Subtle, purposeful animation
+* Strong visual hierarchy
+* Confident and restrained
+
+Do NOT use:
+
+* Generic AI landing-page patterns
+* Excessive gradients
+* Glassmorphism
+* Random decorative blobs
+* Excessive animation
+* Generic stock photography
+* Marketing filler copy
+* Unnecessary UI components
+
+Use Apple, high-end design brands and strong ecommerce experiences as references for information hierarchy, merchandising and clarity only. Never copy another brand's design, layout, copy or branding.
+
+## Experience strategy
+
+The homepage is a curated entry point, not a giant page containing every piece of information.
+
+Core pages:
+
+* Home
+* Drop / Collection
+* Product
+* BUILD
+* Manifesto
+* Cart
+
+The homepage should:
+
+* Create curiosity
+* Introduce the current drop
+* Showcase selected products
+* Establish trust
+* Tease the manufacturing process
+* Introduce KOVA's philosophy
+* Encourage the next action
+
+Detailed shopping information belongs on product/collection pages.
+Detailed manufacturing storytelling belongs on BUILD.
+Detailed brand philosophy belongs on Manifesto.
+
+## BUILD
+
+KOVA's manufacturing capability is a major trust and differentiation asset.
+
+The BUILD experience should eventually communicate:
+CAD/design → laser cutting → finishing → inspection → packaging.
+
+Use authentic factory imagery/video when available.
+
+Do not invent manufacturing claims.
+
+## Product experience
+
+Product pages must clearly communicate:
+
+* Product name
+* Drop
+* Images
+* Price
+* Size
+* Exact dimensions
+* Material
+* Finish
+* Production information
+* Add to cart
+
+Product photography should be the primary visual asset.
+
+Do not design around placeholder imagery once real photography is available.
+
+## Shopify theme architecture
+
+* This project uses Shopify Skeleton as the base theme.
+* Preserve Shopify's theme architecture.
+* Prefer reusable sections and snippets.
+* Prefer JSON templates for page composition.
+* Keep content configurable through the Shopify theme editor where appropriate.
+* Keep Liquid maintainable and semantic.
+* Use Shopify data instead of duplicating commerce data in theme code.
+* Avoid putting an entire page into one large Liquid file.
+
+## Development rules
+
+* Inspect existing code before changing it.
+* Do not modify unrelated files.
+* Do not install dependencies unless there is a clear requirement.
+* Do not change working Shopify commerce functionality unnecessarily.
+* Do not introduce a custom framework or backend.
+* Keep JavaScript minimal and purposeful.
+* Maintain responsive behavior for desktop and mobile.
+* Consider accessibility.
+* Run Theme Check after significant theme changes.
+* Preserve working navigation and cart behavior.
+* Before major architectural changes, explain the intended changes.
+* After significant milestones, summarize files changed and tests performed.
+* Never assume missing business requirements; ask or leave configurable placeholders.
+
+## Git
+
+* Work in small, reviewable milestones.
+* Commit after each meaningful completed phase.
+* Never intentionally overwrite working functionality without a clear reason.
+* Keep main branch in a usable state.
+
+## AI agent behavior
+
+* Do not generate large amounts of unrelated code.
+* Do not rebuild existing functionality just because a different implementation is possible.
+* Prefer the smallest clean change that solves the current task.
+* Before implementing a broad change, inspect the existing theme and identify affected files.
+* When requirements are ambiguous, ask for clarification rather than inventing behavior.

@@ -58,7 +58,7 @@
           <h1 class="product__title">{{ product.title | escape }}</h1>
 
           <p class="product__price">
-            {% if product.compare_at_price > product.price %}
+            {% if current_variant.compare_at_price > current_variant.price %}
               <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
               {{ current_variant.price | money }}
               <s class="product__price-compare">{{ current_variant.compare_at_price | money }}</s>
@@ -71,7 +71,7 @@
             {% if product.variants.size > 1 %}
               <div class="product__field">
                 <label class="product__label" for="ProductVariant-{{ section.id }}">
-                  {{ 'products.variant' | t }}
+                  {{ product.options | join: ' / ' | escape }}
                 </label>
 
                 <select
@@ -135,13 +135,22 @@
             <div class="rte product__description">{{ product.description }}</div>
           {% endif %}
 
-          {% if section.blocks.size > 0 %}
+          {% assign has_details = false %}
+          {% for block in section.blocks %}
+            {% if block.settings.label != blank and block.settings.value != blank %}
+              {% assign has_details = true %}
+            {% endif %}
+          {% endfor %}
+
+          {% if has_details %}
             <dl class="product__details">
               {% for block in section.blocks %}
-                <div class="product__detail" {{ block.shopify_attributes }}>
-                  <dt>{{ block.settings.label | escape }}</dt>
-                  <dd>{{ block.settings.value | escape }}</dd>
-                </div>
+                {% if block.settings.label != blank and block.settings.value != blank %}
+                  <div class="product__detail" {{ block.shopify_attributes }}>
+                    <dt>{{ block.settings.label | escape }}</dt>
+                    <dd>{{ block.settings.value | escape }}</dd>
+                  </div>
+                {% endif %}
               {% endfor %}
             </dl>
           {% endif %}
@@ -315,8 +324,7 @@
         {
           "type": "text",
           "id": "value",
-          "label": "t:labels.detail_value",
-          "default": "Powder-coated mild steel"
+          "label": "t:labels.detail_value"
         }
       ]
     }

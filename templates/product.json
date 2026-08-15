@@ -11,34 +11,6 @@
   "sections": {
     "main": {
       "type": "product",
-      "blocks": {
-        "material": {
-          "type": "detail",
-          "settings": {
-            "label": "Material",
-            "value": "Powder-coated mild steel"
-          }
-        },
-        "finish": {
-          "type": "detail",
-          "settings": {
-            "label": "Finish",
-            "value": "Matte black"
-          }
-        },
-        "made": {
-          "type": "detail",
-          "settings": {
-            "label": "Made in",
-            "value": "India"
-          }
-        }
-      },
-      "block_order": [
-        "material",
-        "finish",
-        "made"
-      ],
       "settings": {
         "eyebrow": "DROP 001"
       }

@@ -15,6 +15,21 @@
       {% endif %}
     </header>
 
+    {% if section.settings.video != blank %}
+      <div class="process__video" data-kova-factory-video>
+        {{
+          section.settings.video
+          | video_tag:
+            autoplay: false,
+            muted: true,
+            loop: true,
+            controls: false,
+            playsinline: true,
+            preload: 'metadata'
+        }}
+      </div>
+    {% endif %}
+
     <ol class="process__list">
       {% for block in section.blocks %}
         <li class="process__step" {{ block.shopify_attributes }}>
@@ -30,7 +45,7 @@
                 | image_tag:
                   class: 'process__image',
                   widths: '400, 600, 800, 1000',
-                  sizes: '(min-width: 900px) 30vw, 88vw',
+                  sizes: '(min-width: 900px) 18vw, 88vw',
                   loading: 'lazy'
               }}
             {% else %}
@@ -38,7 +53,9 @@
             {% endif %}
           </div>
 
-          <h3 class="process__title">{{ block.settings.title | escape }}</h3>
+          {% if block.settings.title != blank %}
+            <h3 class="process__title">{{ block.settings.title | escape }}</h3>
+          {% endif %}
 
           {% if block.settings.description != blank %}
             <div class="rte process__description">{{ block.settings.description }}</div>
@@ -57,6 +74,20 @@
 
   .process__heading {
     margin-top: 0.6rem;
+  }
+
+  .process__video {
+    overflow: hidden;
+    background: #000;
+  }
+
+  .process__video video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: min(70vh, 40rem);
+    object-fit: cover;
+    background: #000;
   }
 
   .process__list {
@@ -116,10 +147,49 @@
 
   @media (min-width: 1100px) {
     .process__list {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const roots = document.querySelectorAll('[data-kova-factory-video]');
+    if (!roots.length) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    roots.forEach(function (root) {
+      const video = root.querySelector('video');
+      if (!video) return;
+
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+
+      if (reduceMotion) {
+        video.controls = true;
+        video.pause();
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              video.play().catch(function () {});
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      observer.observe(video);
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
@@ -137,7 +207,13 @@
       "type": "text",
       "id": "heading",
       "label": "t:labels.heading",
-      "default": "FROM DRAWING TO WALL"
+      "default": "CAD TO PACKAGING"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:labels.video",
+      "info": "t:info.factory_video"
     }
   ],
   "blocks": [
@@ -149,13 +225,13 @@
           "type": "text",
           "id": "title",
           "label": "t:labels.title",
-          "default": "DRAW"
+          "default": "CAD / DESIGN"
         },
         {
           "type": "richtext",
           "id": "description",
           "label": "t:labels.description",
-          "default": "<p>Every form starts as a vector drawing, tuned until the negative space carries the weight.</p>"
+          "default": "<p>Placeholder. Confirmed process copy will replace this.</p>"
         },
         {
           "type": "image_picker",
@@ -172,29 +248,36 @@
         {
           "type": "step",
           "settings": {
-            "title": "DRAW",
-            "description": "<p>Every form starts as a vector drawing, tuned until the negative space carries the weight.</p>"
+            "title": "CAD / DESIGN",
+            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
           }
         },
         {
           "type": "step",
           "settings": {
-            "title": "CUT",
-            "description": "<p>Sheet steel is laser-cut to a fine kerf so edges stay crisp at close range.</p>"
+            "title": "LASER CUTTING",
+            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
           }
         },
         {
           "type": "step",
           "settings": {
-            "title": "FINISH",
-            "description": "<p>Pieces are deburred, then powder-coated in a matte finish built to resist marks.</p>"
+            "title": "FINISHING",
+            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
           }
         },
         {
           "type": "step",
           "settings": {
-            "title": "SHIP",
-            "description": "<p>Each piece is packed flat with its mounting hardware and a numbered drop card.</p>"
+            "title": "INSPECTION",
+            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "PACKAGING",
+            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
           }
         }
       ]

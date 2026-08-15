@@ -14,16 +14,8 @@
       "settings": {
         "eyebrow": "DROP 001",
         "heading": "VELOCITY",
-        "description": "<p>Placeholder copy for the first KOVA release. Laser-cut steel, finished by hand, produced in a limited run.</p>",
+        "description": "<p>Placeholder copy. DROP 001 // VELOCITY.</p>",
         "show_image": true
-      }
-    },
-    "marquee": {
-      "type": "marquee",
-      "settings": {
-        "text": "DROP 001 • VELOCITY • LIMITED RUN • KOVA",
-        "accessibility_label": "Drop announcement",
-        "reduce_motion": false
       }
     },
     "main": {
@@ -48,7 +40,6 @@
   },
   "order": [
     "banner",
-    "marquee",
     "main",
     "notify"
   ]

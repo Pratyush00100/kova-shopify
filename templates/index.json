@@ -14,18 +14,11 @@
       "settings": {
         "anchor_id": "top",
         "brand_text": "KOVA",
-        "heading": "DROP 001 — VELOCITY",
+        "heading": "DROP 001 // VELOCITY",
         "subheading": "LIVE NOW",
         "button_label": "EXPLORE DROP 001",
-        "button_link": "/collections/drop-001"
-      }
-    },
-    "marquee": {
-      "type": "marquee",
-      "settings": {
-        "text": "KOVA • DROP 001 • VELOCITY • LIMITED RUN • KOVA",
-        "accessibility_label": "Announcement",
-        "reduce_motion": false
+        "button_link": "/collections/drop-001",
+        "placeholder_label": "Image forthcoming"
       }
     },
     "drop_intro": {
@@ -34,7 +27,7 @@
         "anchor_id": "drop",
         "eyebrow": "DROP 001",
         "title": "VELOCITY",
-        "description": "<p>Laser-cut metal wall art engineered for presence. Limited run. Built to hold the wall.</p>",
+        "description": "<p>DROP 001 // VELOCITY. A limited run of KOVA pieces.</p>",
         "button_label": "VIEW THE DROP",
         "button_link": "/collections/drop-001",
         "placeholder_label": "Drop imagery"
@@ -58,7 +51,7 @@
           "type": "pathway",
           "settings": {
             "title": "DROP 001",
-            "description": "Velocity. A limited run of laser-cut steel wall pieces.",
+            "description": "A limited run of KOVA pieces.",
             "link": "/collections/drop-001"
           }
         },
@@ -66,7 +59,7 @@
           "type": "pathway",
           "settings": {
             "title": "BUILD",
-            "description": "How each piece is drawn, cut and finished.",
+            "description": "CAD, laser cutting, finishing, inspection and packaging.",
             "link": "/pages/build"
           }
         },
@@ -102,7 +95,6 @@
   },
   "order": [
     "hero",
-    "marquee",
     "drop_intro",
     "featured_products",
     "pathways",

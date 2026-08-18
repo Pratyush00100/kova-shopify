@@ -124,6 +124,7 @@
     "heading_fallback_collection": "Leave empty to use the collection title.",
     "image_fallback_collection": "Leave empty to use the collection image.",
     "related_collection": "Leave empty to use the first collection this product belongs to.",
+    "product_drop_fallback": "Used only when the product is not in a drop collection.",
     "reduce_motion": "Also respects the visitor's system reduced-motion preference."
   },
   "options": {

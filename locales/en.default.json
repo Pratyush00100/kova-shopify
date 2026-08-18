@@ -76,6 +76,8 @@
     "add_to_cart": "Add to cart",
     "coming_soon": "Coming soon",
     "quantity": "Quantity",
+    "quantity_decrease": "Decrease quantity",
+    "quantity_increase": "Increase quantity",
     "sale_price": "Sale price",
     "sold_out": "Sold out",
     "variant": "Variant"

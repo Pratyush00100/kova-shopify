@@ -1,6 +1,6 @@
 {% comment %}
-  This section is used in the collection template to render the product grid
-  for a collection.
+  Product grid for collection templates. Products, order, price and availability
+  all come from Shopify. Pagination stays in place as a safety mechanism.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
@@ -24,10 +24,7 @@
         {% endif %}
       {% else %}
         <div class="collection__empty">
-          <p class="section-title">{{ 'collections.empty' | t }}</p>
-          <a class="link-underline" href="{{ routes.all_products_collection_url }}">
-            {{ 'collections.view_all' | t }}
-          </a>
+          <p class="collection__empty-message">{{ 'collections.empty' | t }}</p>
         </div>
       {% endif %}
     {% endpaginate %}
@@ -40,9 +37,11 @@
     gap: clamp(2rem, 4vw, 3.5rem);
   }
 
+  /* Row gap carries the title/price block; the tighter column gap keeps the
+     photography large across the row. */
   .collection__grid {
     display: grid;
-    gap: clamp(1.5rem, 3vw, 2.5rem);
+    gap: clamp(2.25rem, 4.5vw, 3.75rem) clamp(1.25rem, 2.5vw, 2rem);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -51,20 +50,49 @@
 
   .collection__pagination {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 0.75rem;
-    padding-top: 1rem;
+    gap: 0.5rem 1rem;
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
     border-top: 1px solid var(--color-border);
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
+    color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
+  }
+
+  .collection__pagination a {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s var(--ease-out);
+  }
+
+  .collection__pagination a:hover,
+  .collection__pagination a:focus-visible {
+    color: var(--color-foreground);
+    border-bottom-color: currentcolor;
+  }
+
+  .collection__pagination .current {
+    color: var(--color-foreground);
   }
 
   .collection__empty {
     display: grid;
     justify-items: start;
-    gap: 1.25rem;
-    padding-block: clamp(2rem, 6vw, 4rem);
+    gap: 1rem;
+    padding-block: clamp(3rem, 8vw, 5rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .collection__empty-message {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   @media (min-width: 600px) {
@@ -76,6 +104,12 @@
   @media (min-width: 900px) {
     .collection__grid {
       grid-template-columns: repeat(var(--columns, 3), 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collection__pagination a {
+      transition: none;
     }
   }
 {% endstylesheet %}

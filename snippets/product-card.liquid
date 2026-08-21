@@ -1,6 +1,10 @@
 {% doc %}
   Renders a KOVA product card linking to the product page.
 
+  Shared by the collection grid, the homepage featured products and the PDP
+  related products, so the catalog keeps one card language. Photography, title
+  and price all come from Shopify.
+
   Falls back to a Shopify placeholder illustration when the product has no image,
   so the grid stays intact before final photography is available.
 
@@ -18,6 +22,9 @@
   if show_price == nil
     assign show_price = true
   endif
+
+  assign price_display = product.price | money
+  assign compare_display = product.compare_at_price | money
 %}
 
 <a class="product-card" href="{{ product.url }}">
@@ -29,7 +36,7 @@
         | image_tag:
           class: 'product-card__image',
           widths: '300, 500, 700, 900, 1200, 1400',
-          sizes: '(min-width: 900px) 32vw, 88vw',
+          sizes: '(min-width: 900px) 32vw, (min-width: 600px) 46vw, 92vw',
           loading: 'lazy'
       }}
     {% else %}
@@ -48,10 +55,12 @@
       <p class="product-card__price">
         {% if product.compare_at_price > product.price %}
           <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
-          {{ product.price | money }}
-          <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
+          {{ price_display }}
+          <s class="product-card__price-compare">{{ compare_display }}</s>
+        {% elsif product.price_varies %}
+          {{ 'products.price_from' | t: price: price_display }}
         {% else %}
-          {{ product.price | money }}
+          {{ price_display }}
         {% endif %}
       </p>
     {% endif %}
@@ -61,7 +70,8 @@
 {% stylesheet %}
   .product-card {
     display: grid;
-    gap: 0.9rem;
+    gap: 1.1rem;
+    align-content: start;
     text-decoration: none;
     color: var(--color-foreground);
   }
@@ -74,42 +84,46 @@
     border: 1px solid var(--color-border);
   }
 
-  .product-card__image {
+  .product-card__image,
+  .product-card__placeholder {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .product-card__image {
     transition: transform 0.6s var(--ease-out);
   }
 
   .product-card:hover .product-card__image,
   .product-card:focus-visible .product-card__image {
-    transform: scale(1.03);
+    transform: scale(1.025);
   }
 
   .product-card__badge {
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    padding: 0.35rem 0.6rem;
+    padding: 0.4rem 0.65rem;
     background: var(--color-foreground);
     color: var(--color-background);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
+  /* Stacked so long product titles never crowd the price. */
   .product-card__info {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
+    display: grid;
+    gap: 0.4rem;
   }
 
   .product-card__title {
     margin: 0;
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.35;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
@@ -117,11 +131,11 @@
   .product-card__price {
     margin: 0;
     font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
+    letter-spacing: 0.04em;
   }
 
   .product-card__price-compare {
+    margin-left: 0.4rem;
     color: var(--color-foreground-muted);
   }
 

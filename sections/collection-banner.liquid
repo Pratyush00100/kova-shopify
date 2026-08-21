@@ -1,6 +1,9 @@
 {% comment %}
-  Editorial banner for collection pages. Content comes from the collection
-  itself, with optional theme editor overrides for drop-specific framing.
+  Drop identity for collection pages.
+
+  Heading, description and imagery resolve from Shopify collection data unless a
+  theme editor override is set. Optional fields stay hidden when empty instead of
+  falling back to placeholder art or invented copy.
 {% endcomment %}
 
 {% liquid
@@ -9,48 +12,59 @@
     assign banner_heading = collection.title
   endif
 
+  assign banner_description = section.settings.description
+  if banner_description == blank
+    assign banner_description = collection.description
+  endif
+
   assign banner_image = section.settings.image
   if banner_image == blank
     assign banner_image = collection.image
   endif
+
+  assign has_media = false
+  if section.settings.show_image
+    if banner_image != blank
+      assign has_media = true
+    endif
+  endif
 %}
 
-<section class="collection-banner full-width">
-  {% if section.settings.show_image %}
+<section class="collection-banner full-width{% if has_media %} collection-banner--media{% endif %}">
+  {% if has_media %}
     <div class="collection-banner__media" aria-hidden="true">
-      {% if banner_image != blank %}
-        {{
-          banner_image
-          | image_url: width: 2400
-          | image_tag:
-            class: 'collection-banner__image',
-            widths: '750, 1100, 1500, 1800, 2400',
-            sizes: '100vw',
-            loading: 'eager'
-        }}
-      {% else %}
-        {{ 'collection-1' | placeholder_svg_tag: 'media-placeholder collection-banner__placeholder' }}
-      {% endif %}
+      {{
+        banner_image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'collection-banner__image',
+          widths: '750, 1100, 1500, 1800, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high'
+      }}
       <div class="collection-banner__scrim"></div>
     </div>
   {% endif %}
 
-  <div class="collection-banner__inner page-inner{% if section.settings.show_image %} collection-banner__inner--over-media{% endif %}">
-    {% if section.settings.eyebrow != blank %}
-      <p class="eyebrow collection-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+  <div class="collection-banner__inner page-inner">
+    <div class="collection-banner__meta">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow collection-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if collection.products_count > 0 %}
+        <p class="collection-banner__count">
+          {{- 'collections.product_count' | t: count: collection.products_count -}}
+        </p>
+      {% endif %}
+    </div>
+
+    <h1 class="display-title collection-banner__heading">{{ banner_heading | escape }}</h1>
+
+    {% if banner_description != blank %}
+      <div class="rte collection-banner__description">{{ banner_description }}</div>
     {% endif %}
-
-    <h1 class="display-title">{{ banner_heading | escape }}</h1>
-
-    {% if section.settings.description != blank %}
-      <div class="rte collection-banner__description">{{ section.settings.description }}</div>
-    {% elsif collection.description != blank %}
-      <div class="rte collection-banner__description">{{ collection.description }}</div>
-    {% endif %}
-
-    <p class="collection-banner__count">
-      {{ 'collections.product_count' | t: count: collection.products_count }}
-    </p>
   </div>
 </section>
 
@@ -69,8 +83,7 @@
     overflow: hidden;
   }
 
-  .collection-banner__image,
-  .collection-banner__placeholder {
+  .collection-banner__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -79,31 +92,40 @@
   .collection-banner__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, rgb(0 0 0 / 76%) 10%, rgb(0 0 0 / 40%) 100%);
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 74%) 0%,
+      rgb(0 0 0 / 42%) 52%,
+      rgb(0 0 0 / 22%) 100%
+    );
   }
 
   .collection-banner__inner {
     position: relative;
     z-index: 1;
     display: grid;
-    gap: 1rem;
-    padding-block: clamp(3.5rem, 10vw, 7rem);
+    gap: clamp(0.85rem, 1.6vw, 1.35rem);
+    padding-block: clamp(3rem, 7vw, 5.5rem);
   }
 
-  .collection-banner__inner--over-media {
-    min-height: clamp(20rem, 45vw, 32rem);
+  .collection-banner--media .collection-banner__inner {
+    min-height: clamp(18rem, 38vw, 27rem);
     align-content: end;
     color: var(--color-background);
   }
 
-  .collection-banner__inner--over-media .collection-banner__eyebrow,
-  .collection-banner__inner--over-media .collection-banner__description,
-  .collection-banner__inner--over-media .collection-banner__count {
-    color: color-mix(in srgb, var(--color-background) 72%, transparent);
+  .collection-banner--media .collection-banner__eyebrow,
+  .collection-banner--media .collection-banner__count,
+  .collection-banner--media .collection-banner__description {
+    color: color-mix(in srgb, var(--color-background) 74%, transparent);
   }
 
-  .collection-banner__description {
-    max-width: 48ch;
+  /* Metadata line: drop label and live piece count read as one row. */
+  .collection-banner__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
   }
 
   .collection-banner__count {
@@ -113,6 +135,15 @@
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
+  }
+
+  /* Held below the homepage hero scale so the drop page stays a catalog. */
+  .collection-banner__heading {
+    font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+  }
+
+  .collection-banner__description {
+    max-width: 46ch;
   }
 {% endstylesheet %}
 

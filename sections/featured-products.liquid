@@ -1,17 +1,25 @@
 {% comment %}
   Curated product preview for the homepage. Pulls live products from a
   merchant-selected collection and links through to the full collection page.
+
+  The shared product card is reused as-is. Homepage-only presentation is applied
+  by scoping styles to this section so the collection grid and PDP related
+  products keep their own treatment.
 {% endcomment %}
 
 {% liquid
   assign featured_collection = section.settings.collection
   assign product_limit = section.settings.products_to_show
+  assign has_products = false
+  if featured_collection != blank and featured_collection.products_count > 0
+    assign has_products = true
+  endif
 %}
 
-<section class="featured-products full-width section-pad">
+<section class="featured-products full-width">
   <div class="featured-products__inner page-inner">
     <header class="featured-products__header">
-      <div>
+      <div class="featured-products__intro">
         {% if section.settings.eyebrow != blank %}
           <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {% endif %}
@@ -37,74 +45,112 @@
             assign view_all_url = '/collections/drop-001'
           endif
         %}
-        <a class="link-underline" href="{{ view_all_url }}">
+        <a class="link-underline featured-products__link" href="{{ view_all_url }}">
           {{ section.settings.link_label | escape }}
         </a>
       {% endif %}
     </header>
 
-    {% if featured_collection != blank and featured_collection.products_count > 0 %}
-      <ul class="featured-products__grid" role="list" style="--columns: {{ section.settings.columns }}">
+    <ul class="featured-products__grid" role="list" style="--columns: {{ section.settings.columns }}">
+      {% if has_products %}
         {% for product in featured_collection.products limit: product_limit %}
           <li class="featured-products__item">
             {% render 'product-card', product: product %}
           </li>
         {% endfor %}
-      </ul>
-    {% else %}
-      <ul class="featured-products__grid" role="list" style="--columns: {{ section.settings.columns }}">
+      {% else %}
         {% for i in (1..section.settings.columns) %}
           <li class="featured-products__item">
-            <div class="featured-products__placeholder">
-              {{ 'product-1' | placeholder_svg_tag: 'media-placeholder' }}
-            </div>
-            <p class="featured-products__placeholder-label">{{ 'products.coming_soon' | t }}</p>
+            <div class="featured-products__awaiting"></div>
+            <p class="featured-products__awaiting-label">{{ 'products.coming_soon' | t }}</p>
           </li>
         {% endfor %}
-      </ul>
-    {% endif %}
+      {% endif %}
+    </ul>
   </div>
 </section>
 
 {% stylesheet %}
   .featured-products {
+    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(4.5rem, 11vw, 8.5rem);
     border-top: 1px solid var(--color-border);
   }
 
   .featured-products__inner {
     display: grid;
-    gap: clamp(2rem, 4vw, 3.5rem);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
   }
 
   .featured-products__header {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 1rem 2rem;
+    gap: 1.25rem 2rem;
+  }
+
+  .featured-products__intro {
+    display: grid;
+    gap: 0.85rem;
   }
 
   .featured-products__heading {
-    margin-top: 0.6rem;
+    margin: 0;
+  }
+
+  .featured-products__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
   }
 
   .featured-products__grid {
     display: grid;
-    gap: clamp(1.5rem, 3vw, 2.5rem);
+    gap: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 2.5vw, 2.25rem);
     margin: 0;
     padding: 0;
     list-style: none;
     grid-template-columns: 1fr;
   }
 
-  .featured-products__placeholder {
+  /* Homepage merchandising: the frame around the shared card is dropped so the
+     photograph carries the row instead of a bordered tile. Scoped to this
+     section only. */
+  .featured-products__grid .product-card {
+    gap: 1.25rem;
+  }
+
+  .featured-products__grid .product-card__media {
     aspect-ratio: 4 / 5;
-    border: 1px solid var(--color-border);
+    border: 0;
     background: var(--color-surface);
   }
 
-  .featured-products__placeholder-label {
-    margin: 0.9rem 0 0;
+  .featured-products__grid .product-card__info {
+    gap: 0.55rem;
+    padding-inline: 0.1rem;
+  }
+
+  .featured-products__grid .product-card__title {
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    text-wrap: balance;
+  }
+
+  .featured-products__grid .product-card__price {
+    color: var(--color-foreground-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Quiet frame while a collection has no products yet. No stand-in imagery. */
+  .featured-products__awaiting {
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--color-border);
+  }
+
+  .featured-products__awaiting-label {
+    margin: 1.25rem 0 0;
     color: var(--color-foreground-muted);
     font-size: 0.72rem;
     font-weight: 600;

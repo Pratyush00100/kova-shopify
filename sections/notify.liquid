@@ -1,10 +1,13 @@
 {% comment %}
   Drop notification signup. Uses Shopify's built-in customer form so no
   additional app or dependency is required.
+
+  Also rendered on the Drop 001 template, so the presentation stays surface
+  neutral.
 {% endcomment %}
 
 <section
-  class="notify full-width section-pad"
+  class="notify full-width"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
@@ -16,7 +19,7 @@
       {% endif %}
 
       {% if section.settings.heading != blank %}
-        <h2 class="section-title">{{ section.settings.heading | escape }}</h2>
+        <h2 class="notify__heading">{{ section.settings.heading | escape }}</h2>
       {% endif %}
 
       {% if section.settings.description != blank %}
@@ -65,6 +68,7 @@
 
 {% stylesheet %}
   .notify {
+    padding-block: clamp(4rem, 10vw, 7.5rem);
     border-top: 1px solid var(--color-border);
     background: var(--color-foreground);
     color: var(--color-background);
@@ -72,46 +76,79 @@
 
   .notify__inner {
     display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
+    gap: clamp(2.25rem, 5vw, 4.5rem);
   }
 
   .notify__copy {
     display: grid;
-    gap: 0.9rem;
-    max-width: 40ch;
+    gap: 1rem;
+    max-width: 38ch;
+  }
+
+  .notify__heading {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
   }
 
   .notify__eyebrow,
   .notify__description {
-    color: color-mix(in srgb, var(--color-background) 65%, transparent);
+    color: color-mix(in srgb, var(--color-background) 62%, transparent);
+  }
+
+  .notify__description {
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   .notify__field {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    align-items: flex-end;
+    gap: 1rem;
     max-width: 34rem;
   }
 
+  /* Underlined rather than boxed, so the form reads as typography on the dark
+     panel instead of a generic newsletter widget. */
   .notify__input {
-    flex: 1 1 16rem;
-    min-height: 3rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid color-mix(in srgb, var(--color-background) 45%, transparent);
+    flex: 1 1 15rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 0;
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-background) 40%, transparent);
     background: transparent;
     color: var(--color-background);
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    transition: border-color 0.3s var(--ease-out);
+  }
+
+  .notify__input:focus {
+    outline: none;
+    border-bottom-color: var(--color-background);
+  }
+
+  /* The global focus ring is the foreground colour, which is invisible on this
+     inverted panel. */
+  .notify__input:focus-visible,
+  .notify__submit:focus-visible {
+    outline: 2px solid var(--color-background);
+    outline-offset: 4px;
   }
 
   .notify__input::placeholder {
-    color: color-mix(in srgb, var(--color-background) 55%, transparent);
+    color: color-mix(in srgb, var(--color-background) 48%, transparent);
     text-transform: uppercase;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     letter-spacing: 0.16em;
   }
 
   .notify__submit {
+    flex: 0 0 auto;
     border-color: var(--color-background);
     background: var(--color-background);
     color: var(--color-foreground);
@@ -124,7 +161,7 @@
   }
 
   .notify__message {
-    margin: 1rem 0 0;
+    margin: 1.25rem 0 0;
     font-size: 0.78rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -136,8 +173,15 @@
 
   @media (min-width: 900px) {
     .notify__inner {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+      column-gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .notify__input {
+      transition: none;
     }
   }
 {% endstylesheet %}

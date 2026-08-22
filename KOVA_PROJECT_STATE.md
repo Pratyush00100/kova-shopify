@@ -53,7 +53,7 @@ Architecturally complete.
 - Heading: `DROP 001 // VELOCITY`
 - Pathways to Drop 001, BUILD, Manifesto
 - Featured products pull from a selected collection; VIEW ALL no longer falls back to `/collections/all`
-- Hero image blend and factory video are not wired; they wait on real assets
+- Hero image blend treatment is implemented (masked, lightened, no image card); the hero image asset and factory video are still missing
 - Unresolved: whether Notify stays on Home; final photography/video; leftover drop-intro copy still includes “A limited run of KOVA pieces.”
 
 **PDP** (`templates/product.json`)

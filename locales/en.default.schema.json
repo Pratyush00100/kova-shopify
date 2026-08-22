@@ -126,6 +126,7 @@
     "factory_video": "Optional Shopify-hosted video. Plays muted and looping when this section enters view. Not shown until a video is selected. Honors reduced-motion preferences.",
     "header_menu": "Optional. If empty, fallback links below are used.",
     "hero_image": "Optional. Blends into the black hero. Leave empty for a black placeholder until the final image is ready.",
+    "hero_placeholder_label": "Shown only while no hero image is selected. Clear it to leave the hero completely bare.",
     "heading_fallback": "Leave empty to use the page title.",
     "heading_fallback_collection": "Leave empty to use the collection title.",
     "image_fallback_collection": "Leave empty to use the collection image.",

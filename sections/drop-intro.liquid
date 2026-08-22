@@ -1,5 +1,18 @@
+{% comment %}
+  Editorial transition from the hero into the current release. The media column
+  is only built when an image exists, so the section reads as a deliberate
+  typographic composition until real photography arrives.
+{% endcomment %}
+
+{% liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+%}
+
 <section
-  class="drop-intro full-width"
+  class="drop-intro full-width{% if has_image %} drop-intro--illustrated{% endif %}"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
@@ -14,24 +27,28 @@
         <h2 class="drop-intro__title">{{ section.settings.title | escape }}</h2>
       {% endif %}
 
-      {% if section.settings.description != blank %}
-        <div class="drop-intro__description">
-          {{ section.settings.description }}
-        </div>
-      {% endif %}
+      {% if section.settings.description != blank or section.settings.button_label != blank %}
+        <div class="drop-intro__body">
+          {% if section.settings.description != blank %}
+            <div class="drop-intro__description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
 
-      {% if section.settings.button_label != blank %}
-        <a
-          class="drop-intro__cta"
-          href="{{ section.settings.button_link | default: '/collections/drop-001' }}"
-        >
-          {{ section.settings.button_label | escape }}
-        </a>
+          {% if section.settings.button_label != blank %}
+            <a
+              class="drop-intro__cta"
+              href="{{ section.settings.button_link | default: '/collections/drop-001' }}"
+            >
+              {{ section.settings.button_label | escape }}
+            </a>
+          {% endif %}
+        </div>
       {% endif %}
     </div>
 
-    <div class="drop-intro__media">
-      {% if section.settings.image != blank %}
+    {% if has_image %}
+      <div class="drop-intro__media">
         {{
           section.settings.image
           | image_url: width: 1800
@@ -41,23 +58,19 @@
             sizes: '(min-width: 900px) 55vw, 100vw',
             loading: 'lazy'
         }}
-      {% else %}
-        <div class="drop-intro__placeholder" role="img" aria-label="{{ 'accessibility.image_placeholder' | t }}">
-          <span>{{ section.settings.placeholder_label | escape }}</span>
-        </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
   </div>
 </section>
 
 {% stylesheet %}
   .drop-intro {
-    padding-block: clamp(4rem, 10vw, 7.5rem);
+    padding-block: clamp(4.5rem, 12vw, 9rem);
   }
 
   .drop-intro__inner {
     display: grid;
-    gap: clamp(2rem, 5vw, 4.5rem);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
     width: 100%;
     max-width: var(--page-width);
     margin-inline: auto;
@@ -67,34 +80,38 @@
   .drop-intro__copy {
     display: grid;
     align-content: start;
-    gap: 1.25rem;
-    max-width: 32rem;
-    padding-top: 0.5rem;
+    gap: clamp(1.1rem, 2vw, 1.6rem);
   }
 
   .drop-intro__eyebrow {
     margin: 0;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
     color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
   }
 
   .drop-intro__title {
     margin: 0;
-    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-size: clamp(3.25rem, 9vw, 7rem);
     font-weight: 700;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
+  }
+
+  .drop-intro__body {
+    display: grid;
+    justify-items: start;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
   }
 
   .drop-intro__description {
     color: var(--color-foreground-muted);
     font-size: 1rem;
-    line-height: 1.65;
-    max-width: 34ch;
+    line-height: 1.7;
+    max-width: 32ch;
   }
 
   .drop-intro__description p {
@@ -102,50 +119,71 @@
   }
 
   .drop-intro__cta {
-    justify-self: start;
-    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-bottom: 0.2rem;
     text-decoration: none;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 0.2rem;
+    box-shadow: inset 0 -1px 0 currentcolor;
+    transition: box-shadow 0.3s var(--ease-out);
+  }
+
+  .drop-intro__cta:hover,
+  .drop-intro__cta:focus-visible {
+    box-shadow: inset 0 -1px 0 transparent;
   }
 
   .drop-intro__media {
-    min-height: clamp(22rem, 55vw, 40rem);
-    background: var(--color-surface);
     overflow: hidden;
+    background: var(--color-surface);
   }
 
   .drop-intro__image {
     width: 100%;
     height: 100%;
-    min-height: inherit;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
   }
 
-  .drop-intro__placeholder {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100%;
-    min-height: inherit;
-    border: 1px solid var(--color-border);
-    background:
-      linear-gradient(135deg, var(--color-surface) 0%, color-mix(in srgb, var(--color-foreground) 8%, var(--color-background)) 100%);
-    color: var(--color-foreground-muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+  @media (min-width: 900px) {
+    /* Without photography the section becomes a two-part editorial spread:
+       the release name leads, the supporting line settles on its baseline. */
+    .drop-intro:not(.drop-intro--illustrated) .drop-intro__copy {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 23rem);
+      column-gap: clamp(3rem, 8vw, 8rem);
+      align-items: end;
+    }
+
+    .drop-intro:not(.drop-intro--illustrated) .drop-intro__eyebrow {
+      grid-column: 1 / -1;
+    }
+
+    .drop-intro:not(.drop-intro--illustrated) .drop-intro__title {
+      grid-column: 1;
+      margin-bottom: -0.12em;
+    }
+
+    .drop-intro:not(.drop-intro--illustrated) .drop-intro__body {
+      grid-column: 2;
+    }
+
+    .drop-intro--illustrated .drop-intro__inner {
+      grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
+      align-items: end;
+    }
+
+    .drop-intro--illustrated .drop-intro__image {
+      aspect-ratio: 5 / 4;
+    }
   }
 
-  @media (min-width: 900px) {
-    .drop-intro__inner {
-      grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
-      align-items: stretch;
+  @media (prefers-reduced-motion: reduce) {
+    .drop-intro__cta {
+      transition: none;
     }
   }
 {% endstylesheet %}
@@ -177,8 +215,7 @@
     {
       "type": "richtext",
       "id": "description",
-      "label": "t:labels.description",
-      "default": "<p>DROP 001 // VELOCITY. A limited run of KOVA pieces.</p>"
+      "label": "t:labels.description"
     },
     {
       "type": "text",
@@ -194,13 +231,8 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:labels.image"
-    },
-    {
-      "type": "text",
-      "id": "placeholder_label",
-      "label": "t:labels.placeholder_label",
-      "default": "Drop imagery"
+      "label": "t:labels.image",
+      "info": "t:info.assigned_image_only"
     }
   ],
   "presets": [

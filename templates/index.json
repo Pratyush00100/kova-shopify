@@ -27,10 +27,9 @@
         "anchor_id": "drop",
         "eyebrow": "DROP 001",
         "title": "VELOCITY",
-        "description": "<p>DROP 001 // VELOCITY. A limited run of KOVA pieces.</p>",
+        "description": "<p>A limited run of KOVA pieces.</p>",
         "button_label": "VIEW THE DROP",
-        "button_link": "/collections/drop-001",
-        "placeholder_label": "Drop imagery"
+        "button_link": "/collections/drop-001"
       }
     },
     "featured_products": {

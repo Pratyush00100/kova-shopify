@@ -1,18 +1,19 @@
 {% comment %}
   Editorial entry points that route visitors from the homepage into the
-  dedicated BUILD, MANIFESTO and DROP pages. Each pathway is a block.
+  dedicated DROP, BUILD and MANIFESTO pages. Each pathway is a block and reads
+  as a numbered index entry rather than a card.
 {% endcomment %}
 
-<section class="pathways full-width section-pad">
+<section class="pathways full-width">
   <div class="pathways__inner page-inner">
     {% if section.settings.heading != blank %}
-      <h2 class="section-title">{{ section.settings.heading | escape }}</h2>
+      <h2 class="eyebrow pathways__heading">{{ section.settings.heading | escape }}</h2>
     {% endif %}
 
     <ul class="pathways__list" role="list">
       {% for block in section.blocks %}
         <li class="pathways__item" {{ block.shopify_attributes }}>
-          <a class="pathways__link" href="{{ block.settings.link | default: '#' }}">
+          <a class="pathways__link" href="{{ block.settings.link | default: routes.root_url }}">
             <span class="pathways__index" aria-hidden="true">
               {{ forloop.index | prepend: '0' | slice: -2, 2 }}
             </span>
@@ -35,12 +36,17 @@
 
 {% stylesheet %}
   .pathways {
+    padding-block: clamp(3.5rem, 9vw, 7rem);
     border-top: 1px solid var(--color-border);
   }
 
   .pathways__inner {
     display: grid;
-    gap: clamp(1.5rem, 3vw, 2.5rem);
+    gap: clamp(1.75rem, 3.5vw, 3rem);
+  }
+
+  .pathways__heading {
+    margin: 0;
   }
 
   .pathways__list {
@@ -56,10 +62,13 @@
 
   .pathways__link {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'index arrow'
+      'body  body';
     align-items: center;
-    gap: clamp(1rem, 4vw, 3rem);
-    padding-block: clamp(1.25rem, 3vw, 2rem);
+    gap: 0.9rem 1.5rem;
+    padding-block: clamp(1.6rem, 4vw, 2.5rem);
     text-decoration: none;
     color: var(--color-foreground);
     transition: padding-inline 0.4s var(--ease-out);
@@ -67,44 +76,64 @@
 
   .pathways__link:hover,
   .pathways__link:focus-visible {
-    padding-inline: 0.75rem;
+    padding-inline: 0.5rem;
   }
 
   .pathways__index {
+    grid-area: index;
     color: var(--color-foreground-muted);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
   }
 
   .pathways__body {
+    grid-area: body;
     display: grid;
-    gap: 0.4rem;
+    gap: 0.5rem;
   }
 
   .pathways__title {
-    font-size: clamp(1.5rem, 4vw, 2.75rem);
+    font-size: clamp(1.75rem, 5vw, 3.25rem);
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     text-transform: uppercase;
   }
 
   .pathways__description {
     color: var(--color-foreground-muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    max-width: 46ch;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 44ch;
   }
 
   .pathways__arrow {
-    font-size: 1.25rem;
-    transition: transform 0.4s var(--ease-out);
+    grid-area: arrow;
+    justify-self: end;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--color-foreground-muted);
+    transition: transform 0.4s var(--ease-out), color 0.3s var(--ease-out);
   }
 
   .pathways__link:hover .pathways__arrow,
   .pathways__link:focus-visible .pathways__arrow {
+    color: var(--color-foreground);
     transform: translateX(0.4rem);
+  }
+
+  @media (min-width: 700px) {
+    .pathways__link {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas: 'index body arrow';
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+    }
+
+    .pathways__index {
+      align-self: start;
+      padding-top: 0.55em;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -113,11 +142,13 @@
       transition: none;
     }
 
-    .pathways__link:hover {
+    .pathways__link:hover,
+    .pathways__link:focus-visible {
       padding-inline: 0;
     }
 
-    .pathways__link:hover .pathways__arrow {
+    .pathways__link:hover .pathways__arrow,
+    .pathways__link:focus-visible .pathways__arrow {
       transform: none;
     }
   }
@@ -144,14 +175,12 @@
         {
           "type": "text",
           "id": "title",
-          "label": "t:labels.title",
-          "default": "BUILD"
+          "label": "t:labels.title"
         },
         {
           "type": "text",
           "id": "description",
-          "label": "t:labels.description",
-          "default": "How each piece is drawn, cut and finished."
+          "label": "t:labels.description"
         },
         {
           "type": "url",
@@ -168,22 +197,19 @@
         {
           "type": "pathway",
           "settings": {
-            "title": "DROP 001",
-            "description": "Velocity. A limited run of laser-cut steel wall pieces."
+            "title": "DROP 001"
           }
         },
         {
           "type": "pathway",
           "settings": {
-            "title": "BUILD",
-            "description": "How each piece is drawn, cut and finished."
+            "title": "BUILD"
           }
         },
         {
           "type": "pathway",
           "settings": {
-            "title": "MANIFESTO",
-            "description": "What we make, and why we make it this way."
+            "title": "MANIFESTO"
           }
         }
       ]

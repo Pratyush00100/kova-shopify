@@ -14,8 +14,8 @@
       "settings": {
         "eyebrow": "BUILD",
         "heading": "HOW KOVA IS MADE",
-        "description": "<p>Placeholder copy. Confirmed BUILD copy will replace this.</p>",
-        "show_image": true
+        "description": "",
+        "show_image": false
       }
     },
     "process": {
@@ -25,35 +25,35 @@
           "type": "step",
           "settings": {
             "title": "CAD / DESIGN",
-            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+            "description": ""
           }
         },
         "cut": {
           "type": "step",
           "settings": {
             "title": "LASER CUTTING",
-            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+            "description": ""
           }
         },
         "finish": {
           "type": "step",
           "settings": {
             "title": "FINISHING",
-            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+            "description": ""
           }
         },
         "inspect": {
           "type": "step",
           "settings": {
             "title": "INSPECTION",
-            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+            "description": ""
           }
         },
         "pack": {
           "type": "step",
           "settings": {
             "title": "PACKAGING",
-            "description": "<p>Placeholder. Confirmed process copy will replace this.</p>"
+            "description": ""
           }
         }
       },
@@ -69,28 +69,18 @@
         "heading": "CAD TO PACKAGING"
       }
     },
-    "page_content": {
-      "type": "page",
+    "commerce": {
+      "type": "build-commerce",
       "settings": {
-        "show_title": false
-      }
-    },
-    "notify": {
-      "type": "notify",
-      "settings": {
-        "anchor_id": "notify",
-        "eyebrow": "NOTIFY",
-        "heading": "BE FIRST ON DROP 002",
-        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
-        "button_label": "NOTIFY ME",
-        "customer_tag": "drop-notify"
+        "heading": "DROP 001 // VELOCITY",
+        "button_label": "EXPLORE DROP 001",
+        "button_link": "/collections/drop-001"
       }
     }
   },
   "order": [
     "hero",
     "process",
-    "page_content",
-    "notify"
+    "commerce"
   ]
 }

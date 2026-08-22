@@ -14,7 +14,7 @@
       "settings": {
         "eyebrow": "MANIFESTO",
         "heading": "WHAT WE STAND FOR",
-        "description": "<p>Placeholder copy. KOVA makes a small number of metal pieces each year, built to sit on a wall for a long time.</p>",
+        "description": "",
         "show_image": false
       }
     },
@@ -25,43 +25,37 @@
           "type": "statement",
           "settings": {
             "statement": "Metal should feel considered, not decorative.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+            "description": ""
           }
         },
         "two": {
           "type": "statement",
           "settings": {
             "statement": "We release in drops, not seasons.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
-          }
-        },
-        "three": {
-          "type": "statement",
-          "settings": {
-            "statement": "Made in India, built for anywhere.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+            "description": ""
           }
         }
       },
       "block_order": [
         "one",
-        "two",
-        "three"
+        "two"
       ],
       "settings": {
         "heading": "PRINCIPLES"
       }
     },
-    "page_content": {
-      "type": "page",
+    "commerce": {
+      "type": "manifesto-commerce",
       "settings": {
-        "show_title": false
+        "heading": "DROP 001 // VELOCITY",
+        "button_label": "EXPLORE DROP 001",
+        "button_link": "/collections/drop-001"
       }
     }
   },
   "order": [
     "hero",
     "statements",
-    "page_content"
+    "commerce"
   ]
 }

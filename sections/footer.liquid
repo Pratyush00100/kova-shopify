@@ -15,18 +15,18 @@
             {{ section.settings.link_1_label | escape }}
           </a>
         {% endif %}
-        {% if section.settings.link_2_label != blank %}
-          <a class="footer__link" href="{{ section.settings.link_2_url | default: '#shop' }}">
+        {% if section.settings.link_2_label != blank and section.settings.link_2_url != blank %}
+          <a class="footer__link" href="{{ section.settings.link_2_url }}">
             {{ section.settings.link_2_label | escape }}
           </a>
         {% endif %}
         {% if section.settings.link_3_label != blank %}
-          <a class="footer__link" href="{{ section.settings.link_3_url | default: '#build' }}">
+          <a class="footer__link" href="{{ section.settings.link_3_url | default: '/pages/build' }}">
             {{ section.settings.link_3_label | escape }}
           </a>
         {% endif %}
         {% if section.settings.link_4_label != blank %}
-          <a class="footer__link" href="{{ section.settings.link_4_url | default: '#manifesto' }}">
+          <a class="footer__link" href="{{ section.settings.link_4_url | default: '/pages/manifesto' }}">
             {{ section.settings.link_4_label | escape }}
           </a>
         {% endif %}
@@ -152,8 +152,7 @@
     {
       "type": "text",
       "id": "link_2_label",
-      "label": "t:labels.link_2_label",
-      "default": "SHOP"
+      "label": "t:labels.link_2_label"
     },
     {
       "type": "url",

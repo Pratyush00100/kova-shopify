@@ -24,11 +24,20 @@
       {% if section.settings.link_label != blank %}
         {% liquid
           assign view_all_url = section.settings.link_url
-          if view_all_url == blank and featured_collection != blank
+          if view_all_url == routes.all_products_collection_url
+            assign view_all_url = blank
+          endif
+          if view_all_url == blank and featured_collection != blank and featured_collection.handle != 'all'
             assign view_all_url = featured_collection.url
           endif
+          if view_all_url == blank
+            assign view_all_url = collections['drop-001'].url
+          endif
+          if view_all_url == blank
+            assign view_all_url = '/collections/drop-001'
+          endif
         %}
-        <a class="link-underline" href="{{ view_all_url | default: routes.all_products_collection_url }}">
+        <a class="link-underline" href="{{ view_all_url }}">
           {{ section.settings.link_label | escape }}
         </a>
       {% endif %}

@@ -10,6 +10,14 @@
   if cart_heading == blank
     assign cart_heading = 'cart.title' | t
   endif
+
+  assign continue_url = section.settings.continue_link
+  if continue_url == blank
+    assign continue_url = collections['drop-001'].url
+  endif
+  if continue_url == blank
+    assign continue_url = '/collections/drop-001'
+  endif
 %}
 
 <div class="cart full-width section-pad">
@@ -23,37 +31,80 @@
       <form action="{{ routes.cart_url }}" method="post" novalidate>
         <ul class="cart__items" role="list">
           {% for item in cart.items %}
+            {% liquid
+              assign show_variant = false
+              unless item.product.has_only_default_variant
+                if item.variant.title != blank
+                  assign show_variant = true
+                endif
+              endunless
+
+              if show_variant
+                capture item_label
+                  echo item.product.title
+                  echo ' — '
+                  echo item.variant.title
+                endcapture
+              else
+                assign item_label = item.product.title
+              endif
+            %}
+
             <li class="cart__item">
-              <a class="cart__media" href="{{ item.url }}">
-                {% if item.image %}
+              {% if item.image %}
+                <a class="cart__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
                   {{
                     item.image
                     | image_url: width: 400
                     | image_tag:
                       class: 'cart__image',
                       widths: '150, 250, 400',
-                      sizes: '120px',
+                      sizes: '88px',
                       loading: 'lazy',
-                      alt: item.title
+                      alt: item.image.alt | default: item_label
                   }}
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'media-placeholder' }}
-                {% endif %}
-              </a>
+                </a>
+              {% else %}
+                <div class="cart__media" aria-hidden="true"></div>
+              {% endif %}
 
               <div class="cart__item-info">
                 <a class="cart__item-title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
-                {% unless item.variant.title contains 'Default' %}
+                {% if show_variant %}
                   <p class="cart__item-variant">{{ item.variant.title | escape }}</p>
-                {% endunless %}
+                {% endif %}
 
-                <p class="cart__item-price">{{ item.final_price | money }}</p>
+                <p class="cart__item-price">
+                  {% if item.original_price > item.final_price %}
+                    <s class="cart__price-original">
+                      <span class="visually-hidden">{{ 'cart.regular_price' | t }}</span>
+                      {{ item.original_price | money }}
+                    </s>
+                    <span class="cart__price-final">
+                      <span class="visually-hidden">{{ 'cart.discounted_price' | t }}</span>
+                      {{ item.final_price | money }}
+                    </span>
+                  {% else %}
+                    {{ item.final_price | money }}
+                  {% endif %}
+                </p>
+
+                {% if item.line_level_discount_allocations.size > 0 %}
+                  <ul class="cart__item-discounts" role="list">
+                    {% for allocation in item.line_level_discount_allocations %}
+                      <li>
+                        {{ allocation.discount_application.title | escape }}
+                        (&minus;{{ allocation.amount | money }})
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
 
               <div class="cart__item-actions">
                 <label class="visually-hidden" for="CartQuantity-{{ forloop.index }}">
-                  {{ 'cart.quantity' | t }}
+                  {{ 'cart.quantity_for' | t: item: item_label | escape }}
                 </label>
 
                 <input
@@ -64,24 +115,46 @@
                   value="{{ item.quantity }}"
                   min="0"
                   step="1"
+                  inputmode="numeric"
                 >
 
-                <a class="cart__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+                <a
+                  class="cart__remove"
+                  href="{{ item.url_to_remove }}"
+                  aria-label="{{ 'cart.remove_item' | t: item: item_label | escape }}"
+                >
+                  {{ 'cart.remove' | t }}
+                </a>
               </div>
 
-              <p class="cart__item-total">{{ item.final_line_price | money }}</p>
+              <p class="cart__item-total">
+                <span class="visually-hidden">{{ 'cart.line_total' | t }}</span>
+                {{ item.final_line_price | money }}
+              </p>
             </li>
           {% endfor %}
         </ul>
 
         <div class="cart__footer">
           <div class="cart__totals">
-            <div class="cart__total-row">
-              <span>{{ 'cart.subtotal' | t }}</span>
-              <span class="cart__subtotal">{{ cart.total_price | money }}</span>
-            </div>
+            {% if cart.cart_level_discount_applications.size > 0 %}
+              <div class="cart__total-row cart__total-row--minor">
+                <span>{{ 'cart.subtotal' | t }}</span>
+                <span>{{ cart.items_subtotal_price | money }}</span>
+              </div>
 
-            <p class="cart__note">{{ 'cart.taxes_note' | t }}</p>
+              {% for discount_application in cart.cart_level_discount_applications %}
+                <div class="cart__total-row cart__total-row--minor">
+                  <span>{{ discount_application.title | escape }}</span>
+                  <span>&minus;{{ discount_application.total_allocated_amount | money }}</span>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="cart__total-row">
+              <span>{{ 'cart.total' | t }}</span>
+              <span class="cart__total-value">{{ cart.total_price | money }}</span>
+            </div>
           </div>
 
           <div class="cart__actions">
@@ -95,12 +168,21 @@
           </div>
         </div>
       </form>
+
+      {% if continue_url != blank %}
+        <a class="link-underline cart__continue" href="{{ continue_url }}">
+          {{ 'cart.continue_shopping' | t }}
+        </a>
+      {% endif %}
     {% else %}
       <div class="cart__empty">
         <p class="section-title">{{ 'cart.empty' | t }}</p>
-        <a class="btn" href="{{ routes.all_products_collection_url }}">
-          {{ 'cart.continue_shopping' | t }}
-        </a>
+
+        {% if continue_url != blank %}
+          <a class="btn" href="{{ continue_url }}">
+            {{ 'cart.continue_shopping' | t }}
+          </a>
+        {% endif %}
       </div>
     {% endif %}
   </div>
@@ -135,7 +217,7 @@
 
   .cart__item {
     display: grid;
-    grid-template-columns: 5.5rem 1fr;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
     gap: 1rem 1.25rem;
     padding-block: 1.5rem;
     border-bottom: 1px solid var(--color-border);
@@ -160,6 +242,7 @@
     display: grid;
     gap: 0.35rem;
     align-content: start;
+    min-width: 0;
   }
 
   .cart__item-title {
@@ -168,6 +251,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
   }
 
   .cart__item-variant,
@@ -176,10 +260,28 @@
     color: var(--color-foreground-muted);
     font-size: 0.8rem;
     letter-spacing: 0.06em;
+    overflow-wrap: anywhere;
+  }
+
+  .cart__price-final {
+    color: var(--color-foreground);
+  }
+
+  .cart__item-discounts {
+    margin: 0.15rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.2rem;
+    color: var(--color-foreground-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .cart__item-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
     grid-column: 2;
@@ -214,6 +316,11 @@
     gap: 1.5rem;
   }
 
+  .cart__totals {
+    display: grid;
+    gap: 0.5rem;
+  }
+
   .cart__total-row {
     display: flex;
     justify-content: space-between;
@@ -226,17 +333,28 @@
     text-transform: uppercase;
   }
 
-  .cart__note {
-    margin: 0.75rem 0 0;
+  .cart__total-row--minor {
+    padding-bottom: 0;
+    border-bottom: 0;
     color: var(--color-foreground-muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .cart__total-value {
+    white-space: nowrap;
   }
 
   .cart__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+
+  .cart__continue {
+    justify-self: start;
+    color: var(--color-foreground-muted);
   }
 
   .cart__empty {
@@ -246,7 +364,7 @@
     padding-block: clamp(2rem, 6vw, 4rem);
   }
 
-  @media (min-width: 750px) {
+  @media (min-width: 900px) {
     .cart__item {
       grid-template-columns: 5.5rem minmax(0, 1fr) auto auto;
       align-items: center;
@@ -258,9 +376,14 @@
       grid-column: auto;
     }
 
+    .cart__item-actions {
+      flex-wrap: nowrap;
+    }
+
     .cart__item-total {
       min-width: 6rem;
       text-align: right;
+      white-space: nowrap;
     }
 
     .cart__footer {
@@ -287,6 +410,12 @@
       "id": "heading",
       "label": "t:labels.heading",
       "default": "CART"
+    },
+    {
+      "type": "url",
+      "id": "continue_link",
+      "label": "t:labels.link_url",
+      "info": "t:info.cart_continue_link"
     }
   ]
 }

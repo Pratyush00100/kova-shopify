@@ -27,21 +27,17 @@
       {% endif %}
     </div>
 
-    {% if section.settings.show_image %}
+    {% if section.settings.show_image and section.settings.image != blank %}
       <div class="page-hero__media">
-        {% if section.settings.image != blank %}
-          {{
-            section.settings.image
-            | image_url: width: 1600
-            | image_tag:
-              class: 'page-hero__image',
-              widths: '600, 900, 1200, 1600',
-              sizes: '(min-width: 900px) 45vw, 100vw',
-              loading: 'eager'
-          }}
-        {% else %}
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'media-placeholder' }}
-        {% endif %}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'page-hero__image',
+            widths: '600, 900, 1200, 1600',
+            sizes: '(min-width: 900px) 45vw, 100vw',
+            loading: 'eager'
+        }}
       </div>
     {% endif %}
   </div>
@@ -120,7 +116,8 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:labels.image"
+      "label": "t:labels.image",
+      "info": "t:info.assigned_image_only"
     }
   ],
   "presets": [

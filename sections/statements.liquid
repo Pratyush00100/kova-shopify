@@ -9,25 +9,41 @@
       <h2 class="section-title statements__heading">{{ section.settings.heading | escape }}</h2>
     {% endif %}
 
-    <ol class="statements__list">
-      {% for block in section.blocks %}
-        <li class="statements__item" {{ block.shopify_attributes }}>
-          <p class="statements__index" aria-hidden="true">
-            {{ forloop.index | prepend: '0' | slice: -2, 2 }}
-          </p>
+    {% if section.blocks.size > 0 %}
+      <ol class="statements__list">
+        {% for block in section.blocks %}
+          {% liquid
+            assign statement_text = block.settings.statement | strip
+            assign description_text = block.settings.description | strip_html | strip
+          %}
 
-          <div class="statements__body">
-            {% if block.settings.statement != blank %}
-              <p class="statements__statement">{{ block.settings.statement | escape }}</p>
-            {% endif %}
+          {% if statement_text == 'Made in India, built for anywhere.' %}
+            {% continue %}
+          {% endif %}
 
-            {% if block.settings.description != blank %}
-              <div class="rte statements__description">{{ block.settings.description }}</div>
-            {% endif %}
-          </div>
-        </li>
-      {% endfor %}
-    </ol>
+          {% if statement_text != blank or description_text != blank %}
+            <li
+              class="statements__item{% if description_text == blank %} statements__item--statement-only{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <p class="statements__index" aria-hidden="true">
+                {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+              </p>
+
+              <div class="statements__body">
+                {% if statement_text != blank %}
+                  <p class="statements__statement">{{ block.settings.statement | escape }}</p>
+                {% endif %}
+
+                {% if description_text != blank %}
+                  <div class="rte statements__description">{{ block.settings.description }}</div>
+                {% endif %}
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+    {% endif %}
   </div>
 </section>
 
@@ -84,7 +100,7 @@
       gap: 2rem;
     }
 
-    .statements__body {
+    .statements__item:not(.statements__item--statement-only) .statements__body {
       grid-template-columns: 1.1fr 0.9fr;
       gap: 2.5rem;
       align-items: start;
@@ -113,44 +129,19 @@
         {
           "type": "text",
           "id": "statement",
-          "label": "t:labels.statement",
-          "default": "Metal should feel considered, not decorative."
+          "label": "t:labels.statement"
         },
         {
           "type": "richtext",
           "id": "description",
-          "label": "t:labels.description",
-          "default": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
+          "label": "t:labels.description"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:general.statements",
-      "blocks": [
-        {
-          "type": "statement",
-          "settings": {
-            "statement": "Metal should feel considered, not decorative.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
-          }
-        },
-        {
-          "type": "statement",
-          "settings": {
-            "statement": "We release in drops, not seasons.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
-          }
-        },
-        {
-          "type": "statement",
-          "settings": {
-            "statement": "Made in India, built for anywhere.",
-            "description": "<p>Placeholder copy. Replace with the final manifesto text.</p>"
-          }
-        }
-      ]
+      "name": "t:general.statements"
     }
   ]
 }

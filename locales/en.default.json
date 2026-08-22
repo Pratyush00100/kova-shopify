@@ -26,16 +26,21 @@
   "cart": {
     "checkout": "Checkout",
     "continue_shopping": "Continue shopping",
+    "discounted_price": "Discounted price",
     "empty": "Your cart is empty",
     "item_count": {
       "one": "{{ count }} item",
       "other": "{{ count }} items"
     },
+    "line_total": "Line total",
     "quantity": "Quantity",
+    "quantity_for": "Quantity for {{ item }}",
+    "regular_price": "Regular price",
     "remove": "Remove",
+    "remove_item": "Remove {{ item }}",
     "subtotal": "Subtotal",
-    "taxes_note": "Taxes and shipping calculated at checkout.",
     "title": "Cart",
+    "total": "Total",
     "update": "Update"
   },
   "customers": {

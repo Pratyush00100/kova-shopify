@@ -1,12 +1,31 @@
 {% comment %}
-  Shows more pieces from the same drop. Defaults to the first collection the
-  product belongs to, with a theme editor override for a specific collection.
+  Shows more pieces from the same drop. Prefers Drop 001 when the product
+  belongs to it. A theme editor collection override is used when it is not
+  the all-products collection.
 {% endcomment %}
 
 {% liquid
   assign source_collection = section.settings.collection
+  if source_collection != blank and source_collection.handle == 'all'
+    assign source_collection = nil
+  endif
+
   if source_collection == blank
-    assign source_collection = product.collections.first
+    for collection in product.collections
+      if collection.handle == 'drop-001'
+        assign source_collection = collection
+        break
+      endif
+    endfor
+  endif
+
+  if source_collection == blank
+    for collection in product.collections
+      unless collection.handle == 'all'
+        assign source_collection = collection
+        break
+      endunless
+    endfor
   endif
 %}
 

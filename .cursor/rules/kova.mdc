@@ -50,6 +50,9 @@ description: Core KOVA business, product, design, architecture, and development 
 * Product and collection data should come from Shopify.
 * Guest checkout is preferred for V1.
 * Do not invent shipping, tax, refund or delivery policies.
+* Do not bundle hero images, product photos, or factory videos in theme `assets/`. Assign them in the Shopify theme editor or product admin.
+* Incoming copy and media folders are knowledge only. Never ship them with the theme, and never use decorative wall-art photos as product featured images.
+* Hardcode only identity, CSS, and locked architecture. Section copy, images, videos, prices, and policies stay Shopify-editable.
 
 ## Brand and design
 
@@ -59,24 +62,29 @@ Design direction:
 
 * Industrial
 * Editorial
-* Minimal
 * Premium
 * Strong typography
 * Generous whitespace
-* Black, off-white and neutral tones
+* A deliberate color system chosen to suit the approved product photography and brand assets
+* Black, off-white and neutral tones may remain useful foundations, but the website is not restricted to monochrome
 * High-quality photography
-* Subtle, purposeful animation
+* Client-approved product photography, generic brand imagery and factory video
+* Purposeful interaction and motion
 * Strong visual hierarchy
-* Confident and restrained
+* Confident, attractive and product-led
+
+The agent is responsible for making practical UI design decisions that improve the storefront. Do not wait for approval on every reversible detail. Choose color, composition, typography, spacing, imagery, video treatment and responsive behavior based on the supplied assets, accessibility and the needs of the page.
+
+This is a short-deadline ecommerce launch. Prioritize high-impact, launch-ready work, coherent end-to-end presentation, responsive QA and reliable commerce over speculative architecture or low-value polish.
 
 Do NOT use:
 
 * Generic AI landing-page patterns
-* Excessive gradients
+* Decorative or excessive gradients
 * Glassmorphism
 * Random decorative blobs
 * Excessive animation
-* Generic stock photography
+* Unapproved stock or fabricated photography
 * Marketing filler copy
 * Unnecessary UI components
 * Scrolling/moving marquees
@@ -126,7 +134,7 @@ V1:
 * One shopping destination, not separate Drop and Shop
 * Guest checkout
 * Fixed material/finish unless a product requires otherwise
-* One short factory laser-cutting video, used with restraint
+* Use the client-approved factory videos selectively; choose the number and placement that best support the page without slowing or overwhelming it
 * Homepage sells the brand and current release; product pages sell the piece
 
 V2:
@@ -140,16 +148,16 @@ Do not build V2 navigation, edition, or catalog behavior in V1.
 
 ## Current V1 Design Direction
 
-* Hero is predominantly black.
-* Hero uses a large KOVA wordmark positioned lower in the composition.
-* Hero visual should blend a real automotive/product image into the black background rather than using a separate rectangular image card.
+* The visual direction is no longer restricted to black and white or a predominantly black hero.
+* Build a coherent palette from the approved product photography, generic brand imagery and videos. Use color with intent and maintain accessible contrast.
+* The homepage hero should immediately establish KOVA, Drop 001 // VELOCITY and a clear path to shop. Its exact color, composition and media treatment are designer-led UI decisions.
+* Product photography and merchandising should lead the ecommerce experience.
 * Primary collection naming format: "DROP 001 // VELOCITY".
 * Do not use "DROP 001 — VELOCITY".
 * Remove the scrolling/moving marquee from the homepage and collection pages.
 * Avoid visual patterns that make the website feel AI-generated or template-generated.
-* Use motion only when it supports the product or story.
-* Use authentic product photography and real factory video as primary visual assets.
-* One short laser-cutting video may autoplay, muted and looped, when its section enters the viewport. Honor `prefers-reduced-motion`.
+* Use motion only when it supports the product, navigation or story. Honor `prefers-reduced-motion`.
+* Use the client-approved product photography, generic imagery and factory videos as primary visual assets.
 * Product pages should be detailed and commerce-focused, with inspiration from strong specialist ecommerce sites such as Modello Turbo, without copying their design.
 * The homepage should sell the brand and current release; detailed product information belongs on product pages.
 * Do not use generic "metal wall art" terminology in customer-facing copy.

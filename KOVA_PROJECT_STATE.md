@@ -53,8 +53,8 @@ Architecturally complete.
 - Heading: `DROP 001 // VELOCITY`
 - Pathways to Drop 001, BUILD, Manifesto
 - Featured products pull from a selected collection; VIEW ALL no longer falls back to `/collections/all`
-- Hero image blend treatment is implemented (masked, lightened, no image card); the hero image asset and factory video are still missing
-- Unresolved: whether Notify stays on Home; final photography/video; leftover drop-intro copy still includes “A limited run of KOVA pieces.”
+- Hero defaults to the ember wordmark composition; no bundled photo. Optional Shopify image blends into the field; ember wash stays on KOVA
+- Unresolved: whether Notify stays on Home
 
 **PDP** (`templates/product.json`)
 
@@ -88,10 +88,10 @@ Architecturally complete.
 - Process: CAD / DESIGN → LASER CUTTING → FINISHING → INSPECTION → PACKAGING
 - Step descriptions and placeholder images are hidden when empty
 - Process layout is 1 column below 1100px and 5 columns from 1100px (no 2-column orphan)
-- One Shopify-hosted factory video setting in `process-steps`; muted, inline, looping, viewport-triggered; honors reduced motion
+- Factory video is Shopify-hosted only: one optional main clip plus optional per-step clips; muted, inline, looping, viewport-triggered; honors reduced motion. Hidden until assigned. No homepage video.
 - Notify and Shopify page body are not on BUILD
 - Commerce bridge: `DROP 001 // VELOCITY` → `EXPLORE DROP 001` → `/collections/drop-001`
-- Unresolved: final BUILD/process copy; video playback currently shows poster/blur rather than confirmed play (needs later investigation); whether more than one manufacturing video is required later; whether the same video is also used on Home
+- Unresolved: final BUILD/process copy; assign factory files in the theme editor
 
 **Manifesto** (`templates/page.manifesto.json`)
 
@@ -141,23 +141,20 @@ Architecturally complete. Global shell audit and navigation hardening are done.
 Architecture is closed. These items belong to the UI refinement phase only. Do not treat them as architecture reopenings. Do not resolve them here.
 
 1. PDP gallery — replace the current large stacked presentation with a more premium multi-image/smaller-image experience.
-2. BUILD video — investigate why the Shopify-hosted video currently shows the poster/blur state instead of confirmed playback.
-3. BUILD media model — decide whether/how the 5–6 factory videos should be presented instead of the current single-video slot.
-4. BUILD video poster/aspect ratio/mobile treatment.
-5. Drop 001 product-image sizing/crop refinement.
-6. Homepage hero photography integration once final photography arrives.
-7. Homepage overall visual refinement.
-8. Typography/font refinement.
-9. Global spacing and responsive polish.
-10. Product-card visual refinement.
-11. Final mobile/desktop visual QA.
+2. BUILD video — confirm playback once Shopify-hosted clips are assigned.
+3. Drop 001 product-image sizing/crop refinement.
+4. Homepage overall visual refinement.
+5. Typography/font refinement.
+6. Global spacing and responsive polish.
+7. Product-card visual refinement.
+8. Final mobile/desktop visual QA.
 
 ## Deferred / pending assets
 
-- Final product photography
-- Hero image asset
-- Factory / laser-cutting video playback confirmation
-- Final drop, BUILD, and manifesto copy
+- Final product photography (Shopify product media — not decorative wall-art photos)
+- Optional homepage hero image (theme editor)
+- Factory videos (theme editor: main BUILD clip + optional per-step clips)
+- Final drop, BUILD, and manifesto copy (theme editor / product admin)
 
 ## Next
 
@@ -177,5 +174,4 @@ Architecture is closed. These items belong to the UI refinement phase only. Do n
 - Instagram URL
 - Final manifesto text; whether current Manifesto headlines are locked
 - Final BUILD process copy
-- Whether the laser-cutting video lives on BUILD, homepage, or both
-- Whether more than one BUILD video is required later
+- Instagram stays muted until a URL is confirmed

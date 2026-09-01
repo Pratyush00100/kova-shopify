@@ -18,7 +18,8 @@
         "subheading": "LIVE NOW",
         "button_label": "EXPLORE DROP 001",
         "button_link": "/collections/drop-001",
-        "placeholder_label": "Image forthcoming"
+        "media_treatment": "blend",
+        "placeholder_label": ""
       }
     },
     "drop_intro": {
@@ -27,7 +28,7 @@
         "anchor_id": "drop",
         "eyebrow": "DROP 001",
         "title": "VELOCITY",
-        "description": "<p>A limited run of KOVA pieces.</p>",
+        "description": "<p>Eight automotive silhouettes created for people who don't just like cars, but genuinely care about them.</p>",
         "button_label": "VIEW THE DROP",
         "button_link": "/collections/drop-001"
       }
@@ -50,7 +51,7 @@
           "type": "pathway",
           "settings": {
             "title": "DROP 001",
-            "description": "A limited run of KOVA pieces.",
+            "description": "Eight automotive silhouettes, cut from 2 mm stainless steel.",
             "link": "/collections/drop-001"
           }
         },

@@ -14,7 +14,7 @@
       "settings": {
         "eyebrow": "BUILD",
         "heading": "HOW KOVA IS MADE",
-        "description": "",
+        "description": "<p>From design and fiber-laser cutting to finishing, mounting and packaging, KOVA products are developed and produced in India.</p>",
         "show_image": false
       }
     },
@@ -32,14 +32,14 @@
           "type": "step",
           "settings": {
             "title": "LASER CUTTING",
-            "description": ""
+            "description": "<p>Precision cut from 2 mm stainless steel on a fiber laser.</p>"
           }
         },
         "finish": {
           "type": "step",
           "settings": {
             "title": "FINISHING",
-            "description": ""
+            "description": "<p>Finished across the front, back and edges for a consistent appearance from every angle.</p>"
           }
         },
         "inspect": {
@@ -53,7 +53,7 @@
           "type": "step",
           "settings": {
             "title": "PACKAGING",
-            "description": ""
+            "description": "<p>Every KOVA artwork is packed carefully before dispatch.</p>"
           }
         }
       },

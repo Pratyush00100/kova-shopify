@@ -2,8 +2,10 @@
   "general": {
     "404": "Not found",
     "article": "Article",
+    "assurances": "Delivery assurances",
     "block": "Block",
     "blog": "Blog",
+    "custom_edition": "Custom size enquiry",
     "build_commerce": "BUILD commerce",
     "cart": "Cart",
     "collection": "Collection",
@@ -52,10 +54,17 @@
     "typography": "Typography"
   },
   "labels": {
+    "accent_color": "Accent",
+    "accent_contrast_color": "Text on accent",
     "accessibility_label": "Accessibility label",
     "alignment": "Alignment",
+    "assurance": "Assurance",
+    "media_treatment": "Image treatment",
+    "whatsapp_number": "WhatsApp number",
+    "whatsapp_message": "WhatsApp message",
     "anchor_id": "Section anchor ID",
     "background": "Background",
+    "dark_color": "Dark panel",
     "brand_text": "Large brand text",
     "button_label": "Button label",
     "button_link": "Button link",
@@ -73,7 +82,8 @@
     "grid_item_width": "Grid item width",
     "heading": "Heading",
     "hero_image": "Hero image",
-    "video": "Factory video",
+    "video": "Main factory video",
+    "step_video": "Step video",
     "image": "Image",
     "input_corner_radius": "Input corner radius",
     "instagram_label": "Instagram label",
@@ -116,17 +126,25 @@
     "wordmark": "Wordmark"
   },
   "info": {
+    "accent_color": "Used for primary buttons, active states and small emphasis details. Keep it strong enough to read as an action.",
+    "assurances": "Shown under the add-to-cart button. Leave a field empty to hide that line. Only state promises you can keep.",
+    "media_treatment": "Blend dissolves the photo into the field so it never reads as a card. Scrim suits brighter interiors.",
+    "whatsapp_number": "Include the country code and no spaces, for example 917988355887. Leave empty to hide the enquiry block.",
+    "whatsapp_message": "Prefilled message. The product name is added to the end automatically.",
+    "accent_contrast_color": "Text colour placed on top of the accent. Check it stays legible if you change the accent.",
     "customer_tag": "Applied to customers who sign up here, so you can segment drop notifications.",
+    "dark_color": "Background for the hero and other inverted panels.",
     "description_fallback_collection": "Leave empty to use the collection description.",
     "footer_menu": "Optional. If empty, fallback links below are used.",
     "assigned_image_only": "Shown only when an image is selected. An empty image setting does not render a placeholder.",
     "build_commerce_collection": "Select the current drop collection. Its Shopify URL is used for the button when set.",
     "build_commerce_link": "Used when no collection is selected. Falls back to the Drop 001 collection if that collection exists.",
     "cart_continue_link": "Continue shopping destination. Falls back to the Drop 001 collection if that collection exists.",
-    "factory_video": "Optional Shopify-hosted video. Plays muted and looping when this section enters view. Not shown until a video is selected. Honors reduced-motion preferences.",
+    "factory_video": "Optional. Upload under Content → Files, then select it here. Plays muted and looping when in view. Hidden until a video is selected. Honors reduced-motion preferences.",
+    "step_video": "Optional clip for this stage. Shown instead of the step image when both are set. Same muted in-view playback as the main video.",
     "header_menu": "Optional. If empty, fallback links below are used.",
-    "hero_image": "Optional. Blends into the black hero. Leave empty for a black placeholder until the final image is ready.",
-    "hero_placeholder_label": "Shown only while no hero image is selected. Clear it to leave the hero completely bare.",
+    "hero_image": "Optional. Assign in the theme editor. Leave empty for the ember wordmark hero. When set, the image dissolves into the field and the ember wash stays on the wordmark.",
+    "hero_placeholder_label": "Shown only while no hero image is selected. Leave empty for a clean wordmark hero.",
     "heading_fallback": "Leave empty to use the page title.",
     "heading_fallback_collection": "Leave empty to use the collection title.",
     "image_fallback_collection": "Leave empty to use the collection image.",
@@ -143,6 +161,10 @@
     "direction": {
       "horizontal": "Horizontal",
       "vertical": "Vertical"
+    },
+    "media_treatment": {
+      "scrim": "Scrim (bright photography)",
+      "blend": "Blend (dark photography)"
     },
     "page_width": {
       "narrow": "Narrow",

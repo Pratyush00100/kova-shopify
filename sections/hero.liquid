@@ -1,11 +1,11 @@
 {% comment %}
-  Homepage hero. A predominantly black field with the drop identity set small
-  at the top and the KOVA wordmark anchored low in the viewport.
+  Homepage hero. A deep graphite field with the drop identity set small at the
+  top, the KOVA wordmark anchored low, and an ember wash behind the wordmark.
 
-  The image is optional on purpose: final photography is not available yet, so
-  the composition has to read as intentional while empty. When an image is
-  assigned it is masked and blended into the black field so it never reads as a
-  rectangular image card.
+  The image is optional and assigned in the theme editor. When empty the
+  composition still reads as finished. When set, the photo dissolves into the
+  field and never sits as a rectangular image card. The ember wash stays on
+  the wordmark either way.
 {% endcomment %}
 
 {% liquid
@@ -13,16 +13,18 @@
   if section.settings.image != blank
     assign has_image = true
   endif
+
+  assign treatment = section.settings.media_treatment | default: 'blend'
 %}
 
 <section
-  class="hero full-width{% unless has_image %} hero--unillustrated{% endunless %}"
+  class="hero full-width surface-inverse{% unless has_image %} hero--unillustrated{% endunless %}"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
 >
   {% if has_image %}
-    <div class="hero__media" aria-hidden="true">
+    <div class="hero__media hero__media--{{ treatment }}" aria-hidden="true">
       {{
         section.settings.image
         | image_url: width: 2400
@@ -33,6 +35,10 @@
           loading: 'eager',
           fetchpriority: 'high'
       }}
+
+      {% if treatment == 'scrim' %}
+        <div class="hero__scrim"></div>
+      {% endif %}
     </div>
   {% endif %}
 
@@ -44,7 +50,10 @@
         {% endif %}
 
         {% if section.settings.subheading != blank %}
-          <p class="hero__subheading">{{ section.settings.subheading | escape }}</p>
+          <p class="hero__subheading">
+            <span class="hero__status-dot" aria-hidden="true"></span>
+            {{ section.settings.subheading | escape }}
+          </p>
         {% endif %}
       </div>
 
@@ -57,7 +66,7 @@
       <p class="hero__brand" aria-hidden="true">{{ section.settings.brand_text | escape }}</p>
 
       {% if section.settings.button_label != blank %}
-        <a class="hero__cta" href="{{ section.settings.button_link | default: '/collections/drop-001' }}">
+        <a class="btn hero__cta" href="{{ section.settings.button_link | default: '/collections/drop-001' }}">
           {{ section.settings.button_label | escape }}
         </a>
       {% endif %}
@@ -72,8 +81,6 @@
     display: grid;
     min-height: calc(100svh - var(--header-height));
     overflow: hidden;
-    background: #000;
-    color: #fff;
   }
 
   @supports (height: 100dvh) {
@@ -90,33 +97,73 @@
   .hero__media {
     position: relative;
     z-index: 0;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
   }
 
-  /* Masked and lightened so the photograph dissolves into the black field
-     instead of sitting on it as a rectangle. */
   .hero__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 58% 42%;
-    opacity: 0.52;
+  }
+
+  /* Blend treatment: for dark automotive photography. The image is lightened
+     and masked so it dissolves into the field rather than sitting on it as a
+     rectangle. */
+  .hero__media--blend .hero__image {
+    opacity: 0.55;
     mix-blend-mode: lighten;
     -webkit-mask-image: radial-gradient(105% 82% at 66% 38%, #000 0%, #000 32%, rgb(0 0 0 / 45%) 62%, transparent 84%);
     mask-image: radial-gradient(105% 82% at 66% 38%, #000 0%, #000 32%, rgb(0 0 0 / 45%) 62%, transparent 84%);
   }
 
+  /* Scrim treatment: for bright interior or lifestyle imagery. Heavier at the
+     top and bottom where the type sits, open through the middle so the work
+     stays visible. */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-inverse) 88%, transparent) 0%,
+      color-mix(in srgb, var(--color-inverse) 52%, transparent) 26%,
+      color-mix(in srgb, var(--color-inverse) 44%, transparent) 50%,
+      color-mix(in srgb, var(--color-inverse) 82%, transparent) 78%,
+      color-mix(in srgb, var(--color-inverse) 97%, transparent) 100%
+    );
+  }
+
+  /* Ember wash behind the wordmark. Always on, including when a Shopify image
+     is assigned, so KOVA keeps its heat and the photo cannot dominate. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(
+        72% 58% at 10% 92%,
+        color-mix(in srgb, var(--color-accent) 38%, transparent) 0%,
+        color-mix(in srgb, var(--color-accent) 12%, transparent) 36%,
+        transparent 68%
+      );
+    pointer-events: none;
+  }
+
   .hero__content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: clamp(3rem, 12vh, 7rem);
+    gap: clamp(4rem, 18vh, 9rem);
     width: 100%;
     max-width: var(--page-width);
     min-height: inherit;
     margin-inline: auto;
-    padding: clamp(1.75rem, 6vh, 3.25rem) var(--page-margin) clamp(1.1rem, 3.5vh, 2.25rem);
+    padding: clamp(1.75rem, 6vh, 3.25rem) var(--page-margin) clamp(1.5rem, 4vh, 2.5rem);
   }
 
   .hero__meta {
@@ -128,42 +175,70 @@
 
   .hero__identity {
     display: grid;
-    gap: 0.6rem;
+    gap: 0.7rem;
   }
 
   .hero__heading {
     margin: 0;
-    font-size: clamp(0.8rem, 1vw, 1rem);
+    font-size: clamp(0.82rem, 1vw, 1rem);
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: var(--tracking-wider);
     line-height: 1.35;
     text-transform: uppercase;
   }
 
   .hero__subheading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     margin: 0;
-    color: rgb(255 255 255 / 55%);
-    font-size: 0.66rem;
+    color: var(--color-inverse-muted);
+    font-size: var(--text-xs);
     font-weight: 600;
-    letter-spacing: 0.24em;
+    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
+  }
+
+  .hero__status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0.7rem color-mix(in srgb, var(--color-accent) 70%, transparent);
+    animation: kova-live 1.8s ease-in-out infinite;
+  }
+
+  @keyframes kova-live {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.42;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__status-dot {
+      animation: none;
+    }
   }
 
   /* Honest note about missing photography. Kept quiet so the empty hero still
      reads as a finished composition. */
   .hero__note {
     margin: 0;
-    color: rgb(255 255 255 / 24%);
-    font-size: 0.6rem;
+    color: var(--color-inverse-subtle);
+    font-size: var(--text-2xs);
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     text-align: right;
   }
 
   .hero__foot {
     display: grid;
-    gap: clamp(1.25rem, 3vh, 2rem);
+    gap: clamp(1.5rem, 3.5vh, 2.25rem);
   }
 
   .hero__brand {
@@ -181,39 +256,8 @@
 
   .hero__cta {
     justify-self: start;
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-block: 0.35rem;
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    box-shadow: inset 0 -1px 0 rgb(255 255 255 / 65%);
-    transition: box-shadow 0.3s var(--ease-out), color 0.3s var(--ease-out);
   }
 
-  .hero__cta:hover,
-  .hero__cta:focus-visible {
-    color: rgb(255 255 255 / 72%);
-    box-shadow: inset 0 -1px 0 rgb(255 255 255 / 30%);
-  }
-
-  /* The global focus ring is the foreground colour, which is invisible on the
-     black hero field. */
-  .hero__cta:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 4px;
-  }
-
-  .hero--unillustrated .hero__content {
-    gap: clamp(4rem, 18vh, 9rem);
-  }
-
-  /* Tablet: the wordmark still leads, but the CTA stays under it so the
-     baseline does not crowd at mid widths. */
   @media (min-width: 600px) {
     .hero__brand {
       font-size: min(21vw, 15.5rem);
@@ -228,7 +272,7 @@
     }
 
     .hero__cta {
-      margin-bottom: clamp(0.75rem, 1.6vh, 1.5rem);
+      margin-bottom: clamp(0.5rem, 1.4vh, 1.25rem);
     }
   }
 
@@ -246,11 +290,9 @@
       font-size: min(27vw, 9rem);
       letter-spacing: -0.05em;
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
     .hero__cta {
-      transition: none;
+      justify-self: stretch;
     }
   }
 {% endstylesheet %}
@@ -303,11 +345,21 @@
       "info": "t:info.hero_image"
     },
     {
+      "type": "select",
+      "id": "media_treatment",
+      "label": "t:labels.media_treatment",
+      "info": "t:info.media_treatment",
+      "options": [
+        { "value": "blend", "label": "t:options.media_treatment.blend" },
+        { "value": "scrim", "label": "t:options.media_treatment.scrim" }
+      ],
+      "default": "blend"
+    },
+    {
       "type": "text",
       "id": "placeholder_label",
       "label": "t:labels.placeholder_label",
-      "info": "t:info.hero_placeholder_label",
-      "default": "Image forthcoming"
+      "info": "t:info.hero_placeholder_label"
     }
   ],
   "presets": [

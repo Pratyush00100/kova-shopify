@@ -1,6 +1,9 @@
 {% comment %}
   Numbered process steps used on the BUILD page. Each step is a block so the
   merchant can add, remove and reorder stages from the theme editor.
+
+  Factory video is Shopify-hosted only: one optional main clip at the top, plus
+  an optional clip on each step. Nothing is bundled in the theme.
 {% endcomment %}
 
 <section class="process full-width section-pad">
@@ -23,7 +26,7 @@
     {% if section.settings.eyebrow != blank or section.settings.heading != blank %}
       <header class="process__header">
         {% if section.settings.eyebrow != blank %}
-          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <p class="eyebrow eyebrow--marked">{{ section.settings.eyebrow | escape }}</p>
         {% endif %}
 
         {% if section.settings.heading != blank %}
@@ -40,7 +43,20 @@
               {{ forloop.index | prepend: '0' | slice: -2, 2 }}
             </p>
 
-            {% if block.settings.image != blank %}
+            {% if block.settings.video != blank %}
+              <div class="process__media process__media--video" data-kova-factory-video>
+                {{
+                  block.settings.video
+                  | video_tag:
+                    autoplay: false,
+                    muted: true,
+                    loop: true,
+                    controls: false,
+                    playsinline: true,
+                    preload: 'metadata'
+                }}
+              </div>
+            {% elsif block.settings.image != blank %}
               <div class="process__media">
                 {{
                   block.settings.image
@@ -80,16 +96,18 @@
 
   .process__video {
     overflow: hidden;
-    background: #000;
+    background: var(--color-inverse);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
   }
 
   .process__video video {
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 16 / 9;
     max-height: min(70vh, 40rem);
     object-fit: cover;
-    background: #000;
+    background: var(--color-inverse);
   }
 
   .process__list {
@@ -110,8 +128,8 @@
 
   .process__number {
     margin: 0;
-    color: var(--color-foreground-muted);
-    font-size: 0.72rem;
+    color: var(--color-accent);
+    font-size: var(--text-xs);
     font-weight: 700;
     letter-spacing: 0.18em;
   }
@@ -119,26 +137,39 @@
   .process__media {
     aspect-ratio: 4 / 3;
     overflow: hidden;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
+    background: var(--color-inverse);
   }
 
-  .process__image {
+  .process__image,
+  .process__media--video video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+  }
+
+  .process__media--video :is(video, .deferred-media, .video-wrapper),
+  .process__media--video > * {
+    width: 100%;
+    height: 100%;
   }
 
   .process__title {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: var(--text-lg);
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
   .process__description {
-    font-size: 0.92rem;
+    font-size: var(--text-sm);
+  }
+
+  /* The step a visitor is reading gets the ember rule, so the row of stages
+     reads as a sequence rather than five equal columns. */
+  .process__step:hover {
+    border-top-color: var(--color-accent);
   }
 
   @media (min-width: 1100px) {
@@ -155,10 +186,9 @@
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    roots.forEach(function (root) {
-      const video = root.querySelector('video');
-      if (!video) return;
-
+    function bindVideo(video) {
+      if (!video || video.dataset.kovaBound === 'true') return;
+      video.dataset.kovaBound = 'true';
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
@@ -183,6 +213,24 @@
       );
 
       observer.observe(video);
+    }
+
+    roots.forEach(function (root) {
+      const existing = root.querySelector('video');
+      if (existing) {
+        bindVideo(existing);
+        return;
+      }
+
+      const ready = new MutationObserver(function () {
+        const found = root.querySelector('video');
+        if (found) {
+          ready.disconnect();
+          bindVideo(found);
+        }
+      });
+
+      ready.observe(root, { childList: true, subtree: true });
     });
   })();
 {% endjavascript %}
@@ -227,6 +275,12 @@
           "type": "richtext",
           "id": "description",
           "label": "t:labels.description"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "t:labels.step_video",
+          "info": "t:info.step_video"
         },
         {
           "type": "image_picker",

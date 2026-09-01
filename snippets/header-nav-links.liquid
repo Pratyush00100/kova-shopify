@@ -1,13 +1,20 @@
 {% doc %}
   Renders header navigation links from a menu or fallback settings.
 
+  Marks the link for the page currently being viewed so visitors can see where
+  they are. Anchor links such as /#notify are never treated as current.
+
   @param {object} section - The header section object
 {% enddoc %}
+
+{% liquid
+  assign current_path = request.path
+%}
 
 {% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
   {% for link in section.settings.menu.links %}
     <a
-      class="header__nav-link"
+      class="header__nav-link{% if link.current %} header__nav-link--current{% endif %}"
       href="{{ link.url }}"
       {% if link.current %}
         aria-current="page"
@@ -17,29 +24,44 @@
     </a>
   {% endfor %}
 {% else %}
-  {% if section.settings.link_1_label != blank %}
-    <a class="header__nav-link" href="{{ section.settings.link_1_url | default: '#drop' }}">
-      {{ section.settings.link_1_label | escape }}
-    </a>
-  {% endif %}
-  {% if section.settings.link_2_label != blank and section.settings.link_2_url != blank %}
-    <a class="header__nav-link" href="{{ section.settings.link_2_url }}">
-      {{ section.settings.link_2_label | escape }}
-    </a>
-  {% endif %}
-  {% if section.settings.link_3_label != blank %}
-    <a class="header__nav-link" href="{{ section.settings.link_3_url | default: '/pages/build' }}">
-      {{ section.settings.link_3_label | escape }}
-    </a>
-  {% endif %}
-  {% if section.settings.link_4_label != blank %}
-    <a class="header__nav-link" href="{{ section.settings.link_4_url | default: '/pages/manifesto' }}">
-      {{ section.settings.link_4_label | escape }}
-    </a>
-  {% endif %}
-  {% if section.settings.link_5_label != blank %}
-    <a class="header__nav-link" href="{{ section.settings.link_5_url | default: '#notify' }}">
-      {{ section.settings.link_5_label | escape }}
-    </a>
-  {% endif %}
+  {% for i in (1..5) %}
+    {% liquid
+      case i
+        when 1
+          assign link_label = section.settings.link_1_label
+          assign link_url = section.settings.link_1_url
+        when 2
+          assign link_label = section.settings.link_2_label
+          assign link_url = section.settings.link_2_url
+        when 3
+          assign link_label = section.settings.link_3_label
+          assign link_url = section.settings.link_3_url | default: '/pages/build'
+        when 4
+          assign link_label = section.settings.link_4_label
+          assign link_url = section.settings.link_4_url | default: '/pages/manifesto'
+        when 5
+          assign link_label = section.settings.link_5_label
+          assign link_url = section.settings.link_5_url | default: '#notify'
+      endcase
+
+      assign is_current = false
+      unless link_url contains '#'
+        if link_url != blank and link_url == current_path
+          assign is_current = true
+        endif
+      endunless
+    %}
+
+    {% if link_label != blank and link_url != blank %}
+      <a
+        class="header__nav-link{% if is_current %} header__nav-link--current{% endif %}"
+        href="{{ link_url }}"
+        {% if is_current %}
+          aria-current="page"
+        {% endif %}
+      >
+        {{ link_label | escape }}
+      </a>
+    {% endif %}
+  {% endfor %}
 {% endif %}

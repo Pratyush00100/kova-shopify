@@ -30,7 +30,7 @@
   endif
 %}
 
-<section class="collection-banner full-width{% if has_media %} collection-banner--media{% endif %}">
+<section class="collection-banner full-width{% if has_media %} collection-banner--media surface-inverse{% endif %}">
   {% if has_media %}
     <div class="collection-banner__media" aria-hidden="true">
       {{
@@ -50,7 +50,7 @@
   <div class="collection-banner__inner page-inner">
     <div class="collection-banner__meta">
       {% if section.settings.eyebrow != blank %}
-        <p class="eyebrow collection-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <p class="eyebrow eyebrow--marked collection-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {% endif %}
 
       {% if collection.products_count > 0 %}
@@ -109,15 +109,13 @@
   }
 
   .collection-banner--media .collection-banner__inner {
-    min-height: clamp(18rem, 38vw, 27rem);
+    min-height: clamp(20rem, 40vw, 30rem);
     align-content: end;
-    color: var(--color-background);
   }
 
-  .collection-banner--media .collection-banner__eyebrow,
   .collection-banner--media .collection-banner__count,
   .collection-banner--media .collection-banner__description {
-    color: color-mix(in srgb, var(--color-background) 74%, transparent);
+    color: var(--color-inverse-muted);
   }
 
   /* Metadata line: drop label and live piece count read as one row. */
@@ -131,9 +129,9 @@
   .collection-banner__count {
     margin: 0;
     color: var(--color-foreground-muted);
-    font-size: 0.72rem;
+    font-size: var(--text-xs);
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
   }
 

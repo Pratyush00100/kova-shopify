@@ -12,8 +12,9 @@ node_modules/
 # Shopify CLI files
 .shopify/
 
-# Client drafts and knowledge files. Do not ship with the theme.
+# Client drafts and knowledge files. Never commit, push, or ship with the theme.
 incoming-assets/
+**/incoming-assets/
 
 ## Release files
 release

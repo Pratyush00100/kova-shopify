@@ -49,7 +49,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:labels.page_margin",
-        "default": 24
+        "default": 28
       }
     ]
   },
@@ -59,14 +59,35 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#EDEDEC",
+        "default": "#F1EFEA",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#0A0A0A",
+        "default": "#12161A",
         "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "dark_color",
+        "default": "#0E1215",
+        "label": "t:labels.dark_color",
+        "info": "t:info.dark_color"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#C0431C",
+        "label": "t:labels.accent_color",
+        "info": "t:info.accent_color"
+      },
+      {
+        "type": "color",
+        "id": "accent_contrast_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.accent_contrast_color",
+        "info": "t:info.accent_contrast_color"
       },
       {
         "type": "range",

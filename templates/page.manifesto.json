@@ -13,7 +13,7 @@
       "type": "page-hero",
       "settings": {
         "eyebrow": "MANIFESTO",
-        "heading": "WHAT WE STAND FOR",
+        "heading": "STEEL. DESIGNED & REIMAGINED.",
         "description": "",
         "show_image": false
       }
@@ -24,24 +24,40 @@
         "one": {
           "type": "statement",
           "settings": {
-            "statement": "Metal should feel considered, not decorative.",
-            "description": ""
+            "statement": "We believe the things you're obsessed with shouldn't stay on your screen. They should exist around you.",
+            "description": "<p>KOVA transforms automotive culture, machines, forms and ideas into precision-cut metal objects designed for modern spaces.</p>"
           }
         },
         "two": {
           "type": "statement",
           "settings": {
-            "statement": "We release in drops, not seasons.",
+            "statement": "No unnecessary decoration. No disposable materials. No compromise on the details that make the piece worth keeping.",
             "description": ""
+          }
+        },
+        "three": {
+          "type": "statement",
+          "settings": {
+            "statement": "Metal, reimagined.",
+            "description": ""
+          }
+        },
+        "four": {
+          "type": "statement",
+          "settings": {
+            "statement": "Designed and made in India.",
+            "description": "<p>From design and fiber-laser cutting to finishing, mounting and packaging, KOVA products are developed and produced in India.</p>"
           }
         }
       },
       "block_order": [
         "one",
-        "two"
+        "two",
+        "three",
+        "four"
       ],
       "settings": {
-        "heading": "PRINCIPLES"
+        "heading": "MANIFESTO"
       }
     },
     "commerce": {

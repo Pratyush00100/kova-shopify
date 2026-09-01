@@ -11,6 +11,50 @@
   "sections": {
     "main": {
       "type": "product",
+      "blocks": {
+        "material": {
+          "type": "detail",
+          "settings": {
+            "label": "Material",
+            "value": "2 mm stainless steel"
+          }
+        },
+        "finish": {
+          "type": "detail",
+          "settings": {
+            "label": "Finish",
+            "value": "Matte black"
+          }
+        },
+        "cut": {
+          "type": "detail",
+          "settings": {
+            "label": "Cut",
+            "value": "Fiber-laser cut, finished front, back and edges"
+          }
+        },
+        "mounting": {
+          "type": "detail",
+          "settings": {
+            "label": "Mounting",
+            "value": "Floats 15 mm from the wall, integrated bracket"
+          }
+        },
+        "origin": {
+          "type": "detail",
+          "settings": {
+            "label": "Origin",
+            "value": "Designed and made in India"
+          }
+        }
+      },
+      "block_order": [
+        "material",
+        "finish",
+        "cut",
+        "mounting",
+        "origin"
+      ],
       "settings": {
         "eyebrow": "DROP 001"
       }

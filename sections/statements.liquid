@@ -6,7 +6,7 @@
 <section class="statements full-width section-pad">
   <div class="statements__inner page-inner">
     {% if section.settings.heading != blank %}
-      <h2 class="section-title statements__heading">{{ section.settings.heading | escape }}</h2>
+      <h2 class="eyebrow eyebrow--marked statements__heading">{{ section.settings.heading | escape }}</h2>
     {% endif %}
 
     {% if section.blocks.size > 0 %}
@@ -16,10 +16,6 @@
             assign statement_text = block.settings.statement | strip
             assign description_text = block.settings.description | strip_html | strip
           %}
-
-          {% if statement_text == 'Made in India, built for anywhere.' %}
-            {% continue %}
-          {% endif %}
 
           {% if statement_text != blank or description_text != blank %}
             <li
@@ -70,8 +66,8 @@
 
   .statements__index {
     margin: 0;
-    color: var(--color-foreground-muted);
-    font-size: 0.72rem;
+    color: var(--color-accent);
+    font-size: var(--text-xs);
     font-weight: 700;
     letter-spacing: 0.18em;
   }
@@ -83,10 +79,10 @@
 
   .statements__statement {
     margin: 0;
-    font-size: clamp(1.35rem, 3.2vw, 2.35rem);
+    font-size: clamp(1.5rem, 3.6vw, 2.6rem);
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 

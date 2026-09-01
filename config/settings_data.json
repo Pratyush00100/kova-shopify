@@ -11,9 +11,12 @@
   "current": {
     "type_primary_font": "archivo_n4",
     "max_page_width": "110rem",
-    "min_page_margin": 24,
-    "background_color": "#EDEDEC",
-    "foreground_color": "#0A0A0A",
+    "min_page_margin": 28,
+    "background_color": "#F1EFEA",
+    "foreground_color": "#12161A",
+    "dark_color": "#0E1215",
+    "accent_color": "#C0431C",
+    "accent_contrast_color": "#FFFFFF",
     "input_corner_radius": 0
   }
 }

@@ -7,7 +7,7 @@
 {% endcomment %}
 
 <section
-  class="notify full-width"
+  class="notify full-width surface-inverse"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
@@ -15,7 +15,7 @@
   <div class="notify__inner page-inner">
     <div class="notify__copy">
       {% if section.settings.eyebrow != blank %}
-        <p class="eyebrow notify__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <p class="eyebrow eyebrow--marked">{{ section.settings.eyebrow | escape }}</p>
       {% endif %}
 
       {% if section.settings.heading != blank %}
@@ -23,7 +23,7 @@
       {% endif %}
 
       {% if section.settings.description != blank %}
-        <div class="rte notify__description">{{ section.settings.description }}</div>
+        <div class="notify__description">{{ section.settings.description }}</div>
       {% endif %}
     </div>
 
@@ -68,10 +68,8 @@
 
 {% stylesheet %}
   .notify {
-    padding-block: clamp(4rem, 10vw, 7.5rem);
+    padding-block: var(--space-section-lg);
     border-top: 1px solid var(--color-border);
-    background: var(--color-foreground);
-    color: var(--color-background);
   }
 
   .notify__inner {
@@ -87,21 +85,21 @@
 
   .notify__heading {
     margin: 0;
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-size: var(--display-sm);
     font-weight: 700;
     line-height: 1.02;
     letter-spacing: -0.025em;
     text-transform: uppercase;
   }
 
-  .notify__eyebrow,
   .notify__description {
-    color: color-mix(in srgb, var(--color-background) 62%, transparent);
+    color: var(--color-inverse-muted);
+    font-size: var(--text-base);
+    line-height: 1.7;
   }
 
-  .notify__description {
-    font-size: 0.95rem;
-    line-height: 1.7;
+  .notify__description p {
+    margin: 0;
   }
 
   .notify__field {
@@ -119,56 +117,39 @@
     min-height: 3.25rem;
     padding: 0.75rem 0;
     border: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-background) 40%, transparent);
+    border-bottom: 1px solid var(--color-inverse-border);
     background: transparent;
-    color: var(--color-background);
-    font-size: 0.95rem;
+    color: var(--color-inverse-foreground);
+    font-size: var(--text-base);
     letter-spacing: 0.04em;
-    transition: border-color 0.3s var(--ease-out);
+    transition: border-color var(--duration) var(--ease-out);
   }
 
   .notify__input:focus {
     outline: none;
-    border-bottom-color: var(--color-background);
-  }
-
-  /* The global focus ring is the foreground colour, which is invisible on this
-     inverted panel. */
-  .notify__input:focus-visible,
-  .notify__submit:focus-visible {
-    outline: 2px solid var(--color-background);
-    outline-offset: 4px;
+    border-bottom-color: var(--color-inverse-foreground);
   }
 
   .notify__input::placeholder {
-    color: color-mix(in srgb, var(--color-background) 48%, transparent);
+    color: var(--color-inverse-subtle);
     text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
   }
 
   .notify__submit {
     flex: 0 0 auto;
-    border-color: var(--color-background);
-    background: var(--color-background);
-    color: var(--color-foreground);
-  }
-
-  .notify__submit:hover,
-  .notify__submit:focus-visible {
-    background: transparent;
-    color: var(--color-background);
   }
 
   .notify__message {
     margin: 1.25rem 0 0;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .notify__message--error {
-    color: #ff8f7a;
+    color: #ff9b85;
   }
 
   @media (min-width: 900px) {
@@ -176,6 +157,12 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-items: end;
       column-gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+
+  @media (max-width: 599px) {
+    .notify__submit {
+      width: 100%;
     }
   }
 

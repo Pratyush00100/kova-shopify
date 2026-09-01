@@ -13,6 +13,6 @@
 #   /(templates|sections)/.*\.json/
 
 # Raw client media and copy. Working files only - never uploaded to the store.
-incoming-assets/*
+incoming-assets/
 SHOPIFY-SETUP.md
 shopify-products.csv

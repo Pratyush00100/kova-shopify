@@ -4,6 +4,16 @@
 
 Use the [Shopify AI Toolkit](https://shopify.dev/docs/apps/build/ai-toolkit) for all Shopify API and platform work. If missing, install it in the agent host per that page (or `npx skills add Shopify/shopify-ai-toolkit --list` for skill-compatible hosts).
 
+## KOVA project direction
+
+- KOVA is a client ecommerce launch with a short delivery window. Prioritize the highest-impact, launch-ready improvements and keep the storefront reliable.
+- The design is not restricted to black, white, or a monochrome palette. Choose colors, contrast, typography, imagery, video, spacing, and restrained interaction deliberately to make the store attractive and credible.
+- Preserve KOVA's premium, product-led character. Avoid generic AI-generated layouts, decorative clutter, inaccessible color combinations, and effects without a clear purpose.
+- Use client-approved product information, descriptions, photography, generic brand imagery, and videos when provided. Never fabricate products, prices, claims, specifications, policies, copy, photography, or manufacturing facts.
+- The agent may make normal UI design decisions without waiting for approval when they are reversible, accessible, responsive, consistent, and grounded in the supplied assets and content.
+- Preserve Shopify as the commerce source of truth and do not replace working product, variant, inventory, cart, checkout, discount, or order behavior.
+- Treat `KOVA_PROJECT_SPEC.md` as historical/current project context, but newer explicit client or user decisions override its earlier monochrome or predominantly-black visual direction.
+
 ## Theme Architecture
 
 **Key principles: focus on generating snippets, blocks, and sections; users may create templates using the theme editor**

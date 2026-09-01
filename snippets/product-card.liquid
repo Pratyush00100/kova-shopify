@@ -3,7 +3,7 @@
 
   Shared by the collection grid, the homepage featured products and the PDP
   related products, so the catalog keeps one card language. Photography, title
-  and price all come from Shopify.
+  and price all come from Shopify. Do not substitute decorative wall-art photos.
 
   Falls back to a Shopify placeholder illustration when the product has no image,
   so the grid stays intact before final photography is available.
@@ -25,6 +25,10 @@
 
   assign price_display = product.price | money
   assign compare_display = product.compare_at_price | money
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
 %}
 
 <a class="product-card" href="{{ product.url }}">
@@ -44,7 +48,7 @@
     {% endif %}
 
     {% unless product.available %}
-      <span class="product-card__badge">{{ 'products.sold_out' | t }}</span>
+      <span class="badge product-card__badge">{{ 'products.sold_out' | t }}</span>
     {% endunless %}
   </div>
 
@@ -52,8 +56,8 @@
     <h3 class="product-card__title">{{ product.title | escape }}</h3>
 
     {% if show_price %}
-      <p class="product-card__price">
-        {% if product.compare_at_price > product.price %}
+      <p class="product-card__price{% if on_sale %} product-card__price--sale{% endif %}">
+        {% if on_sale %}
           <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
           {{ price_display }}
           <s class="product-card__price-compare">{{ compare_display }}</s>
@@ -70,18 +74,18 @@
 {% stylesheet %}
   .product-card {
     display: grid;
-    gap: 1.1rem;
+    gap: 1.15rem;
     align-content: start;
     text-decoration: none;
     color: var(--color-foreground);
   }
 
+  /* Frameless: the photograph carries the card, not a bordered tile. */
   .product-card__media {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
   }
 
   .product-card__image,
@@ -97,50 +101,59 @@
 
   .product-card:hover .product-card__image,
   .product-card:focus-visible .product-card__image {
-    transform: scale(1.025);
+    transform: scale(1.03);
   }
 
   .product-card__badge {
     position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    padding: 0.4rem 0.65rem;
-    background: var(--color-foreground);
-    color: var(--color-background);
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    top: 0.85rem;
+    left: 0.85rem;
   }
 
   /* Stacked so long product titles never crowd the price. */
   .product-card__info {
     display: grid;
-    gap: 0.4rem;
+    gap: 0.5rem;
   }
 
   .product-card__title {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-weight: 700;
     line-height: 1.35;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    text-wrap: balance;
+    transition: color var(--duration) var(--ease-out);
+  }
+
+  .product-card:hover .product-card__title,
+  .product-card:focus-visible .product-card__title {
+    color: var(--color-accent);
   }
 
   .product-card__price {
     margin: 0;
-    font-size: 0.82rem;
+    color: var(--color-foreground-muted);
+    font-size: var(--text-sm);
     letter-spacing: 0.04em;
   }
 
+  /* A real Shopify sale state, so it earns the accent. */
+  .product-card__price--sale {
+    color: var(--color-accent-strong);
+    font-weight: 700;
+  }
+
   .product-card__price-compare {
-    margin-left: 0.4rem;
+    margin-left: 0.45rem;
     color: var(--color-foreground-muted);
+    font-weight: 400;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .product-card__image {
+    .product-card__image,
+    .product-card__title {
       transition: none;
     }
 

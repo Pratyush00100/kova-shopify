@@ -27,9 +27,20 @@
         "copyright_text": "KOVA",
         "show_payment_icons": false
       }
+    },
+    "policies": {
+      "type": "policy-links",
+      "settings": {
+        "heading": "Policies",
+        "terms_label": "Terms of Service",
+        "privacy_label": "Privacy Policy",
+        "shipping_label": "Shipping",
+        "returns_label": "Returns"
+      }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "policies"
   ]
 }

@@ -9,8 +9,17 @@
 {% endcomment %}
 
 {% liquid
-  assign has_image = false
+  assign has_desktop_image = false
+  assign has_mobile_image = false
   if section.settings.image != blank
+    assign has_desktop_image = true
+  endif
+  if section.settings.image_mobile != blank
+    assign has_mobile_image = true
+  endif
+
+  assign has_image = false
+  if has_desktop_image or has_mobile_image
     assign has_image = true
   endif
 
@@ -18,23 +27,56 @@
 %}
 
 <section
-  class="hero full-width surface-inverse{% unless has_image %} hero--unillustrated{% endunless %}"
+  class="hero full-width surface-inverse{% unless has_desktop_image %} hero--unillustrated{% endunless %}"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
 >
   {% if has_image %}
-    <div class="hero__media hero__media--{{ treatment }}" aria-hidden="true">
-      {{
-        section.settings.image
-        | image_url: width: 2400
-        | image_tag:
-          class: 'hero__image',
-          widths: '750, 1100, 1500, 1800, 2400',
-          sizes: '100vw',
-          loading: 'eager',
-          fetchpriority: 'high'
-      }}
+    <div
+      class="hero__media hero__media--{{ treatment }}{% if has_mobile_image and has_desktop_image == false %} hero__media--mobile-only{% endif %}"
+      aria-hidden="true"
+    >
+      {% if has_desktop_image and has_mobile_image %}
+        <picture>
+          <source
+            media="(max-width: 749px)"
+            srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}"
+          >
+          {{
+            section.settings.image
+            | image_url: width: 2400
+            | image_tag:
+              class: 'hero__image',
+              widths: '750, 1100, 1500, 1800, 2400',
+              sizes: '100vw',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        </picture>
+      {% elsif has_desktop_image %}
+        {{
+          section.settings.image
+          | image_url: width: 2400
+          | image_tag:
+            class: 'hero__image',
+            widths: '750, 1100, 1500, 1800, 2400',
+            sizes: '100vw',
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {% else %}
+        {{
+          section.settings.image_mobile
+          | image_url: width: 1200
+          | image_tag:
+            class: 'hero__image',
+            widths: '480, 750, 1100, 1200',
+            sizes: '100vw',
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {% endif %}
 
       {% if treatment == 'scrim' %}
         <div class="hero__scrim"></div>
@@ -57,7 +99,7 @@
         {% endif %}
       </div>
 
-      {% if has_image == false and section.settings.placeholder_label != blank %}
+      {% if has_desktop_image == false and has_mobile_image == false and section.settings.placeholder_label != blank %}
         <p class="hero__note">{{ section.settings.placeholder_label | escape }}</p>
       {% endif %}
     </div>
@@ -102,6 +144,7 @@
     min-height: inherit;
   }
 
+  .hero__media picture,
   .hero__image {
     width: 100%;
     height: 100%;
@@ -109,10 +152,28 @@
     object-position: 58% 42%;
   }
 
+  .hero__media picture {
+    display: block;
+  }
+
+  .hero__media picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 58% 42%;
+  }
+
+  @media (min-width: 750px) {
+    .hero__media--mobile-only {
+      display: none;
+    }
+  }
+
   /* Blend treatment: for dark automotive photography. The image is lightened
      and masked so it dissolves into the field rather than sitting on it as a
      rectangle. */
-  .hero__media--blend .hero__image {
+  .hero__media--blend .hero__image,
+  .hero__media--blend picture img {
     opacity: 0.55;
     mix-blend-mode: lighten;
     -webkit-mask-image: radial-gradient(105% 82% at 66% 38%, #000 0%, #000 32%, rgb(0 0 0 / 45%) 62%, transparent 84%);
@@ -343,6 +404,12 @@
       "id": "image",
       "label": "t:labels.hero_image",
       "info": "t:info.hero_image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:labels.hero_image_mobile",
+      "info": "t:info.hero_image_mobile"
     },
     {
       "type": "select",

@@ -1,0 +1,187 @@
+{% comment %}
+  Modular policy links. Prefers Shopify Admin policies when they exist,
+  then optional theme-editor URLs. Hidden when no destinations are set.
+{% endcomment %}
+
+{% liquid
+  assign terms_url = section.settings.terms_url
+  if terms_url == blank and shop.terms_of_service != blank
+    assign terms_url = shop.terms_of_service.url
+  endif
+
+  assign privacy_url = section.settings.privacy_url
+  if privacy_url == blank and shop.privacy_policy != blank
+    assign privacy_url = shop.privacy_policy.url
+  endif
+
+  assign shipping_url = section.settings.shipping_url
+  if shipping_url == blank and shop.shipping_policy != blank
+    assign shipping_url = shop.shipping_policy.url
+  endif
+
+  assign returns_url = section.settings.returns_url
+  if returns_url == blank and shop.refund_policy != blank
+    assign returns_url = shop.refund_policy.url
+  endif
+
+  assign has_links = false
+  if terms_url != blank or privacy_url != blank or shipping_url != blank or returns_url != blank
+    assign has_links = true
+  endif
+%}
+
+{% if has_links %}
+  <nav class="policy-links full-width" aria-label="{{ section.settings.heading | default: 'Policies' | escape }}">
+    <div class="policy-links__inner page-inner">
+      {% if section.settings.heading != blank %}
+        <p class="policy-links__heading">{{ section.settings.heading | escape }}</p>
+      {% endif %}
+
+      <ul class="policy-links__list" role="list">
+        {% if terms_url != blank %}
+          <li>
+            <a class="policy-links__link" href="{{ terms_url }}">
+              {{ section.settings.terms_label | default: 'Terms of Service' | escape }}
+            </a>
+          </li>
+        {% endif %}
+        {% if privacy_url != blank %}
+          <li>
+            <a class="policy-links__link" href="{{ privacy_url }}">
+              {{ section.settings.privacy_label | default: 'Privacy Policy' | escape }}
+            </a>
+          </li>
+        {% endif %}
+        {% if shipping_url != blank %}
+          <li>
+            <a class="policy-links__link" href="{{ shipping_url }}">
+              {{ section.settings.shipping_label | default: 'Shipping' | escape }}
+            </a>
+          </li>
+        {% endif %}
+        {% if returns_url != blank %}
+          <li>
+            <a class="policy-links__link" href="{{ returns_url }}">
+              {{ section.settings.returns_label | default: 'Returns' | escape }}
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endif %}
+
+{% stylesheet %}
+  .policy-links {
+    border-top: 1px solid var(--color-border);
+    padding-block: 1.35rem;
+  }
+
+  .policy-links__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+  }
+
+  .policy-links__heading {
+    margin: 0;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+
+  .policy-links__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .policy-links__link {
+    color: var(--color-foreground-muted);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .policy-links__link:hover,
+  .policy-links__link:focus-visible {
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.policy_links",
+  "tag": "div",
+  "class": "section-policy-links",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Policies"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:info.policy_links"
+    },
+    {
+      "type": "text",
+      "id": "terms_label",
+      "label": "t:labels.terms_label",
+      "default": "Terms of Service"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "t:labels.terms_url"
+    },
+    {
+      "type": "text",
+      "id": "privacy_label",
+      "label": "t:labels.privacy_label",
+      "default": "Privacy Policy"
+    },
+    {
+      "type": "url",
+      "id": "privacy_url",
+      "label": "t:labels.privacy_url"
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "t:labels.shipping_label",
+      "default": "Shipping"
+    },
+    {
+      "type": "url",
+      "id": "shipping_url",
+      "label": "t:labels.shipping_url"
+    },
+    {
+      "type": "text",
+      "id": "returns_label",
+      "label": "t:labels.returns_label",
+      "default": "Returns"
+    },
+    {
+      "type": "url",
+      "id": "returns_url",
+      "label": "t:labels.returns_url"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.policy_links"
+    }
+  ]
+}
+{% endschema %}

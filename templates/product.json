@@ -56,7 +56,12 @@
         "origin"
       ],
       "settings": {
-        "eyebrow": "DROP 001"
+        "eyebrow": "DROP 001",
+        "materials_heading": "Materials & Specs",
+        "shipping_heading": "Shipping & Fulfillment",
+        "shipping_content": "<p>Orders ship from India. You receive tracking once your order is dispatched. Estimated delivery is 3–6 working days.</p>",
+        "warranty_heading": "Warranty & Returns",
+        "warranty_content": "<p>If your order arrives damaged, defective, or incorrect, we will replace it after verification. Change-of-mind returns are not offered.</p>"
       }
     },
     "related": {

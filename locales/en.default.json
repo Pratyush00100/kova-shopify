@@ -86,7 +86,8 @@
     "quantity_increase": "Increase quantity",
     "sale_price": "Sale price",
     "sold_out": "Sold out",
-    "variant": "Variant"
+    "variant": "Variant",
+    "view_image": "View image {{ index }} of {{ count }}"
   },
   "search": {
     "title": "Search",

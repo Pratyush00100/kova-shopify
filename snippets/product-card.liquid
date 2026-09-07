@@ -2,25 +2,33 @@
   Renders a KOVA product card linking to the product page.
 
   Shared by the collection grid, the homepage featured products and the PDP
-  related products, so the catalog keeps one card language. Photography, title
-  and price all come from Shopify. Do not substitute decorative wall-art photos.
+  related products. Photography, title and price all come from Shopify.
 
-  Falls back to a Shopify placeholder illustration when the product has no image,
-  so the grid stays intact before final photography is available.
+  Pass layout: 'catalog' on collection pages for the square Drop grid card.
+  PDP related cards and homepage cards keep the default 4:5 treatment.
 
   @param {object} product - The product to render
   @param {string} [placeholder] - Placeholder SVG name used when the product has no image
   @param {boolean} [show_price] - Whether the price is displayed. Defaults to true
+  @param {string} [layout] - Card layout. Use 'catalog' on collection pages
+  @param {number} [card_index] - 1-based index shown on catalog cards
+  @param {string} [drop_label] - Drop name. When empty, the product's drop collection is used
 
   @example
   {% render 'product-card', product: product %}
-  {% render 'product-card', product: product, placeholder: 'product-2', show_price: false %}
+  {% render 'product-card', product: product, layout: 'catalog', card_index: 1 %}
 {% enddoc %}
 
 {% liquid
   assign placeholder_name = placeholder | default: 'product-1'
   if show_price == nil
     assign show_price = true
+  endif
+
+  assign card_layout = layout | default: 'default'
+  assign is_catalog = false
+  if card_layout == 'catalog'
+    assign is_catalog = true
   endif
 
   assign price_display = product.price | money
@@ -31,45 +39,93 @@
   endif
 
   assign hover_image = nil
-  if product.featured_image and product.images.size > 1
-    for image in product.images
-      if image.id != product.featured_image.id
-        assign hover_image = image
+  unless is_catalog
+    if product.featured_image and product.images.size > 1
+      for image in product.images
+        if image.id != product.featured_image.id
+          assign hover_image = image
+          break
+        endif
+      endfor
+    endif
+  endunless
+
+  assign resolved_drop = drop_label
+  if resolved_drop == blank
+    for product_collection in product.collections
+      if product_collection.handle == 'drop-001'
+        assign resolved_drop = product_collection.title
         break
       endif
     endfor
   endif
+  if resolved_drop == blank
+    for product_collection in product.collections
+      unless product_collection.handle == 'all'
+        assign resolved_drop = product_collection.title
+        break
+      endunless
+    endfor
+  endif
+
+  assign index_label = nil
+  if card_index != blank
+    if card_index > 0
+      assign index_label = card_index | plus: 100 | append: '' | slice: -2, 2
+    endif
+  endif
+
+  assign image_sizes = '(min-width: 900px) 32vw, (min-width: 600px) 46vw, 92vw'
+  if is_catalog
+    assign image_sizes = '(min-width: 900px) 23vw, 46vw'
+  endif
 %}
 
 <a
-  class="product-card{% if hover_image %} product-card--has-hover{% endif %}"
+  class="product-card{% if is_catalog %} product-card--catalog{% endif %}{% if hover_image %} product-card--has-hover{% endif %}"
   href="{{ product.url }}"
 >
   <div class="product-card__media">
     {% if product.featured_image %}
-      {{
-        product.featured_image
-        | image_url: width: 1400
-        | image_tag:
-          class: 'product-card__image',
-          widths: '300, 500, 700, 900, 1200, 1400',
-          sizes: '(min-width: 900px) 32vw, (min-width: 600px) 46vw, 92vw',
-          loading: 'lazy'
-      }}
-      {% if hover_image %}
+      {% if is_catalog %}
         {{
-          hover_image
+          product.featured_image
+          | image_url: width: 1200, height: 1200, crop: 'center'
+          | image_tag:
+            class: 'product-card__image',
+            widths: '300, 500, 700, 900, 1200',
+            sizes: image_sizes,
+            loading: 'lazy'
+        }}
+      {% else %}
+        {{
+          product.featured_image
           | image_url: width: 1400
           | image_tag:
-            class: 'product-card__image product-card__image--secondary',
+            class: 'product-card__image',
             widths: '300, 500, 700, 900, 1200, 1400',
-            sizes: '(min-width: 900px) 32vw, (min-width: 600px) 46vw, 92vw',
-            loading: 'lazy',
-            aria-hidden: 'true'
+            sizes: image_sizes,
+            loading: 'lazy'
         }}
+        {% if hover_image %}
+          {{
+            hover_image
+            | image_url: width: 1400
+            | image_tag:
+              class: 'product-card__image product-card__image--secondary',
+              widths: '300, 500, 700, 900, 1200, 1400',
+              sizes: image_sizes,
+              loading: 'lazy',
+              aria-hidden: 'true'
+          }}
+        {% endif %}
       {% endif %}
     {% else %}
       {{ placeholder_name | placeholder_svg_tag: 'media-placeholder product-card__placeholder' }}
+    {% endif %}
+
+    {% if index_label != blank %}
+      <span class="product-card__index">{{ index_label }}</span>
     {% endif %}
 
     {% unless product.available %}
@@ -78,20 +134,32 @@
   </div>
 
   <div class="product-card__info">
-    <h3 class="product-card__title">{{ product.title | escape }}</h3>
+    <div class="product-card__copy">
+      <h3 class="product-card__title">{{ product.title | escape }}</h3>
 
-    {% if show_price %}
-      <p class="product-card__price{% if on_sale %} product-card__price--sale{% endif %}">
-        {% if on_sale %}
-          <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
-          {{ price_display }}
-          <s class="product-card__price-compare">{{ compare_display }}</s>
-        {% elsif product.price_varies %}
-          {{ 'products.price_from' | t: price: price_display }}
-        {% else %}
-          {{ price_display }}
+      {% if is_catalog %}
+        {% if resolved_drop != blank %}
+          <p class="product-card__drop">{{ resolved_drop | escape }}</p>
         {% endif %}
-      </p>
+      {% endif %}
+
+      {% if show_price %}
+        <p class="product-card__price{% if on_sale %} product-card__price--sale{% endif %}">
+          {% if on_sale %}
+            <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+            {{ price_display }}
+            <s class="product-card__price-compare">{{ compare_display }}</s>
+          {% elsif product.price_varies %}
+            {{ 'products.price_from' | t: price: price_display }}
+          {% else %}
+            {{ price_display }}
+          {% endif %}
+        </p>
+      {% endif %}
+    </div>
+
+    {% if is_catalog %}
+      <span class="product-card__arrow" aria-hidden="true">→</span>
     {% endif %}
   </div>
 </a>
@@ -105,12 +173,15 @@
     color: var(--color-foreground);
   }
 
-  /* Uniform 4:5 frame so grids do not shift as images load. */
   .product-card__media {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--color-surface);
+  }
+
+  .product-card--catalog .product-card__media {
+    aspect-ratio: 1;
   }
 
   .product-card__image,
@@ -148,42 +219,86 @@
     opacity: 1;
   }
 
+  .product-card__index {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    z-index: 1;
+    color: var(--color-foreground);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    mix-blend-mode: difference;
+  }
+
   .product-card__badge {
     position: absolute;
     top: 0.85rem;
     left: 0.85rem;
   }
 
-  /* Stacked so long product titles never crowd the price. */
+  .product-card--catalog .product-card__badge {
+    top: auto;
+    bottom: 0.7rem;
+    left: 0.7rem;
+  }
+
   .product-card__info {
     display: grid;
     gap: 0.5rem;
   }
 
+  .product-card--catalog .product-card__info {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 0.65rem;
+  }
+
+  .product-card__copy {
+    display: grid;
+    gap: 0.35rem;
+    min-inline-size: 0;
+  }
+
   .product-card__title {
     margin: 0;
-    font-size: var(--text-sm);
-    font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: 0.12em;
+    font-family: var(--font-display--family);
+    font-size: var(--text-lg);
+    font-weight: var(--font-display--weight);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
     text-transform: uppercase;
     text-wrap: balance;
     transition: color var(--duration) var(--ease-out);
   }
 
-  .product-card:hover .product-card__title,
-  .product-card:focus-visible .product-card__title {
-    color: var(--color-accent);
+  .product-card--catalog .product-card__title {
+    font-size: clamp(0.78rem, 2.4vw, 1.05rem);
+    line-height: 1.2;
   }
 
+  .product-card:hover .product-card__title,
+  .product-card:focus-visible .product-card__title {
+    color: var(--color-foreground-muted);
+  }
+
+  .product-card__drop,
   .product-card__price {
     margin: 0;
     color: var(--color-foreground-muted);
-    font-size: var(--text-sm);
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
   }
 
-  /* A real Shopify sale state, so it earns the accent. */
+  .product-card--catalog .product-card__drop,
+  .product-card--catalog .product-card__price {
+    font-size: var(--text-2xs);
+  }
+
   .product-card__price--sale {
     color: var(--color-accent-strong);
     font-weight: 700;
@@ -193,6 +308,17 @@
     margin-left: 0.45rem;
     color: var(--color-foreground-muted);
     font-weight: 400;
+  }
+
+  .product-card__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    color: var(--color-foreground);
+    font-size: 0.95rem;
+    line-height: 1;
+    transform: translateY(-0.1rem);
   }
 
   @media (hover: none) {

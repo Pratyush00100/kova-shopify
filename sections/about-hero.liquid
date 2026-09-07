@@ -1,0 +1,186 @@
+{% liquid
+  assign hero_heading = section.settings.heading
+  if hero_heading == blank
+    assign hero_heading = page.title
+  endif
+%}
+
+<section class="about-hero full-width">
+  <div class="about-hero__inner page-inner">
+    <div class="about-hero__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow eyebrow--marked">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if hero_heading != blank %}
+        <h1 class="display-title about-hero__heading">{{ hero_heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="about-hero__subheading">{{ section.settings.subheading | escape }}</p>
+      {% endif %}
+    </div>
+
+    <div class="about-hero__media">
+      {% if section.settings.image != blank %}
+        {{
+          section.settings.image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'about-hero__image',
+            widths: '750, 1100, 1400, 1800',
+            sizes: '(min-width: 900px) 48vw, 100vw',
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {% else %}
+        <span class="about-hero__placeholder" aria-hidden="true"></span>
+      {% endif %}
+    </div>
+
+    {% if section.settings.aside_label != blank %}
+      <p class="about-hero__aside">{{ section.settings.aside_label | escape }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .about-hero {
+    padding-block: var(--space-section);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .about-hero__inner {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    align-items: end;
+  }
+
+  .about-hero__copy {
+    display: grid;
+    justify-items: start;
+    gap: 1.1rem;
+    max-width: 18ch;
+  }
+
+  .about-hero__heading {
+    max-width: 10ch;
+  }
+
+  .about-hero__subheading {
+    margin: 0;
+    max-width: 28ch;
+    color: var(--color-foreground-muted);
+    font-size: var(--text-base);
+    line-height: 1.6;
+  }
+
+  .about-hero__media {
+    overflow: hidden;
+    min-height: 22rem;
+    aspect-ratio: 4 / 5;
+    background: var(--color-surface);
+  }
+
+  .about-hero__image,
+  .about-hero__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-hero__placeholder {
+    background:
+      repeating-linear-gradient(
+        -18deg,
+        var(--color-surface-strong) 0 1px,
+        transparent 1px 18px
+      );
+  }
+
+  .about-hero__aside {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .about-hero__inner {
+      grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.25fr);
+      min-height: min(82vh, 46rem);
+      align-items: stretch;
+    }
+
+    .about-hero__inner:has(.about-hero__aside) {
+      grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.25fr) auto;
+    }
+
+    .about-hero__copy {
+      align-content: end;
+      padding-block: 1rem 2rem;
+    }
+
+    .about-hero__media {
+      min-height: 100%;
+      aspect-ratio: auto;
+    }
+
+    .about-hero__aside {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      align-self: stretch;
+      padding-block: 1.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.about_hero",
+  "tag": "div",
+  "class": "section-about-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "ABOUT KOVA"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "info": "t:info.heading_fallback",
+      "default": "WE SAW SOMETHING MISSING."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "The things we obsess over deserved better walls."
+    },
+    {
+      "type": "text",
+      "id": "aside_label",
+      "label": "t:labels.aside_label",
+      "default": "CARS, ANIME, GAMES, MYTHOLOGY, AND MORE."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:info.image_placeholder"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.about_hero"
+    }
+  ]
+}
+{% endschema %}

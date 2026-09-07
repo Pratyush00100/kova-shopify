@@ -4,6 +4,9 @@
     "not_found": "Page not found.",
     "back_to_shopping": "Back to shopping"
   },
+  "general": {
+    "home": "Home"
+  },
   "accessibility": {
     "breadcrumb": "Breadcrumb",
     "cart_count": "{{ count }} items in cart",
@@ -12,6 +15,7 @@
     "main_navigation": "Primary",
     "mobile_navigation": "Mobile",
     "pagination": "Pagination",
+    "drop_filters": "Drop filters",
     "skip_to_content": "Skip to content"
   },
   "blog": {
@@ -51,12 +55,21 @@
       "title": "Login"
     }
   },
+  "contact": {
+    "email": "Email",
+    "whatsapp": "WhatsApp"
+  },
   "collections": {
     "empty": "No pieces in this drop yet",
     "product_count": {
       "one": "{{ count }} piece",
       "other": "{{ count }} pieces"
     },
+    "catalog_count": {
+      "one": "{{ count }} PRODUCT",
+      "other": "{{ count }} PRODUCTS"
+    },
+    "sort": "SORT",
     "title": "Collections",
     "view_all": "View all"
   },
@@ -66,6 +79,9 @@
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
+  },
+  "faq": {
+    "empty": "Questions will appear here once they are published in Shopify."
   },
   "newsletter": {
     "email_label": "Email address",
@@ -79,6 +95,8 @@
   },
   "products": {
     "add_to_cart": "Add to cart",
+    "image_counter": "{{ index }} / {{ count }}",
+    "incl_taxes": "(Incl. of all taxes)",
     "coming_soon": "Coming soon",
     "price_from": "From {{ price }}",
     "quantity": "Quantity",

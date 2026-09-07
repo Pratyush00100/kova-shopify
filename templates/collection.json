@@ -12,15 +12,37 @@
     "banner": {
       "type": "collection-banner",
       "settings": {
-        "eyebrow": "KOVA",
+        "eyebrow": "01 // DROP",
+        "heading": "",
         "show_image": true
       }
     },
     "main": {
       "type": "collection",
+      "blocks": {
+        "filter_all": {
+          "type": "filter",
+          "settings": {
+            "label": "ALL"
+          }
+        },
+        "filter_drop": {
+          "type": "filter",
+          "settings": {
+            "label": "DROP 001 // VELOCITY",
+            "url": "/collections/drop-001"
+          }
+        }
+      },
+      "block_order": [
+        "filter_all",
+        "filter_drop"
+      ],
       "settings": {
-        "columns": 3,
+        "current_drop": "CURRENT DROP",
+        "columns": 4,
         "products_per_page": 12,
+        "show_sort": true,
         "show_price": true
       }
     }

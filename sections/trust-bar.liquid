@@ -1,0 +1,87 @@
+{% liquid
+  assign visible_count = 0
+  for block in section.blocks
+    if block.settings.text != blank
+      assign visible_count = visible_count | plus: 1
+    endif
+  endfor
+%}
+
+{% if visible_count > 0 %}
+  <div class="trust-bar full-width">
+    <ul class="trust-bar__list" role="list">
+      {% for block in section.blocks %}
+        {% if block.settings.text != blank %}
+          <li class="trust-bar__item" {{ block.shopify_attributes }}>
+            {{ block.settings.text | escape }}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .trust-bar {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background);
+  }
+
+  .trust-bar__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0;
+    width: 100%;
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0.95rem var(--page-margin);
+    list-style: none;
+  }
+
+  .trust-bar__item {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .trust-bar__item:not(:last-child)::after {
+    content: '·';
+    margin-inline: 0.85rem;
+    color: var(--color-foreground-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.trust_bar",
+  "class": "section-trust-bar",
+  "max_blocks": 8,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:general.trust_item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:labels.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.trust_bar"
+    }
+  ]
+}
+{% endschema %}

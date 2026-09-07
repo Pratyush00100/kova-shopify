@@ -45,14 +45,17 @@ For each product: Admin → Products → the product → Media.
 
 ## 4. Pages
 
-Admin → Content → Pages. Two are required because the navigation links to them:
+Admin → Content → Pages. These are required because the navigation links to them:
 
 | Title | Handle (required) | Theme template |
 | --- | --- | --- |
 | BUILD | `build` | `build` |
 | Manifesto | `manifesto` | `manifesto` |
+| FAQ | `faq` | `faq` |
 
-On each page, set Theme template to the matching name. If BUILD stays on the default page template, the factory video slots will not appear.
+On each page, set Theme template to the matching name. If BUILD stays on the default page template, the factory video slots will not appear. If FAQ stays on the default page template, the accordion layout will not appear.
+
+If the header uses a Shopify navigation menu instead of the fallback links, add FAQ between Manifesto and Notify in that menu.
 
 Recommended additional pages for the policy copy you supplied:
 
@@ -75,16 +78,79 @@ Online Store → Themes → Customize.
 - **Drop template → Collection banner** — leave "Show image" on; it uses the collection image.
 - **BUILD → Process steps** — upload factory clips under Content → Files. Pick the main clip in
   Factory video, then optional short clips on each process step. Nothing plays until you assign a file.
-- **Product → detail rows** — Material, Finish and Mounting are already filled with your approved
-  wording. These are shared across all products, which is correct since they are the same for every piece.
+- **Product page** — order is buy box → details → sizes → in your space → mounting.
+  Assign photography in Customize: details macro, three lifestyle frames, mounting hero, and
+  four install-step photos. Empty slots keep a dark placeholder. Product gallery images still
+  live on each product in Admin, not in theme `assets/`.
+- **Variant dimensions** — Settings → Custom data → Variants → Add definition. Name
+  `Dimensions`, namespace and key `custom.dimensions`, type Single line text. Enter each
+  variant’s size (for example `27" × 7"`). Size cards and edition boxes read this metafield;
+  if it is empty, title and price still show.
+- **FAQ** — Custom data definitions and entries (section 6). After they exist, Customize →
+  FAQ page can optionally pick and reorder categories. Leave the picker empty to show every
+  published category automatically.
+- **Product descriptions** — keep the Shopify description to the short buy-box opener. Specs,
+  mounting and install copy now live in product-page sections.
+- **Product → detail rows** — Material, Finish and Elevation sit in the Details section and are
+  shared across all products, which is correct since they are the same for every piece. Leave
+  weight empty until you have real numbers.
 
-## 6. Checkout and payments
+## 6. FAQ metaobjects
+
+The FAQ page does not ship answers in the theme. Categories and Q&A live in Shopify Custom data.
+
+Admin → Settings → Custom data → Metaobjects.
+
+### Entry definition
+
+1. Add definition. Name `FAQ entry`, type `faq_entry`.
+2. Storefront access: **Read**.
+3. Fields:
+
+| Name | Key | Type | Required |
+| --- | --- | --- | --- |
+| Question | `question` | Single line text | Yes |
+| Answer | `answer` | Rich text | Yes |
+
+Set display name to Question.
+
+### Category definition
+
+1. Add definition. Name `FAQ category`, type `faq_category`.
+2. Storefront access: **Read**.
+3. Fields:
+
+| Name | Key | Type | Required |
+| --- | --- | --- | --- |
+| Title | `title` | Single line text | Yes |
+| Entries | `entries` | List of metaobjects → `faq_entry` | No |
+
+Set display name to Title.
+
+### Suggested categories
+
+Create one category entry per row. Do not invent answers — paste only copy you have approved.
+
+| Title | Handle |
+| --- | --- |
+| PRODUCTS | `products` |
+| MOUNTING | `mounting` |
+| ORDERS | `orders` |
+| RETURNS / REPLACEMENTS | `returns-replacements` |
+| COLLECTOR'S EDITION | `collectors-edition` |
+| OTHER | `other` |
+
+Then create FAQ entry metaobjects and attach them to the matching category’s Entries list.
+
+Until categories exist, the FAQ page still shows the heading and diagrams, with an empty accordion.
+
+## 7. Checkout and payments
 
 - Enable **Cash on Delivery**, since the product copy promises it
 - Set up **free shipping across India** (Settings → Shipping → flat rate ₹0)
 - Confirm guest checkout is on
 
-## 7. Still needed from the client
+## 8. Still needed from the client
 
 - Product photography for all 8 designs
 - Descriptions for the 7 designs other than SVJ

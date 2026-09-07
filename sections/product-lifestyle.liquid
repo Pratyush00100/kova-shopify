@@ -1,0 +1,175 @@
+<section class="product-lifestyle full-width section-pad">
+  <div class="product-lifestyle__inner page-inner">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <header class="product-lifestyle__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="product-lifestyle__heading">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="product-lifestyle__subheading">{{ section.settings.subheading | escape }}</p>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <ul class="product-lifestyle__grid" role="list">
+        {% for block in section.blocks %}
+          <li class="product-lifestyle__item" {{ block.shopify_attributes }}>
+            <figure class="product-lifestyle__frame">
+              {% if block.settings.image != blank %}
+                {{
+                  block.settings.image
+                  | image_url: width: 1400
+                  | image_tag:
+                    class: 'product-lifestyle__image',
+                    widths: '500, 800, 1100, 1400',
+                    sizes: '(min-width: 900px) 30vw, (min-width: 600px) 48vw, 100vw',
+                    loading: 'lazy'
+                }}
+              {% else %}
+                <span class="product-lifestyle__placeholder" aria-hidden="true"></span>
+                {% if block.settings.label != blank %}
+                  <figcaption class="visually-hidden">{{ block.settings.label | escape }}</figcaption>
+                {% endif %}
+              {% endif %}
+            </figure>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-lifestyle {
+    border-top: 1px solid var(--color-border);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 40rem;
+  }
+
+  .product-lifestyle__inner {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .product-lifestyle__header {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .product-lifestyle__heading {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .product-lifestyle__subheading {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .product-lifestyle__grid {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-lifestyle__frame {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-surface);
+  }
+
+  .product-lifestyle__image,
+  .product-lifestyle__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-lifestyle__placeholder {
+    background: var(--color-surface-strong);
+  }
+
+  @media (min-width: 640px) {
+    .product-lifestyle__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .product-lifestyle__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_lifestyle",
+  "tag": "div",
+  "class": "section-product-lifestyle",
+  "max_blocks": 6,
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "IN YOUR SPACE."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Real spaces. Real stories."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "t:labels.image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image",
+          "info": "t:info.pdp_image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:labels.accessibility_label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.product_lifestyle",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

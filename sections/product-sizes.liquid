@@ -1,0 +1,193 @@
+{% comment %}
+  Size comparison from live Shopify variants. Dimensions come from the
+  variant metafield custom.dimensions when present.
+{% endcomment %}
+
+{% if product.variants.size > 0 %}
+  <section class="product-sizes full-width section-pad">
+    <div class="product-sizes__inner page-inner">
+      {% if section.settings.heading != blank or section.settings.subheading != blank %}
+        <header class="product-sizes__header">
+          {% if section.settings.heading != blank %}
+            <h2 class="product-sizes__heading">{{ section.settings.heading | escape }}</h2>
+          {% endif %}
+
+          {% if section.settings.subheading != blank %}
+            <p class="product-sizes__subheading">{{ section.settings.subheading | escape }}</p>
+          {% endif %}
+        </header>
+      {% endif %}
+
+      <ul class="product-sizes__grid" role="list" style="--size-count: {{ product.variants.size }}">
+        {% for variant in product.variants %}
+          {% liquid
+            assign variant_dimensions = variant.metafields.custom.dimensions.value
+            assign size_image = variant.image | default: product.featured_image
+            assign scale = 72
+            if forloop.length == 1
+              assign scale = 100
+            elsif forloop.last
+              assign scale = 100
+            elsif forloop.index == 2
+              assign scale = 86
+            endif
+          %}
+
+          <li class="product-sizes__item" style="--size-scale: {{ scale }}%">
+            <div class="product-sizes__media">
+              {% if size_image != blank %}
+                {{
+                  size_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'product-sizes__image',
+                    widths: '400, 700, 1000, 1200',
+                    sizes: '(min-width: 900px) 28vw, 80vw',
+                    loading: 'lazy',
+                    alt: variant.title
+                }}
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'media-placeholder product-sizes__placeholder' }}
+              {% endif %}
+            </div>
+
+            <p class="product-sizes__title">{{ variant.title | escape }}</p>
+
+            {% if variant_dimensions != blank %}
+              <p class="product-sizes__dimensions">{{ variant_dimensions | escape }}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .product-sizes {
+    border-top: 1px solid var(--color-border);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 32rem;
+  }
+
+  .product-sizes__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .product-sizes__header {
+    display: grid;
+    gap: 0.55rem;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .product-sizes__heading {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .product-sizes__subheading {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .product-sizes__grid {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-items: end;
+  }
+
+  .product-sizes__item {
+    display: grid;
+    justify-items: center;
+    gap: 0.85rem;
+    text-align: center;
+  }
+
+  .product-sizes__media {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .product-sizes__image,
+  .product-sizes__placeholder {
+    width: var(--size-scale, 100%);
+    height: var(--size-scale, 100%);
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .product-sizes__title {
+    margin: 0;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+
+  .product-sizes__dimensions {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: var(--font-display--weight);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 700px) {
+    .product-sizes__grid {
+      grid-template-columns: repeat(var(--size-count, 3), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_sizes",
+  "tag": "div",
+  "class": "section-product-sizes",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "SIZE & DIMENSIONS"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Three sizes. Same attitude."
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.product_sizes"
+    }
+  ]
+}
+{% endschema %}

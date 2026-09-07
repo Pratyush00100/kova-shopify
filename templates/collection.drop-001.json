@@ -12,18 +12,47 @@
     "banner": {
       "type": "collection-banner",
       "settings": {
-        "eyebrow": "DROP 001",
-        "heading": "VELOCITY",
+        "eyebrow": "01 // DROP",
+        "heading": "DROP",
         "description": "",
+        "pagination": "01 —— 05",
         "show_image": true
       }
     },
     "main": {
       "type": "collection",
+      "blocks": {
+        "filter_all": {
+          "type": "filter",
+          "settings": {
+            "label": "ALL"
+          }
+        },
+        "filter_drop": {
+          "type": "filter",
+          "settings": {
+            "label": "DROP 001 // VELOCITY",
+            "url": "/collections/drop-001"
+          }
+        }
+      },
+      "block_order": [
+        "filter_all",
+        "filter_drop"
+      ],
       "settings": {
-        "columns": 3,
+        "current_drop": "CURRENT DROP",
+        "columns": 4,
         "products_per_page": 12,
+        "show_sort": true,
         "show_price": true
+      }
+    },
+    "teasers": {
+      "type": "collection-teasers",
+      "settings": {
+        "heading": "UPCOMING",
+        "link_label": ""
       }
     },
     "notify": {
@@ -41,6 +70,7 @@
   "order": [
     "banner",
     "main",
+    "teasers",
     "notify"
   ]
 }

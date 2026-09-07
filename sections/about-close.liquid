@@ -1,0 +1,200 @@
+{% liquid
+  assign stamp_label = section.settings.stamp_label
+  assign stamp_center = section.settings.stamp_center
+  assign has_stamp_image = false
+  if section.settings.stamp_image != blank
+    assign has_stamp_image = true
+  endif
+  assign has_stamp_text = false
+  if stamp_label != blank or stamp_center != blank
+    assign has_stamp_text = true
+  endif
+%}
+
+<section class="about-close full-width section-pad">
+  <div class="about-close__inner page-inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="display-title about-close__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    {% if has_stamp_image %}
+      <div class="about-close__stamp">
+        {{
+          section.settings.stamp_image
+          | image_url: width: 480
+          | image_tag:
+            class: 'about-close__stamp-image',
+            widths: '160, 240, 320, 480',
+            sizes: '10rem',
+            loading: 'lazy',
+            alt: ''
+        }}
+      </div>
+    {% elsif has_stamp_text %}
+      <div class="about-close__stamp" aria-hidden="true">
+        <svg class="about-close__stamp-svg" viewBox="0 0 200 200">
+          <circle
+            cx="100"
+            cy="100"
+            r="96"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+          ></circle>
+          {% if stamp_label != blank %}
+            <path
+              id="about-close-ring-{{ section.id }}"
+              d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"
+              fill="none"
+            ></path>
+            <text class="about-close__stamp-ring">
+              <textPath href="#about-close-ring-{{ section.id }}" startOffset="0">
+                {{ stamp_label | escape }} · {{ stamp_label | escape }} ·
+              </textPath>
+            </text>
+          {% endif %}
+          {% if stamp_center != blank %}
+            <text
+              class="about-close__stamp-center"
+              x="100"
+              y="108"
+              text-anchor="middle"
+            >
+              {{ stamp_center | escape }}
+            </text>
+          {% endif %}
+        </svg>
+      </div>
+    {% endif %}
+
+    {% if section.settings.note != blank %}
+      <p class="about-close__note">{{ section.settings.note | escape }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .about-close {
+    border-top: 1px solid var(--color-border);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 24rem;
+  }
+
+  .about-close__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    justify-items: start;
+  }
+
+  .about-close__heading {
+    max-width: 12ch;
+  }
+
+  .about-close__stamp {
+    width: 10rem;
+    height: 10rem;
+    color: var(--color-foreground);
+  }
+
+  .about-close__stamp-image,
+  .about-close__stamp-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .about-close__stamp-ring {
+    font-family: var(--font-mono--family);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: currentColor;
+  }
+
+  .about-close__stamp-center {
+    font-family: var(--font-display--family);
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    fill: currentColor;
+  }
+
+  .about-close__note {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .about-close__inner {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .about-close__heading {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .about-close__stamp {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .about-close__note {
+      grid-column: 2;
+      justify-self: end;
+      text-align: right;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.about_close",
+  "tag": "div",
+  "class": "section-about-close",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.close_heading",
+      "default": "METAL, REIMAGINED. DESIGNED AND MADE IN INDIA."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "t:labels.close_note",
+      "default": "SAME PASSION. DIFFERENT WALLS."
+    },
+    {
+      "type": "text",
+      "id": "stamp_label",
+      "label": "t:labels.stamp_label",
+      "default": "DESIGNED & MADE IN INDIA"
+    },
+    {
+      "type": "text",
+      "id": "stamp_center",
+      "label": "t:labels.stamp_center",
+      "default": "KOVA"
+    },
+    {
+      "type": "image_picker",
+      "id": "stamp_image",
+      "label": "t:labels.stamp_image",
+      "info": "t:info.stamp_image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.about_close"
+    }
+  ]
+}
+{% endschema %}

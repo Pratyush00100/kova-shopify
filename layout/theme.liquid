@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+    <meta name="color-scheme" content="dark">
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
+    {% unless settings.type_display_font.system? and settings.type_primary_font.system? %}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {% endunless %}
 
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
+    {% unless settings.type_display_font.system? %}
+      {{ settings.type_display_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endunless %}
+
+    {% unless settings.type_primary_font.system? %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 

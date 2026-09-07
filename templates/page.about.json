@@ -1,0 +1,88 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "about-hero",
+      "settings": {
+        "eyebrow": "ABOUT KOVA",
+        "heading": "WE SAW SOMETHING MISSING.",
+        "subheading": "The things we obsess over deserved better walls.",
+        "aside_label": "CARS, ANIME, GAMES, MYTHOLOGY, AND MORE."
+      }
+    },
+    "story": {
+      "type": "about-story",
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "IT STARTED WITH A SIMPLE THOUGHT.",
+        "description": "",
+        "button_label": "",
+        "media_caption": "IDEAS CUT IN METAL BUILT TO LAST."
+      }
+    },
+    "pillars": {
+      "type": "about-pillars",
+      "blocks": {
+        "metal": {
+          "type": "pillar",
+          "settings": {
+            "title": "BUILT FROM METAL",
+            "text": "Premium stainless steel. Precision cut. Made to last."
+          }
+        },
+        "standout": {
+          "type": "pillar",
+          "settings": {
+            "title": "DESIGNED TO STAND OUT",
+            "text": "Clean silhouettes. Bold shadows. Timeless design."
+          }
+        },
+        "space": {
+          "type": "pillar",
+          "settings": {
+            "title": "MADE FOR YOUR SPACE",
+            "text": "More than decor. A reflection of what you love."
+          }
+        }
+      },
+      "block_order": [
+        "metal",
+        "standout",
+        "space"
+      ],
+      "settings": {}
+    },
+    "statement": {
+      "type": "about-statement",
+      "settings": {
+        "heading": "WE DON'T MAKE WALL DECOR.",
+        "outline_heading": "WE MAKE STATEMENTS FOR EMPTY WALLS.",
+        "caption": "OBSESSION IN EVERY DETAIL."
+      }
+    },
+    "close": {
+      "type": "about-close",
+      "settings": {
+        "heading": "METAL, REIMAGINED. DESIGNED AND MADE IN INDIA.",
+        "note": "SAME PASSION. DIFFERENT WALLS.",
+        "stamp_label": "DESIGNED & MADE IN INDIA",
+        "stamp_center": "KOVA"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "story",
+    "pillars",
+    "statement",
+    "close"
+  ]
+}

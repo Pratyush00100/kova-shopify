@@ -1,103 +1,190 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
         "anchor_id": "top",
-        "brand_text": "KOVA",
-        "heading": "DROP 001 // VELOCITY",
-        "subheading": "LIVE NOW",
-        "button_label": "EXPLORE DROP 001",
-        "button_link": "/collections/drop-001",
-        "media_treatment": "blend",
-        "placeholder_label": ""
+        "eyebrow": "KOVA // METAL ART",
+        "heading": "METAL, REIMAGINED.",
+        "body": "<p>Metal art for your space. Designed to stand out.</p>",
+        "button_label": "EXPLORE COLLECTIONS",
+        "button_link": "/collections/drop-001"
       }
     },
     "drop_intro": {
       "type": "drop-intro",
       "settings": {
         "anchor_id": "drop",
-        "eyebrow": "DROP 001",
-        "title": "VELOCITY",
+        "eyebrow": "CURRENT DROP",
+        "title": "VELOCITY // 001",
+        "subtitle": "AUTOMOTIVE SILHOUETTES",
         "description": "<p>Eight automotive silhouettes created for people who don't just like cars, but genuinely care about them.</p>",
-        "button_label": "VIEW THE DROP",
-        "button_link": "/collections/drop-001"
+        "button_label": "VIEW COLLECTION",
+        "button_link": "/collections/drop-001",
+        "pagination": "01 —— 05"
       }
     },
-    "featured_products": {
-      "type": "featured-products",
-      "settings": {
-        "eyebrow": "DROP 001",
-        "heading": "SELECTED PIECES",
-        "products_to_show": 3,
-        "columns": 3,
-        "link_label": "VIEW ALL",
-        "link_url": "/collections/drop-001"
-      }
-    },
-    "pathways": {
-      "type": "pathways",
+    "features": {
+      "type": "features",
       "blocks": {
-        "drop": {
-          "type": "pathway",
+        "material": {
+          "type": "feature",
           "settings": {
-            "title": "DROP 001",
-            "description": "Eight automotive silhouettes, cut from 2 mm stainless steel.",
-            "link": "/collections/drop-001"
+            "title": "PREMIUM MATERIAL",
+            "text": "2mm Stainless Steel. Built to last."
           }
         },
-        "build": {
-          "type": "pathway",
+        "precision": {
+          "type": "feature",
           "settings": {
-            "title": "BUILD",
-            "description": "CAD, laser cutting, finishing, inspection and packaging.",
-            "link": "/pages/build"
+            "title": "PRECISION CUT",
+            "text": "Laser cut with extreme precision."
           }
         },
-        "manifesto": {
-          "type": "pathway",
+        "elevation": {
+          "type": "feature",
           "settings": {
-            "title": "MANIFESTO",
-            "description": "What we make, and why we make it this way.",
-            "link": "/pages/manifesto"
+            "title": "15MM ELEVATION",
+            "text": "Stands off the wall for a bold shadow."
+          }
+        },
+        "longevity": {
+          "type": "feature",
+          "settings": {
+            "title": "BUILT TO LAST",
+            "text": "Rust-resistant. Timeless finish."
           }
         }
       },
       "block_order": [
-        "drop",
-        "build",
-        "manifesto"
+        "material",
+        "precision",
+        "elevation",
+        "longevity"
+      ]
+    },
+    "collection_teasers": {
+      "type": "collection-teasers",
+      "blocks": {
+        "automotive": {
+          "type": "teaser",
+          "settings": {
+            "title": "AUTOMOTIVE",
+            "status": "VELOCITY // 001",
+            "link": "/collections/drop-001",
+            "coming_soon": false
+          }
+        },
+        "teaser_2": {
+          "type": "teaser",
+          "settings": {
+            "title": "COLLECTION 02",
+            "status": "COMING SOON",
+            "coming_soon": true
+          }
+        },
+        "teaser_3": {
+          "type": "teaser",
+          "settings": {
+            "title": "COLLECTION 03",
+            "status": "COMING SOON",
+            "coming_soon": true
+          }
+        },
+        "teaser_4": {
+          "type": "teaser",
+          "settings": {
+            "title": "COLLECTION 04",
+            "status": "COMING SOON",
+            "coming_soon": true
+          }
+        },
+        "teaser_5": {
+          "type": "teaser",
+          "settings": {
+            "title": "COLLECTION 05",
+            "status": "COMING SOON",
+            "coming_soon": true
+          }
+        }
+      },
+      "block_order": [
+        "automotive",
+        "teaser_2",
+        "teaser_3",
+        "teaser_4",
+        "teaser_5"
       ],
       "settings": {
-        "heading": "INSIDE KOVA"
+        "heading": "EXPLORE COLLECTIONS",
+        "link_label": "VIEW ALL →",
+        "link_url": "/collections/drop-001"
       }
     },
-    "notify": {
-      "type": "notify",
+    "about_story": {
+      "type": "about-story",
       "settings": {
-        "anchor_id": "notify",
-        "eyebrow": "NOTIFY",
-        "heading": "BE FIRST ON DROP 002",
-        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
-        "button_label": "NOTIFY ME",
-        "customer_tag": "drop-notify"
+        "eyebrow": "ABOUT KOVA",
+        "heading": "BUILT DIFFERENT. MADE FOR YOU.",
+        "description": "<p>Designed and made in India. Cut from stainless steel, finished by hand, and built to hold a room.</p>",
+        "button_label": "OUR STORY",
+        "button_link": "/pages/about"
+      }
+    },
+    "contact": {
+      "type": "contact",
+      "blocks": {
+        "custom": {
+          "type": "topic",
+          "settings": {
+            "title": "CUSTOM",
+            "text": "Custom size / design enquiry",
+            "email_subject": "Custom enquiry",
+            "whatsapp_message": "Hi KOVA — I have a custom size / design enquiry."
+          }
+        },
+        "support": {
+          "type": "topic",
+          "settings": {
+            "title": "SUPPORT",
+            "text": "Order / delivery / product help",
+            "email_subject": "Support",
+            "whatsapp_message": "Hi KOVA — I need help with an order."
+          }
+        },
+        "collab": {
+          "type": "topic",
+          "settings": {
+            "title": "COLLAB",
+            "text": "Brands / creators / events",
+            "email_subject": "Collaboration",
+            "whatsapp_message": "Hi KOVA — I would like to talk about a collaboration."
+          }
+        }
+      },
+      "block_order": [
+        "custom",
+        "support",
+        "collab"
+      ],
+      "settings": {
+        "anchor_id": "contact",
+        "eyebrow": "KOVA // CONTACT",
+        "heading": "LET'S MAKE SOMETHING.",
+        "description": "<p>Questions, custom dimensions, collaborations or just want to talk?</p>",
+        "details_heading": "GET IN TOUCH",
+        "email": "kovaa.cool@gmail.com",
+        "whatsapp_number": "917988355887",
+        "phone_display": "+91 7988355887"
       }
     }
   },
   "order": [
     "hero",
     "drop_intro",
-    "featured_products",
-    "pathways",
-    "notify"
+    "features",
+    "collection_teasers",
+    "about_story",
+    "contact"
   ]
 }

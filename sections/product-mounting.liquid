@@ -1,0 +1,565 @@
+<section class="product-mounting full-width">
+  <div class="product-mounting__inner page-inner">
+    <div class="product-mounting__overview">
+      <div class="product-mounting__copy">
+        {% if section.settings.eyebrow != blank %}
+          <p class="eyebrow eyebrow--marked">{{ section.settings.eyebrow | escape }}</p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="product-mounting__heading">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+
+        {% if section.settings.body != blank %}
+          <div class="rte product-mounting__body">{{ section.settings.body }}</div>
+        {% endif %}
+
+        <ul class="product-mounting__features" role="list">
+          {% if section.settings.feature_1 != blank %}
+            <li class="product-mounting__feature">
+              <span class="product-mounting__feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                  <path d="M16 4v16"></path>
+                  <path d="M12 8h8"></path>
+                  <path d="M10 20h12v3H10z"></path>
+                  <path d="M14 23v5h4v-5"></path>
+                </svg>
+              </span>
+              <span>{{ section.settings.feature_1 | escape }}</span>
+            </li>
+          {% endif %}
+
+          {% if section.settings.feature_2 != blank %}
+            <li class="product-mounting__feature">
+              <span class="product-mounting__feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                  <rect x="7" y="7" width="13" height="13"></rect>
+                  <rect x="12" y="12" width="13" height="13"></rect>
+                </svg>
+              </span>
+              <span>{{ section.settings.feature_2 | escape }}</span>
+            </li>
+          {% endif %}
+
+          {% if section.settings.feature_3 != blank %}
+            <li class="product-mounting__feature">
+              <span class="product-mounting__feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                  <path d="M16 5 8 8.5v7.2c0 5.2 3.4 9.1 8 10.3 4.6-1.2 8-5.1 8-10.3V8.5L16 5z"></path>
+                  <path d="m12.5 16 2.4 2.4 4.6-5"></path>
+                </svg>
+              </span>
+              <span>{{ section.settings.feature_3 | escape }}</span>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <figure class="product-mounting__hero">
+        <span class="product-mounting__mark product-mounting__mark--tl" aria-hidden="true">+</span>
+        <span class="product-mounting__mark product-mounting__mark--tr" aria-hidden="true">+</span>
+        <span class="product-mounting__mark product-mounting__mark--bl" aria-hidden="true">+</span>
+        <span class="product-mounting__mark product-mounting__mark--br" aria-hidden="true">+</span>
+
+        {% if section.settings.caption != blank %}
+          <p class="product-mounting__caption">{{ section.settings.caption | escape }}</p>
+        {% endif %}
+
+        <div class="product-mounting__hero-media">
+          {% if section.settings.image != blank %}
+            {{
+              section.settings.image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'product-mounting__hero-image',
+                widths: '600, 900, 1200, 1600',
+                sizes: '(min-width: 900px) 44vw, 100vw',
+                loading: 'lazy'
+            }}
+          {% else %}
+            <span class="product-mounting__placeholder" aria-hidden="true"></span>
+          {% endif %}
+        </div>
+
+        {% if section.settings.image_note != blank %}
+          <p class="product-mounting__note">{{ section.settings.image_note | escape }}</p>
+        {% endif %}
+      </figure>
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="product-mounting__steps">
+        {% if section.settings.steps_heading != blank %}
+          <h3 class="product-mounting__steps-heading">{{ section.settings.steps_heading | escape }}</h3>
+        {% endif %}
+
+        <ol class="product-mounting__list">
+          {% for block in section.blocks %}
+            <li class="product-mounting__step" {{ block.shopify_attributes }}>
+              <div class="product-mounting__step-media">
+                {% if block.settings.image != blank %}
+                  {{
+                    block.settings.image
+                    | image_url: width: 900
+                    | image_tag:
+                      class: 'product-mounting__step-image',
+                      widths: '320, 480, 640, 900',
+                      sizes: '(min-width: 900px) 22vw, (min-width: 600px) 46vw, 100vw',
+                      loading: 'lazy'
+                  }}
+                {% else %}
+                  <span class="product-mounting__placeholder" aria-hidden="true"></span>
+                {% endif %}
+              </div>
+
+              <p class="product-mounting__step-text">
+                <span class="product-mounting__step-index">
+                  {{- forloop.index | prepend: '00' | slice: -2, 2 -}}
+                </span>
+                {% if block.settings.title != blank %}
+                  <span class="product-mounting__step-title">{{ block.settings.title | escape }}</span>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <span class="product-mounting__step-copy">{{ block.settings.text | escape }}</span>
+                {% endif %}
+              </p>
+            </li>
+          {% endfor %}
+        </ol>
+      </div>
+    {% endif %}
+
+    {% if section.settings.close_heading != blank or section.settings.close_note != blank %}
+      <footer class="product-mounting__close">
+        {% if section.settings.close_heading != blank %}
+          <p class="product-mounting__close-heading">{{ section.settings.close_heading | escape }}</p>
+        {% endif %}
+
+        {% if section.settings.close_note != blank %}
+          <p class="product-mounting__close-note">{{ section.settings.close_note | escape }}</p>
+        {% endif %}
+      </footer>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-mounting {
+    padding-block: var(--space-section);
+    border-top: 1px solid var(--color-border);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 52rem;
+  }
+
+  .product-mounting__inner {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .product-mounting__overview {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .product-mounting__copy {
+    display: grid;
+    gap: 1.15rem;
+    align-content: start;
+  }
+
+  .product-mounting__heading {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(2.1rem, 6vw, 4.1rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .product-mounting__body {
+    max-width: 36rem;
+    font-size: var(--text-sm);
+    line-height: 1.75;
+  }
+
+  .product-mounting__features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-mounting__feature {
+    display: grid;
+    justify-items: start;
+    gap: 0.55rem;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product-mounting__feature-icon {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-foreground);
+  }
+
+  .product-mounting__feature-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-mounting__hero {
+    position: relative;
+    margin: 0;
+    padding: 0.85rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .product-mounting__mark {
+    position: absolute;
+    z-index: 2;
+    color: var(--color-foreground);
+    font-size: 0.85rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .product-mounting__mark--tl {
+    top: 0.35rem;
+    left: 0.4rem;
+  }
+
+  .product-mounting__mark--tr {
+    top: 0.35rem;
+    right: 0.4rem;
+  }
+
+  .product-mounting__mark--bl {
+    bottom: 0.35rem;
+    left: 0.4rem;
+  }
+
+  .product-mounting__mark--br {
+    bottom: 0.35rem;
+    right: 0.4rem;
+  }
+
+  .product-mounting__caption,
+  .product-mounting__note {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product-mounting__caption {
+    position: absolute;
+    top: 1.15rem;
+    right: 1.35rem;
+    z-index: 2;
+  }
+
+  .product-mounting__note {
+    margin-top: 0.75rem;
+    text-align: right;
+  }
+
+  .product-mounting__hero-media {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-surface);
+  }
+
+  .product-mounting__hero-image,
+  .product-mounting__step-image,
+  .product-mounting__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-mounting__hero-image,
+  .product-mounting__step-image {
+    filter: grayscale(1);
+  }
+
+  .product-mounting__placeholder {
+    background: var(--color-surface-strong);
+  }
+
+  .product-mounting__steps {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .product-mounting__steps-heading {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product-mounting__list {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-mounting__step {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .product-mounting__step-media {
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface);
+  }
+
+  .product-mounting__step-text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.55rem;
+    margin: 0;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-mounting__step-index,
+  .product-mounting__step-title {
+    color: var(--color-foreground);
+    font-weight: 500;
+  }
+
+  .product-mounting__step-copy {
+    color: var(--color-foreground-muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  .product-mounting__close {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-mounting__close-heading {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-size: clamp(1.05rem, 2vw, 1.45rem);
+    font-weight: var(--font-display--weight);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-mounting__close-note {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 640px) {
+    .product-mounting__features {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .product-mounting__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .product-mounting__overview {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    }
+
+    .product-mounting__hero-media {
+      aspect-ratio: 1 / 1;
+    }
+
+    .product-mounting__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-mounting__hero-image,
+    .product-mounting__step-image {
+      filter: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_mounting",
+  "tag": "div",
+  "class": "section-product-mounting",
+  "max_blocks": 6,
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "MOUNTING"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "15MM OFF THE WALL"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "t:labels.description",
+      "default": "<p>KOVA pieces sit approximately 15 mm away from the wall, creating a subtle floating effect. Light passes behind the silhouette and throws a natural shadow, adding depth to an otherwise flat form.</p><p>Each piece uses a formed metal mounting bracket integrated into the design rather than an externally welded bracket. It arrives ready to mount.</p>"
+    },
+    {
+      "type": "text",
+      "id": "feature_1",
+      "label": "t:labels.feature",
+      "default": "Easy installation"
+    },
+    {
+      "type": "text",
+      "id": "feature_2",
+      "label": "t:labels.feature",
+      "default": "Floating 15mm gap"
+    },
+    {
+      "type": "text",
+      "id": "feature_3",
+      "label": "t:labels.feature",
+      "default": "Strong & secure"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:info.pdp_image"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "t:labels.caption",
+      "default": "→ KOVA // DETAIL"
+    },
+    {
+      "type": "text",
+      "id": "image_note",
+      "label": "t:labels.image_note",
+      "default": "PRECISION IN EVERY DETAIL."
+    },
+    {
+      "type": "text",
+      "id": "steps_heading",
+      "label": "t:labels.steps_heading",
+      "default": "INSTALLATION STEPS —"
+    },
+    {
+      "type": "text",
+      "id": "close_heading",
+      "label": "t:labels.close_heading",
+      "default": "SIMPLE INSTALLATION. A BOLDER PRESENCE."
+    },
+    {
+      "type": "text",
+      "id": "close_note",
+      "label": "t:labels.close_note",
+      "default": "METAL, REIMAGINED. —"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "t:general.step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image",
+          "info": "t:info.pdp_image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:labels.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.product_mounting",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "DRILL",
+            "text": "Make a hole at the marked position."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "INSERT",
+            "text": "Insert the wall plug (provided)."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "SCREW",
+            "text": "Fix the screw, leaving a small gap."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "HANG",
+            "text": "Place the piece on the screw and it is ready."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

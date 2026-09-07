@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "KOVA",
-    "theme_version": "0.1.0",
+    "theme_version": "0.2.0",
     "theme_author": "KOVA",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
@@ -16,8 +16,20 @@
       },
       {
         "type": "font_picker",
+        "id": "type_display_font",
+        "default": "oswald_n7",
+        "label": "t:general.display"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_mono_font",
+        "default": "ibm_plex_mono_n4",
+        "label": "t:general.mono"
+      },
+      {
+        "type": "font_picker",
         "id": "type_primary_font",
-        "default": "archivo_n4",
+        "default": "inter_n4",
         "label": "t:general.primary"
       }
     ]
@@ -59,33 +71,33 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#F1EFEA",
+        "default": "#000000",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#12161A",
+        "default": "#F4F4F4",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "dark_color",
-        "default": "#0E1215",
+        "default": "#000000",
         "label": "t:labels.dark_color",
         "info": "t:info.dark_color"
       },
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#C0431C",
+        "default": "#E4E4E4",
         "label": "t:labels.accent_color",
         "info": "t:info.accent_color"
       },
       {
         "type": "color",
         "id": "accent_contrast_color",
-        "default": "#FFFFFF",
+        "default": "#000000",
         "label": "t:labels.accent_contrast_color",
         "info": "t:info.accent_contrast_color"
       },

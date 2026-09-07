@@ -1,9 +1,3 @@
-{% comment %}
-  Editorial transition from the hero into the current release. The media column
-  is only built when an image exists, so the section reads as a deliberate
-  typographic composition until real photography arrives.
-{% endcomment %}
-
 {% liquid
   assign has_image = false
   if section.settings.image != blank
@@ -17,139 +11,169 @@
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
 >
+  {% if has_image %}
+    <div class="drop-intro__media" aria-hidden="true">
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'drop-intro__image',
+          widths: '750, 1100, 1500, 1800, 2400',
+          sizes: '100vw',
+          loading: 'lazy'
+      }}
+    </div>
+  {% endif %}
+
   <div class="drop-intro__inner">
     <div class="drop-intro__copy">
       {% if section.settings.eyebrow != blank %}
-        <p class="eyebrow eyebrow--marked">{{ section.settings.eyebrow | escape }}</p>
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {% endif %}
 
       {% if section.settings.title != blank %}
         <h2 class="drop-intro__title">{{ section.settings.title | escape }}</h2>
       {% endif %}
 
-      {% if section.settings.description != blank or section.settings.button_label != blank %}
-        <div class="drop-intro__body">
-          {% if section.settings.description != blank %}
-            <div class="drop-intro__description">
-              {{ section.settings.description }}
-            </div>
-          {% endif %}
+      {% if section.settings.subtitle != blank %}
+        <p class="drop-intro__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {% endif %}
 
-          {% if section.settings.button_label != blank %}
-            <a
-              class="link-underline"
-              href="{{ section.settings.button_link | default: '/collections/drop-001' }}"
-            >
-              {{ section.settings.button_label | escape }}
-            </a>
-          {% endif %}
+      {% if section.settings.description != blank %}
+        <div class="drop-intro__description">
+          {{ section.settings.description }}
         </div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a
+          class="btn btn--arrow"
+          href="{{ section.settings.button_link | default: '/collections/drop-001' }}"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
       {% endif %}
     </div>
 
-    {% if has_image %}
-      <div class="drop-intro__media">
-        {{
-          section.settings.image
-          | image_url: width: 1800
-          | image_tag:
-            class: 'drop-intro__image',
-            widths: '600, 900, 1200, 1500, 1800',
-            sizes: '(min-width: 900px) 55vw, 100vw',
-            loading: 'lazy'
-        }}
-      </div>
+    {% if section.settings.pagination != blank %}
+      <p class="drop-intro__pagination">{{ section.settings.pagination | escape }}</p>
     {% endif %}
   </div>
 </section>
 
 {% stylesheet %}
   .drop-intro {
-    padding-block: var(--space-section-lg);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: min(72vw, 38rem);
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .drop-intro__media,
+  .drop-intro__inner {
+    grid-area: 1 / 1;
+  }
+
+  .drop-intro__media {
+    z-index: 0;
+  }
+
+  .drop-intro__image {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
+  }
+
+  .drop-intro::after {
+    content: '';
+    grid-area: 1 / 1;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      rgb(0 0 0 / 78%) 0%,
+      rgb(0 0 0 / 42%) 42%,
+      rgb(0 0 0 / 18%) 100%
+    );
+    pointer-events: none;
+  }
+
+  .drop-intro:not(.drop-intro--illustrated)::after {
+    background: linear-gradient(180deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 55%));
   }
 
   .drop-intro__inner {
-    display: grid;
-    gap: clamp(2.5rem, 5vw, 4.5rem);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
     width: 100%;
     max-width: var(--page-width);
     margin-inline: auto;
-    padding-inline: var(--page-margin);
+    padding: clamp(2.5rem, 7vw, 5rem) var(--page-margin);
   }
 
   .drop-intro__copy {
     display: grid;
-    align-content: start;
-    gap: clamp(1.1rem, 2vw, 1.6rem);
+    justify-items: start;
+    gap: 1rem;
+    max-width: 36rem;
   }
 
   .drop-intro__title {
     margin: 0;
-    font-size: clamp(3.25rem, 9vw, 7rem);
-    font-weight: 700;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(2.75rem, 8vw, 6.25rem);
     line-height: 0.88;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
   }
 
-  .drop-intro__body {
-    display: grid;
-    justify-items: start;
-    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  .drop-intro__subtitle {
+    margin: 0;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
   }
 
   .drop-intro__description {
+    max-width: 38ch;
     color: var(--color-foreground-muted);
     font-size: var(--text-base);
-    line-height: 1.7;
-    max-width: 32ch;
+    line-height: 1.65;
   }
 
   .drop-intro__description p {
     margin: 0;
   }
 
-  .drop-intro__media {
-    overflow: hidden;
-    background: var(--color-surface);
-  }
-
-  .drop-intro__image {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+  .drop-intro__pagination {
+    align-self: end;
+    margin: 0;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-foreground-subtle);
   }
 
   @media (min-width: 900px) {
-    /* Without photography the section becomes a two-part editorial spread:
-       the release name leads, the supporting line settles on its baseline. */
-    .drop-intro:not(.drop-intro--illustrated) .drop-intro__copy {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 23rem);
-      column-gap: clamp(3rem, 8vw, 8rem);
-      align-items: end;
+    .drop-intro {
+      min-height: min(78vh, 44rem);
     }
 
-    .drop-intro:not(.drop-intro--illustrated) .eyebrow {
-      grid-column: 1 / -1;
-    }
-
-    .drop-intro:not(.drop-intro--illustrated) .drop-intro__title {
-      grid-column: 1;
-      margin-bottom: -0.12em;
-    }
-
-    .drop-intro:not(.drop-intro--illustrated) .drop-intro__body {
-      grid-column: 2;
-    }
-
-    .drop-intro--illustrated .drop-intro__inner {
-      grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
-      align-items: end;
-    }
-
-    .drop-intro--illustrated .drop-intro__image {
-      aspect-ratio: 5 / 4;
+    .drop-intro__inner {
+      flex-direction: row;
+      align-items: flex-end;
     }
   }
 {% endstylesheet %}
@@ -170,13 +194,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "t:labels.eyebrow",
-      "default": "DROP 001"
+      "default": "CURRENT DROP"
     },
     {
       "type": "text",
       "id": "title",
       "label": "t:labels.title",
-      "default": "VELOCITY"
+      "default": "VELOCITY // 001"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subheading",
+      "default": "AUTOMOTIVE SILHOUETTES"
     },
     {
       "type": "richtext",
@@ -187,12 +217,18 @@
       "type": "text",
       "id": "button_label",
       "label": "t:labels.button_label",
-      "default": "VIEW THE DROP"
+      "default": "VIEW COLLECTION"
     },
     {
       "type": "url",
       "id": "button_link",
       "label": "t:labels.button_link"
+    },
+    {
+      "type": "text",
+      "id": "pagination",
+      "label": "t:labels.pagination",
+      "default": "01 —— 05"
     },
     {
       "type": "image_picker",

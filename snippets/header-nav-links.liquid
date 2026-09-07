@@ -2,7 +2,7 @@
   Renders header navigation links from a menu or fallback settings.
 
   Marks the link for the page currently being viewed so visitors can see where
-  they are. Anchor links such as /#notify are never treated as current.
+  they are. Anchor links such as /#contact are never treated as current.
 
   @param {object} section - The header section object
 {% enddoc %}
@@ -24,7 +24,7 @@
     </a>
   {% endfor %}
 {% else %}
-  {% for i in (1..5) %}
+  {% for i in (1..6) %}
     {% liquid
       case i
         when 1
@@ -32,16 +32,19 @@
           assign link_url = section.settings.link_1_url
         when 2
           assign link_label = section.settings.link_2_label
-          assign link_url = section.settings.link_2_url
+          assign link_url = section.settings.link_2_url | default: '/pages/build'
         when 3
           assign link_label = section.settings.link_3_label
-          assign link_url = section.settings.link_3_url | default: '/pages/build'
+          assign link_url = section.settings.link_3_url | default: '/pages/about'
         when 4
           assign link_label = section.settings.link_4_label
           assign link_url = section.settings.link_4_url | default: '/pages/manifesto'
         when 5
           assign link_label = section.settings.link_5_label
-          assign link_url = section.settings.link_5_url | default: '#notify'
+          assign link_url = section.settings.link_5_url | default: '/pages/faq'
+        when 6
+          assign link_label = section.settings.link_6_label
+          assign link_url = section.settings.link_6_url | default: '#contact'
       endcase
 
       assign is_current = false

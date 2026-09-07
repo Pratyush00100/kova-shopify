@@ -1,13 +1,3 @@
-{% comment %}
-  Homepage hero. A deep graphite field with the drop identity set small at the
-  top, the KOVA wordmark anchored low, and an ember wash behind the wordmark.
-
-  The image is optional and assigned in the theme editor. When empty the
-  composition still reads as finished. When set, the photo dissolves into the
-  field and never sits as a rectangular image card. The ember wash stays on
-  the wordmark either way.
-{% endcomment %}
-
 {% liquid
   assign has_desktop_image = false
   assign has_mobile_image = false
@@ -22,95 +12,97 @@
   if has_desktop_image or has_mobile_image
     assign has_image = true
   endif
-
-  assign treatment = section.settings.media_treatment | default: 'blend'
 %}
 
 <section
-  class="hero full-width surface-inverse{% unless has_desktop_image %} hero--unillustrated{% endunless %}"
+  class="hero full-width{% if has_image %} hero--media{% endif %}"
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
 >
-  {% if has_image %}
-    <div
-      class="hero__media hero__media--{{ treatment }}{% if has_mobile_image and has_desktop_image == false %} hero__media--mobile-only{% endif %}"
-      aria-hidden="true"
-    >
-      {% if has_desktop_image and has_mobile_image %}
-        <picture>
-          <source
-            media="(max-width: 749px)"
-            srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}"
-          >
+  <div class="hero__inner">
+    <div class="hero__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="hero__heading">{{ section.settings.heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.body != blank %}
+        <div class="hero__body">{{ section.settings.body }}</div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a
+          class="btn btn--arrow hero__cta"
+          href="{{ section.settings.button_link | default: '/collections/drop-001' }}"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="hero__media">
+      {% if has_image %}
+        {% if has_desktop_image and has_mobile_image %}
+          <picture>
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}"
+            >
+            {{
+              section.settings.image
+              | image_url: width: 1800
+              | image_tag:
+                class: 'hero__image',
+                widths: '750, 1100, 1400, 1800',
+                sizes: '(min-width: 900px) 52vw, 100vw',
+                loading: 'eager',
+                fetchpriority: 'high'
+            }}
+          </picture>
+        {% elsif has_desktop_image %}
           {{
             section.settings.image
-            | image_url: width: 2400
+            | image_url: width: 1800
             | image_tag:
               class: 'hero__image',
-              widths: '750, 1100, 1500, 1800, 2400',
+              widths: '750, 1100, 1400, 1800',
+              sizes: '(min-width: 900px) 52vw, 100vw',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        {% else %}
+          {{
+            section.settings.image_mobile
+            | image_url: width: 1200
+            | image_tag:
+              class: 'hero__image',
+              widths: '480, 750, 1100, 1200',
               sizes: '100vw',
               loading: 'eager',
               fetchpriority: 'high'
           }}
-        </picture>
-      {% elsif has_desktop_image %}
-        {{
-          section.settings.image
-          | image_url: width: 2400
-          | image_tag:
-            class: 'hero__image',
-            widths: '750, 1100, 1500, 1800, 2400',
-            sizes: '100vw',
-            loading: 'eager',
-            fetchpriority: 'high'
-        }}
+        {% endif %}
       {% else %}
-        {{
-          section.settings.image_mobile
-          | image_url: width: 1200
-          | image_tag:
-            class: 'hero__image',
-            widths: '480, 750, 1100, 1200',
-            sizes: '100vw',
-            loading: 'eager',
-            fetchpriority: 'high'
-        }}
+        <div class="hero__placeholder" aria-hidden="true"></div>
       {% endif %}
 
-      {% if treatment == 'scrim' %}
-        <div class="hero__scrim"></div>
-      {% endif %}
-    </div>
-  {% endif %}
-
-  <div class="hero__content">
-    <div class="hero__meta">
-      <div class="hero__identity">
-        {% if section.settings.heading != blank %}
-          <h1 class="hero__heading">{{ section.settings.heading | escape }}</h1>
-        {% endif %}
-
-        {% if section.settings.subheading != blank %}
-          <p class="hero__subheading">
-            <span class="hero__status-dot" aria-hidden="true"></span>
-            {{ section.settings.subheading | escape }}
-          </p>
-        {% endif %}
-      </div>
-
-      {% if has_desktop_image == false and has_mobile_image == false and section.settings.placeholder_label != blank %}
-        <p class="hero__note">{{ section.settings.placeholder_label | escape }}</p>
-      {% endif %}
-    </div>
-
-    <div class="hero__foot">
-      <p class="hero__brand" aria-hidden="true">{{ section.settings.brand_text | escape }}</p>
-
-      {% if section.settings.button_label != blank %}
-        <a class="btn hero__cta" href="{{ section.settings.button_link | default: '/collections/drop-001' }}">
-          {{ section.settings.button_label | escape }}
-        </a>
+      {% if section.settings.badge_image != blank %}
+        <div class="hero__badge">
+          {{
+            section.settings.badge_image
+            | image_url: width: 280
+            | image_tag:
+              class: 'hero__badge-image',
+              widths: '120, 180, 240, 280',
+              sizes: '120px',
+              loading: 'eager',
+              alt: ''
+          }}
+        </div>
       {% endif %}
     </div>
   </div>
@@ -118,242 +110,132 @@
 
 {% stylesheet %}
   .hero {
-    position: relative;
-    isolation: isolate;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero__inner {
     display: grid;
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
     min-height: calc(100svh - var(--header-height));
-    overflow: hidden;
   }
 
   @supports (height: 100dvh) {
-    .hero {
+    .hero__inner {
       min-height: calc(100dvh - var(--header-height));
     }
   }
 
-  .hero__media,
-  .hero__content {
-    grid-area: 1 / 1;
+  .hero__copy {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.25rem;
+    padding: clamp(2.5rem, 8vw, 5rem) var(--page-margin);
+  }
+
+  .hero__heading {
+    margin: 0;
+    max-width: 11ch;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(3rem, 8.5vw, 6.75rem);
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .hero__body {
+    max-width: 36ch;
+    color: var(--color-foreground-muted);
+    font-size: var(--text-base);
+    line-height: 1.65;
+  }
+
+  .hero__body p {
+    margin: 0;
+  }
+
+  .hero__cta {
+    margin-top: 0.5rem;
   }
 
   .hero__media {
     position: relative;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    min-height: inherit;
+    min-height: 22rem;
+    overflow: hidden;
+    background: var(--color-surface);
   }
 
   .hero__media picture,
-  .hero__image {
+  .hero__image,
+  .hero__placeholder {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 58% 42%;
   }
 
   .hero__media picture {
-    display: block;
+    height: 100%;
   }
 
   .hero__media picture img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 58% 42%;
   }
 
-  @media (min-width: 750px) {
-    .hero__media--mobile-only {
-      display: none;
-    }
-  }
-
-  /* Blend treatment: for dark automotive photography. The image is lightened
-     and masked so it dissolves into the field rather than sitting on it as a
-     rectangle. */
-  .hero__media--blend .hero__image,
-  .hero__media--blend picture img {
-    opacity: 0.55;
-    mix-blend-mode: lighten;
-    -webkit-mask-image: radial-gradient(105% 82% at 66% 38%, #000 0%, #000 32%, rgb(0 0 0 / 45%) 62%, transparent 84%);
-    mask-image: radial-gradient(105% 82% at 66% 38%, #000 0%, #000 32%, rgb(0 0 0 / 45%) 62%, transparent 84%);
-  }
-
-  /* Scrim treatment: for bright interior or lifestyle imagery. Heavier at the
-     top and bottom where the type sits, open through the middle so the work
-     stays visible. */
-  .hero__scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-inverse) 88%, transparent) 0%,
-      color-mix(in srgb, var(--color-inverse) 52%, transparent) 26%,
-      color-mix(in srgb, var(--color-inverse) 44%, transparent) 50%,
-      color-mix(in srgb, var(--color-inverse) 82%, transparent) 78%,
-      color-mix(in srgb, var(--color-inverse) 97%, transparent) 100%
-    );
-  }
-
-  /* Ember wash behind the wordmark. Always on, including when a Shopify image
-     is assigned, so KOVA keeps its heat and the photo cannot dominate. */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+  .hero__placeholder {
+    min-height: inherit;
     background:
-      radial-gradient(
-        72% 58% at 10% 92%,
-        color-mix(in srgb, var(--color-accent) 38%, transparent) 0%,
-        color-mix(in srgb, var(--color-accent) 12%, transparent) 36%,
-        transparent 68%
+      linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 55%) 100%),
+      repeating-linear-gradient(
+        -18deg,
+        var(--color-surface) 0 1px,
+        transparent 1px 18px
       );
+  }
+
+  .hero__badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: min(7.5rem, 28vw);
     pointer-events: none;
   }
 
-  .hero__content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: clamp(4rem, 18vh, 9rem);
+  .hero__badge-image {
     width: 100%;
-    max-width: var(--page-width);
-    min-height: inherit;
-    margin-inline: auto;
-    padding: clamp(1.75rem, 6vh, 3.25rem) var(--page-margin) clamp(1.5rem, 4vh, 2.5rem);
-  }
-
-  .hero__meta {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1.5rem;
-  }
-
-  .hero__identity {
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .hero__heading {
-    margin: 0;
-    font-size: clamp(0.82rem, 1vw, 1rem);
-    font-weight: 700;
-    letter-spacing: var(--tracking-wider);
-    line-height: 1.35;
-    text-transform: uppercase;
-  }
-
-  .hero__subheading {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    margin: 0;
-    color: var(--color-inverse-muted);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-  }
-
-  .hero__status-dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 999px;
-    background: var(--color-accent);
-    box-shadow: 0 0 0.7rem color-mix(in srgb, var(--color-accent) 70%, transparent);
-    animation: kova-live 1.8s ease-in-out infinite;
-  }
-
-  @keyframes kova-live {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.42;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__status-dot {
-      animation: none;
-    }
-  }
-
-  /* Honest note about missing photography. Kept quiet so the empty hero still
-     reads as a finished composition. */
-  .hero__note {
-    margin: 0;
-    color: var(--color-inverse-subtle);
-    font-size: var(--text-2xs);
-    font-weight: 600;
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    text-align: right;
-  }
-
-  .hero__foot {
-    display: grid;
-    gap: clamp(1.5rem, 3.5vh, 2.25rem);
-  }
-
-  .hero__brand {
-    margin: 0;
-    /* Negative inline start pulls the glyph edge onto the page margin so the
-       wordmark aligns optically rather than mathematically. */
-    margin-inline-start: -0.045em;
-    font-size: min(20vw, 15.5rem);
-    font-weight: 700;
-    line-height: 0.74;
-    letter-spacing: -0.055em;
-    text-transform: uppercase;
-    user-select: none;
-  }
-
-  .hero__cta {
-    justify-self: start;
-  }
-
-  @media (min-width: 600px) {
-    .hero__brand {
-      font-size: min(21vw, 15.5rem);
-    }
+    height: auto;
   }
 
   @media (min-width: 900px) {
-    .hero__foot {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: end;
-      column-gap: clamp(2rem, 6vw, 6rem);
+    .hero__inner {
+      grid-template-columns: minmax(18rem, 0.92fr) minmax(0, 1.08fr);
     }
 
-    .hero__cta {
-      margin-bottom: clamp(0.5rem, 1.4vh, 1.25rem);
+    .hero__media,
+    .hero__placeholder {
+      min-height: 100%;
+    }
+
+    .hero__copy {
+      padding-inline-end: clamp(1.5rem, 4vw, 3.5rem);
     }
   }
 
-  @media (max-width: 599px) {
-    .hero__meta {
-      flex-direction: column;
-      gap: 0.85rem;
+  @media (max-width: 899px) {
+    .hero__inner {
+      min-height: 0;
     }
 
-    .hero__note {
-      text-align: left;
-    }
-
-    .hero__brand {
-      font-size: min(27vw, 9rem);
-      letter-spacing: -0.05em;
-    }
-
-    .hero__cta {
-      justify-self: stretch;
+    .hero__media {
+      min-height: min(70vw, 28rem);
+      aspect-ratio: 4 / 5;
     }
   }
 {% endstylesheet %}
@@ -372,27 +254,27 @@
     },
     {
       "type": "text",
-      "id": "brand_text",
-      "label": "t:labels.brand_text",
-      "default": "KOVA"
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "KOVA // METAL ART"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "t:labels.heading",
-      "default": "DROP 001 // VELOCITY"
+      "default": "METAL, REIMAGINED."
     },
     {
-      "type": "text",
-      "id": "subheading",
-      "label": "t:labels.subheading",
-      "default": "LIVE NOW"
+      "type": "richtext",
+      "id": "body",
+      "label": "t:labels.description",
+      "default": "<p>Metal art for your space. Designed to stand out.</p>"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "t:labels.button_label",
-      "default": "EXPLORE DROP 001"
+      "default": "EXPLORE COLLECTIONS"
     },
     {
       "type": "url",
@@ -412,21 +294,10 @@
       "info": "t:info.hero_image_mobile"
     },
     {
-      "type": "select",
-      "id": "media_treatment",
-      "label": "t:labels.media_treatment",
-      "info": "t:info.media_treatment",
-      "options": [
-        { "value": "blend", "label": "t:options.media_treatment.blend" },
-        { "value": "scrim", "label": "t:options.media_treatment.scrim" }
-      ],
-      "default": "blend"
-    },
-    {
-      "type": "text",
-      "id": "placeholder_label",
-      "label": "t:labels.placeholder_label",
-      "info": "t:info.hero_placeholder_label"
+      "type": "image_picker",
+      "id": "badge_image",
+      "label": "t:labels.badge_image",
+      "info": "t:info.badge_image"
     }
   ],
   "presets": [

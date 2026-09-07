@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "KOVA // FAQ",
+        "heading": "QUESTIONS? GOOD. WE'VE GOT ANSWERS.",
+        "diagram_title": "SIDE ELEVATION",
+        "wall_label": "WALL",
+        "offset_label": "15mm",
+        "artwork_label": "ARTWORK",
+        "coord_north": "N 28.6139°",
+        "coord_east": "E 77.2098°",
+        "slogan": "IDEAS SHAPED IN STEEL."
+      }
+    }
+  },
+  "order": ["faq"]
+}

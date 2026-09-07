@@ -11,18 +11,55 @@
   "type": "footer",
   "name": "t:general.footer",
   "sections": {
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "shipping": {
+          "type": "item",
+          "settings": {
+            "text": "PAN INDIA SHIPPING"
+          }
+        },
+        "cod": {
+          "type": "item",
+          "settings": {
+            "text": "CASH ON DELIVERY"
+          }
+        },
+        "returns": {
+          "type": "item",
+          "settings": {
+            "text": "7 DAY EASY RETURNS"
+          }
+        },
+        "payments": {
+          "type": "item",
+          "settings": {
+            "text": "SECURE PAYMENTS"
+          }
+        }
+      },
+      "block_order": [
+        "shipping",
+        "cod",
+        "returns",
+        "payments"
+      ]
+    },
     "footer": {
       "type": "footer",
       "settings": {
         "brand_label": "KOVA",
         "link_1_label": "DROP",
         "link_1_url": "/collections/drop-001",
-        "link_2_label": "",
-        "link_2_url": "",
-        "link_3_label": "BUILD",
-        "link_3_url": "/pages/build",
+        "link_2_label": "BUILD",
+        "link_2_url": "/pages/build",
+        "link_3_label": "ABOUT",
+        "link_3_url": "/pages/about",
         "link_4_label": "MANIFESTO",
         "link_4_url": "/pages/manifesto",
+        "link_5_label": "FAQ",
+        "link_5_url": "/pages/faq",
         "instagram_label": "INSTAGRAM",
         "copyright_text": "KOVA",
         "show_payment_icons": false
@@ -40,6 +77,7 @@
     }
   },
   "order": [
+    "trust_bar",
     "footer",
     "policies"
   ]

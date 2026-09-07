@@ -11,70 +11,122 @@
   "sections": {
     "main": {
       "type": "product",
+      "settings": {
+        "eyebrow": "DROP 001",
+        "subtitle": "AUTOMOTIVE WALL ART",
+        "origin_label": "DESIGNED & MADE IN INDIA",
+        "assurance_1": "Free shipping",
+        "assurance_2": "Cash on delivery",
+        "assurance_3": "Made to order"
+      }
+    },
+    "details": {
+      "type": "product-details",
       "blocks": {
         "material": {
           "type": "detail",
           "settings": {
             "label": "Material",
-            "value": "2 mm stainless steel"
+            "value": "2mm stainless steel"
           }
         },
         "finish": {
           "type": "detail",
           "settings": {
             "label": "Finish",
-            "value": "Matte black"
+            "value": "Matte black powder coating"
           }
         },
-        "cut": {
+        "elevation": {
           "type": "detail",
           "settings": {
-            "label": "Cut",
-            "value": "Fiber-laser cut, finished front, back and edges"
-          }
-        },
-        "mounting": {
-          "type": "detail",
-          "settings": {
-            "label": "Mounting",
-            "value": "Floats 15 mm from the wall, integrated bracket"
-          }
-        },
-        "origin": {
-          "type": "detail",
-          "settings": {
-            "label": "Origin",
-            "value": "Designed and made in India"
+            "label": "Elevation",
+            "value": "15mm off the wall"
           }
         }
       },
-      "block_order": [
-        "material",
-        "finish",
-        "cut",
-        "mounting",
-        "origin"
-      ],
+      "block_order": ["material", "finish", "elevation"],
       "settings": {
-        "eyebrow": "DROP 001",
-        "materials_heading": "Materials & Specs",
-        "shipping_heading": "Shipping & Fulfillment",
-        "shipping_content": "<p>Orders ship from India. You receive tracking once your order is dispatched. Estimated delivery is 3–6 working days.</p>",
-        "warranty_heading": "Warranty & Returns",
-        "warranty_content": "<p>If your order arrives damaged, defective, or incorrect, we will replace it after verification. Change-of-mind returns are not offered.</p>"
+        "heading": "IT'S ALL IN THE DETAILS.",
+        "body": "<p>Cut from 2 mm stainless steel, finished matte black, and built to sit 15 mm off the wall. The bracket is formed into the piece, not welded on afterwards.</p>"
       }
     },
-    "related": {
-      "type": "related-products",
+    "sizes": {
+      "type": "product-sizes",
       "settings": {
-        "heading": "MORE FROM THIS DROP",
-        "products_to_show": 3,
-        "columns": 3
+        "heading": "SIZE & DIMENSIONS",
+        "subheading": "Three sizes. Same attitude."
+      }
+    },
+    "lifestyle": {
+      "type": "product-lifestyle",
+      "blocks": {
+        "space_1": {
+          "type": "image",
+          "settings": {}
+        },
+        "space_2": {
+          "type": "image",
+          "settings": {}
+        },
+        "space_3": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": ["space_1", "space_2", "space_3"],
+      "settings": {
+        "heading": "IN YOUR SPACE.",
+        "subheading": "Real spaces. Real stories."
+      }
+    },
+    "mounting": {
+      "type": "product-mounting",
+      "blocks": {
+        "drill": {
+          "type": "step",
+          "settings": {
+            "title": "DRILL",
+            "text": "Make a hole at the marked position."
+          }
+        },
+        "insert": {
+          "type": "step",
+          "settings": {
+            "title": "INSERT",
+            "text": "Insert the wall plug (provided)."
+          }
+        },
+        "screw": {
+          "type": "step",
+          "settings": {
+            "title": "SCREW",
+            "text": "Fix the screw, leaving a small gap."
+          }
+        },
+        "hang": {
+          "type": "step",
+          "settings": {
+            "title": "HANG",
+            "text": "Place the piece on the screw and it is ready."
+          }
+        }
+      },
+      "block_order": ["drill", "insert", "screw", "hang"],
+      "settings": {
+        "eyebrow": "MOUNTING",
+        "heading": "15MM OFF THE WALL",
+        "body": "<p>KOVA pieces sit approximately 15 mm away from the wall, creating a subtle floating effect. Light passes behind the silhouette and throws a natural shadow, adding depth to an otherwise flat form.</p><p>Each piece uses a formed metal mounting bracket integrated into the design rather than an externally welded bracket. It arrives ready to mount.</p>",
+        "feature_1": "Easy installation",
+        "feature_2": "Floating 15mm gap",
+        "feature_3": "Strong & secure",
+        "caption": "→ KOVA // DETAIL",
+        "image_note": "PRECISION IN EVERY DETAIL.",
+        "steps_heading": "INSTALLATION STEPS —",
+        "close_heading": "SIMPLE INSTALLATION. A BOLDER PRESENCE.",
+        "close_note": "METAL, REIMAGINED. —"
       }
     }
   },
-  "order": [
-    "main",
-    "related"
-  ]
+  "order": ["main", "details", "sizes", "lifestyle", "mounting"]
 }

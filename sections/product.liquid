@@ -1,14 +1,14 @@
 {% comment %}
-  KOVA product page: primary conversion surface.
-  Price, availability and edition labels come from Shopify variants.
-  Spec rows render only when a value exists. Do not invent catalog facts.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  KOVA product buy box. Catalog data comes from Shopify: title, description,
+  media, variants, prices and availability. Theme settings hold labels only.
 {% endcomment %}
 
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign drop_collection = nil
+  assign drop_index = 0
+  assign drop_count = 0
+  assign image_count = product.images.size
 
   for collection in product.collections
     if collection.handle == 'drop-001'
@@ -28,39 +28,66 @@
 
   if drop_collection != blank
     assign drop_label = drop_collection.title
+    assign drop_count = drop_collection.products_count
+    for drop_product in drop_collection.products
+      if drop_product.id == product.id
+        assign drop_index = forloop.index
+        break
+      endif
+    endfor
   else
     assign drop_label = section.settings.eyebrow
   endif
 
-  assign has_details = false
-  for block in section.blocks
-    if block.settings.label != blank and block.settings.value != blank
-      assign has_details = true
-    endif
-  endfor
+  if drop_index > 0
+    assign drop_index_label = drop_index | prepend: '00' | slice: -2, 2
+    assign drop_count_label = drop_count | prepend: '00' | slice: -2, 2
+  endif
+
+  if image_count > 0
+    assign image_count_label = image_count | prepend: '00' | slice: -2, 2
+  endif
 %}
 
-<div class="product full-width section-pad" data-product-root>
-  <div class="product__inner page-inner">
-    {% if drop_collection != blank %}
+<div class="product full-width" data-product-root>
+  <div class="product__bar">
+    <div class="product__bar-inner page-inner">
       <nav class="product__breadcrumb" aria-label="{{ 'accessibility.breadcrumb' | t }}">
-        <a class="product__breadcrumb-link" href="{{ drop_collection.url }}">
-          {{- drop_collection.title | escape -}}
+        <a class="product__breadcrumb-link" href="{{ routes.root_url }}">
+          {{- 'general.home' | t -}}
         </a>
+
+        {% if drop_collection != blank %}
+          <span class="product__breadcrumb-divider" aria-hidden="true">/</span>
+          <a class="product__breadcrumb-link" href="{{ drop_collection.url }}">
+            {{- drop_collection.title | escape -}}
+          </a>
+        {% endif %}
+
         <span class="product__breadcrumb-divider" aria-hidden="true">/</span>
         <span class="product__breadcrumb-current" aria-current="page">{{ product.title | escape }}</span>
       </nav>
-    {% endif %}
 
+      {% if section.settings.origin_label != blank %}
+        <p class="product__origin">
+          <span>{{ section.settings.origin_label | escape }}</span>
+          <span aria-hidden="true">→</span>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="product__inner page-inner">
     <div class="product__layout">
-      <div class="product__gallery{% if product.images.size > 1 %} product__gallery--thumbs{% endif %}" data-product-gallery>
-        {% if product.images.size > 0 %}
-          <div class="product__stage">
+      <div class="product__gallery" data-product-gallery>
+        <div class="product__stage">
+          {% if image_count > 0 %}
             {% for image in product.images %}
               <figure
                 class="product__stage-frame"
                 data-gallery-slide
                 data-image-id="{{ image.id }}"
+                data-image-index="{{ forloop.index }}"
                 {% unless forloop.first %}
                   hidden
                 {% endunless %}
@@ -72,7 +99,7 @@
                     | image_tag:
                       class: 'product__image',
                       widths: '600, 800, 1000, 1200, 1500, 1800',
-                      sizes: '(min-width: 900px) 48vw, 100vw',
+                      sizes: '(min-width: 900px) 52vw, 100vw',
                       loading: 'eager',
                       fetchpriority: 'high'
                   }}
@@ -83,47 +110,59 @@
                     | image_tag:
                       class: 'product__image',
                       widths: '600, 800, 1000, 1200, 1500, 1800',
-                      sizes: '(min-width: 900px) 48vw, 100vw',
-                      loading: 'lazy'
+                      sizes: '(min-width: 900px) 52vw, 100vw',
+                      loading: 'lazy',
+                      fetchpriority: 'low'
                   }}
                 {% endif %}
               </figure>
             {% endfor %}
-          </div>
-
-          {% if product.images.size > 1 %}
-            <ul class="product__thumbs" role="list">
-              {% for image in product.images %}
-                <li class="product__thumb-item">
-                  <button
-                    class="product__thumb"
-                    type="button"
-                    data-gallery-thumb
-                    data-image-id="{{ image.id }}"
-                    aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
-                    aria-label="{{ 'products.view_image' | t: index: forloop.index, count: product.images.size }}"
-                  >
-                    {{
-                      image
-                      | image_url: width: 240
-                      | image_tag:
-                        class: 'product__thumb-image',
-                        widths: '120, 180, 240',
-                        sizes: '72px',
-                        loading: 'lazy',
-                        alt: ''
-                    }}
-                  </button>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        {% else %}
-          <div class="product__stage">
+          {% else %}
             <div class="product__stage-frame product__stage-frame--placeholder">
               {{ 'product-1' | placeholder_svg_tag: 'media-placeholder product__placeholder' }}
             </div>
-          </div>
+          {% endif %}
+
+          {% if section.settings.origin_label != blank %}
+            <div class="product__stamp" aria-hidden="true">
+              <span class="product__stamp-text">{{ section.settings.origin_label | escape }}</span>
+            </div>
+          {% endif %}
+
+          {% if image_count > 0 %}
+            <p class="product__counter" data-gallery-counter>
+              {{ 'products.image_counter' | t: index: '01', count: image_count_label }}
+            </p>
+          {% endif %}
+        </div>
+
+        {% if image_count > 1 %}
+          <ul class="product__thumbs" role="list">
+            {% for image in product.images %}
+              <li class="product__thumb-item">
+                <button
+                  class="product__thumb"
+                  type="button"
+                  data-gallery-thumb
+                  data-image-id="{{ image.id }}"
+                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-label="{{ 'products.view_image' | t: index: forloop.index, count: image_count }}"
+                >
+                  {{
+                    image
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'product__thumb-image',
+                      widths: '120, 180, 240',
+                      sizes: '72px',
+                      loading: 'lazy',
+                      fetchpriority: 'low',
+                      alt: ''
+                  }}
+                </button>
+              </li>
+            {% endfor %}
+          </ul>
         {% endif %}
       </div>
 
@@ -131,10 +170,23 @@
         <div class="product__info-sticky" data-product-purchase>
           <div class="product__identity">
             {% if drop_label != blank %}
-              <p class="eyebrow product__drop">{{ drop_label | escape }}</p>
+              <p class="product__drop">
+                <span>{{ drop_label | escape }}</span>
+                {% if drop_index > 0 %}
+                  <span class="product__drop-index">{{ drop_index_label }} / {{ drop_count_label }}</span>
+                {% endif %}
+              </p>
             {% endif %}
 
             <h1 class="product__title">{{ product.title | escape }}</h1>
+
+            {% if section.settings.subtitle != blank %}
+              <p class="product__subtitle">{{ section.settings.subtitle | escape }}</p>
+            {% endif %}
+
+            {% if product.description != blank %}
+              <div class="rte product__description">{{ product.description }}</div>
+            {% endif %}
 
             <p class="product__price" aria-live="polite">
               <span
@@ -156,18 +208,21 @@
               >
                 {{ current_variant.compare_at_price | money }}
               </s>
+              <span class="product__price-tax">{{ 'products.incl_taxes' | t }}</span>
             </p>
           </div>
 
           {% form 'product', product, class: 'product__form' %}
-            {% if product.variants.size > 1 %}
-              <fieldset class="product__variants">
-                <legend class="product__label product__variants-legend">
-                  {{- product.options | join: ' / ' | escape -}}
-                </legend>
+            <input type="hidden" name="quantity" value="1">
 
-                <div class="product__variant-grid">
+            {% if product.variants.size > 0 %}
+              <fieldset class="product__variants">
+                <legend class="visually-hidden">{{ product.options | join: ' / ' | escape }}</legend>
+
+                <div class="product__variant-grid" style="--variant-count: {{ product.variants.size }}">
                   {% for variant in product.variants %}
+                    {% assign variant_dimensions = variant.metafields.custom.dimensions.value %}
+
                     <div class="product__variant">
                       <input
                         id="ProductVariant-{{ section.id }}-{{ variant.id }}"
@@ -193,9 +248,11 @@
                       >
                         <span class="product__variant-title">{{ variant.title | escape }}</span>
 
-                        {% if product.price_varies %}
-                          <span class="product__variant-meta">{{ variant.price | money }}</span>
+                        {% if variant_dimensions != blank %}
+                          <span class="product__variant-meta">{{ variant_dimensions | escape }}</span>
                         {% endif %}
+
+                        <span class="product__variant-meta product__variant-price">{{ variant.price | money }}</span>
 
                         {% unless variant.available %}
                           <span class="product__variant-meta product__variant-meta--sold">
@@ -207,47 +264,7 @@
                   {% endfor %}
                 </div>
               </fieldset>
-            {% else %}
-              <input type="hidden" name="id" value="{{ current_variant.id }}">
             {% endif %}
-
-            <div class="product__field product__field--quantity">
-              <label class="product__label" for="ProductQuantity-{{ section.id }}">
-                {{ 'products.quantity' | t }}
-              </label>
-
-              <div class="product__quantity-control">
-                <button
-                  class="product__quantity-step"
-                  type="button"
-                  data-quantity-step="-1"
-                  aria-label="{{ 'products.quantity_decrease' | t | escape }}"
-                >
-                  &minus;
-                </button>
-
-                <input
-                  id="ProductQuantity-{{ section.id }}"
-                  class="product__quantity"
-                  type="number"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  step="1"
-                  inputmode="numeric"
-                  data-quantity-input
-                >
-
-                <button
-                  class="product__quantity-step"
-                  type="button"
-                  data-quantity-step="1"
-                  aria-label="{{ 'products.quantity_increase' | t | escape }}"
-                >
-                  +
-                </button>
-              </div>
-            </div>
 
             <button
               class="btn product__submit"
@@ -260,133 +277,64 @@
                 disabled
               {% endunless %}
             >
-              {% if current_variant.available %}
-                {{ 'products.add_to_cart' | t }}
-              {% else %}
-                {{ 'products.sold_out' | t }}
-              {% endif %}
+              <span data-product-submit-label>
+                {% if current_variant.available %}
+                  {{ 'products.add_to_cart' | t }}
+                {% else %}
+                  {{ 'products.sold_out' | t }}
+                {% endif %}
+              </span>
+              <span class="product__submit-arrow" aria-hidden="true">→</span>
             </button>
           {% endform %}
 
           {% liquid
-            assign assurances = ''
-            assign assurances = section.settings.assurance_1 | append: '||' | append: section.settings.assurance_2 | append: '||' | append: section.settings.assurance_3 | append: '||' | append: section.settings.assurance_4
-            assign assurance_list = assurances | split: '||'
             assign has_assurances = false
-            for entry in assurance_list
-              if entry != blank
-                assign has_assurances = true
-              endif
-            endfor
+            if section.settings.assurance_1 != blank or section.settings.assurance_2 != blank or section.settings.assurance_3 != blank
+              assign has_assurances = true
+            endif
           %}
 
           {% if has_assurances %}
             <ul class="product__trust" role="list">
-              {% for entry in assurance_list %}
-                {% if entry != blank %}
-                  <li class="product__trust-item">{{ entry | escape }}</li>
-                {% endif %}
-              {% endfor %}
+              {% if section.settings.assurance_1 != blank %}
+                <li class="product__trust-item">
+                  <span class="product__trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                      <path d="M3 7h11v8H3z"></path>
+                      <path d="M14 10h4l3 3v2h-7"></path>
+                      <circle cx="7" cy="17" r="1.6"></circle>
+                      <circle cx="17.5" cy="17" r="1.6"></circle>
+                    </svg>
+                  </span>
+                  <span>{{ section.settings.assurance_1 | escape }}</span>
+                </li>
+              {% endif %}
+
+              {% if section.settings.assurance_2 != blank %}
+                <li class="product__trust-item">
+                  <span class="product__trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                      <circle cx="12" cy="12" r="8.5"></circle>
+                      <path d="M12 7.5v9M9.5 9.2c.6-.8 1.5-1.2 2.6-1.2 1.6 0 2.6.8 2.6 2 0 2.6-5.2 1.5-5.2 4.2 0 1.2 1.1 2.1 2.8 2.1 1.2 0 2.1-.5 2.7-1.3"></path>
+                    </svg>
+                  </span>
+                  <span>{{ section.settings.assurance_2 | escape }}</span>
+                </li>
+              {% endif %}
+
+              {% if section.settings.assurance_3 != blank %}
+                <li class="product__trust-item">
+                  <span class="product__trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.4 6.4l1.6 1.6M16 16l1.6 1.6M17.6 6.4 16 8M8 16l-1.6 1.6"></path>
+                    </svg>
+                  </span>
+                  <span>{{ section.settings.assurance_3 | escape }}</span>
+                </li>
+              {% endif %}
             </ul>
-          {% endif %}
-
-          {% if section.settings.custom_label != blank and section.settings.whatsapp_number != blank %}
-            {% liquid
-              assign wa_number = section.settings.whatsapp_number | remove: ' ' | remove: '+' | remove: '-'
-              capture wa_message
-                echo section.settings.custom_message
-                echo ' '
-                echo product.title
-              endcapture
-              assign wa_text = wa_message | strip | url_param_escape
-              assign wa_href = 'https://wa.me/' | append: wa_number | append: '?text=' | append: wa_text
-            %}
-
-            <div class="product__custom">
-              {% if section.settings.custom_heading != blank %}
-                <p class="product__custom-heading">{{ section.settings.custom_heading | escape }}</p>
-              {% endif %}
-
-              {% if section.settings.custom_text != blank %}
-                <p class="product__custom-text">{{ section.settings.custom_text | escape }}</p>
-              {% endif %}
-
-              <a
-                class="btn btn--ghost product__custom-cta"
-                href="{{ wa_href }}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ section.settings.custom_label | escape }}
-              </a>
-            </div>
-          {% endif %}
-
-          {% liquid
-            assign show_materials = false
-            if product.description != blank or has_details
-              assign show_materials = true
-            endif
-            assign show_shipping = false
-            if section.settings.shipping_content != blank
-              assign show_shipping = true
-            endif
-            assign show_warranty = false
-            if section.settings.warranty_content != blank
-              assign show_warranty = true
-            endif
-          %}
-
-          {% if show_materials or show_shipping or show_warranty %}
-            <div class="product__accordions">
-              {% if show_materials %}
-                <details class="product__accordion" open>
-                  <summary class="product__accordion-summary">
-                    {{ section.settings.materials_heading | default: 'Materials & Specs' | escape }}
-                  </summary>
-                  <div class="product__accordion-body">
-                    {% if product.description != blank %}
-                      <div class="rte product__description">{{ product.description }}</div>
-                    {% endif %}
-
-                    {% if has_details %}
-                      <dl class="product__details">
-                        {% for block in section.blocks %}
-                          {% if block.settings.label != blank and block.settings.value != blank %}
-                            <div class="product__detail" {{ block.shopify_attributes }}>
-                              <dt>{{ block.settings.label | escape }}</dt>
-                              <dd>{{ block.settings.value | escape }}</dd>
-                            </div>
-                          {% endif %}
-                        {% endfor %}
-                      </dl>
-                    {% endif %}
-                  </div>
-                </details>
-              {% endif %}
-
-              {% if show_shipping %}
-                <details class="product__accordion">
-                  <summary class="product__accordion-summary">
-                    {{ section.settings.shipping_heading | default: 'Shipping & Fulfillment' | escape }}
-                  </summary>
-                  <div class="product__accordion-body rte">
-                    {{ section.settings.shipping_content }}
-                  </div>
-                </details>
-              {% endif %}
-
-              {% if show_warranty %}
-                <details class="product__accordion">
-                  <summary class="product__accordion-summary">
-                    {{ section.settings.warranty_heading | default: 'Warranty & Returns' | escape }}
-                  </summary>
-                  <div class="product__accordion-body rte">
-                    {{ section.settings.warranty_content }}
-                  </div>
-                </details>
-              {% endif %}
-            </div>
           {% endif %}
         </div>
       </div>
@@ -395,65 +343,76 @@
 </div>
 
 {% stylesheet %}
-  .product__inner {
-    display: grid;
-    gap: clamp(1.5rem, 3vw, 2.75rem);
+  .product__bar {
+    border-bottom: 1px solid var(--color-border);
   }
 
-  .product__breadcrumb {
+  .product__bar-inner {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    min-height: 2.85rem;
+  }
+
+  .product__breadcrumb,
+  .product__origin {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 0.55rem;
+    margin: 0;
     color: var(--color-foreground-muted);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: var(--tracking-wide);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
   }
 
   .product__breadcrumb-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.75rem;
     text-decoration: none;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.25s var(--ease-out);
+    transition: border-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
   }
 
   .product__breadcrumb-link:hover,
   .product__breadcrumb-link:focus-visible {
-    color: var(--color-accent);
+    color: var(--color-foreground);
     border-bottom-color: currentcolor;
+  }
+
+  .product__breadcrumb-current {
+    color: var(--color-foreground);
+  }
+
+  .product__inner {
+    padding-block: clamp(1.75rem, 4vw, 3.25rem) var(--space-section);
   }
 
   .product__layout {
     display: grid;
-    gap: clamp(2.25rem, 5vw, 5rem);
+    gap: clamp(2.25rem, 5vw, 4.5rem);
     align-items: start;
   }
 
-  /* Amazon-style gallery: thumbs + one framed stage. 4:5 + cover stops CLS. */
   .product__gallery {
     display: grid;
-    gap: 0.75rem;
+    gap: 0.85rem;
     min-width: 0;
-    grid-template-areas:
-      'stage'
-      'thumbs';
   }
 
   .product__stage {
     position: relative;
     min-width: 0;
-    grid-area: stage;
+    background: var(--color-surface);
   }
 
   .product__stage-frame {
     aspect-ratio: 4 / 5;
     margin: 0;
     overflow: hidden;
-    background: var(--color-surface);
   }
 
   .product__stage-frame[hidden] {
@@ -467,6 +426,47 @@
     object-fit: cover;
   }
 
+  .product__stamp {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 5.75rem;
+    height: 5.75rem;
+    padding: 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 78%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-background) 28%, transparent);
+    color: var(--color-foreground);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .product__stamp-text {
+    font-family: var(--font-mono--family);
+    font-size: 0.52rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .product__counter {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 2;
+    margin: 0;
+    color: var(--color-foreground);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
   .product__thumbs {
     display: flex;
     gap: 0.5rem;
@@ -475,7 +475,6 @@
     list-style: none;
     overflow-x: auto;
     scrollbar-width: thin;
-    grid-area: thumbs;
   }
 
   .product__thumb {
@@ -495,17 +494,17 @@
   }
 
   .product__thumb[aria-pressed='true'] {
-    border-color: var(--color-accent);
-    box-shadow: inset 0 0 0 1px var(--color-accent);
+    border-color: var(--color-foreground);
   }
 
   .product__thumb:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-foreground);
     outline-offset: 2px;
   }
 
   .product__info-sticky {
-    display: block;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.15rem);
   }
 
   .product__identity {
@@ -514,33 +513,61 @@
   }
 
   .product__drop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
     margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
   }
 
   .product__title {
     margin: 0;
-    font-size: clamp(2rem, 3.2vw, 2.75rem);
-    font-weight: 700;
-    line-height: 1.02;
-    letter-spacing: -0.025em;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(2.15rem, 5vw, 3.6rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     text-wrap: balance;
+  }
+
+  .product__subtitle {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product__description {
+    max-width: 38rem;
+    font-size: var(--text-sm);
+    line-height: 1.7;
   }
 
   .product__price {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.65rem;
-    margin: 0;
+    gap: 0.55rem 0.7rem;
+    margin: 0.35rem 0 0;
   }
 
-  /* The price is a primary decision point, so it is sized to be read at a
-     glance rather than tucked under the title. */
   .product__price-current {
-    font-size: clamp(1.35rem, 2vw, 1.75rem);
-    font-weight: 700;
-    letter-spacing: 0.01em;
+    font-family: var(--font-display--family);
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    font-weight: var(--font-display--weight);
+    letter-spacing: 0.02em;
   }
 
   .product__price-compare {
@@ -548,52 +575,29 @@
     font-size: var(--text-base);
   }
 
-  /* Only reached when Shopify reports a real compare-at price. */
-  .product__price:has(.product__price-compare:not([hidden])) .product__price-current {
-    color: var(--color-accent-strong);
+  .product__price-tax {
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .product__form {
     display: grid;
-    gap: clamp(1.5rem, 2.5vw, 2rem);
-    margin-top: clamp(1.75rem, 3vw, 2.25rem);
-    padding-top: clamp(1.75rem, 3vw, 2.25rem);
-    border-top: 1px solid var(--color-border);
+    gap: 1.35rem;
   }
 
-  .product__field {
-    display: grid;
-    gap: 0.7rem;
-    justify-items: start;
-  }
-
-  .product__label {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-foreground-muted);
-  }
-
-  /* Variant / edition selector. One radio per Shopify variant, so the native
-     product form still submits a variant id without a custom data model. */
   .product__variants {
-    display: grid;
-    gap: 0.7rem;
-    min-width: 0;
     margin: 0;
     padding: 0;
     border: 0;
   }
 
-  .product__variants-legend {
-    padding: 0;
-  }
-
   .product__variant-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
-    gap: 0.6rem;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
   }
 
   .product__variant {
@@ -611,16 +615,13 @@
 
   .product__variant-label {
     display: grid;
-    gap: 0.3rem;
-    align-content: start;
-    min-height: 3.75rem;
-    padding: 0.85rem 1rem;
+    gap: 0.28rem;
+    min-height: 5.25rem;
+    padding: 0.95rem 1rem;
     border: 1px solid var(--color-border);
     background: var(--color-background);
     cursor: pointer;
-    transition:
-      border-color 0.25s var(--ease-out),
-      background-color 0.25s var(--ease-out);
+    transition: border-color 0.25s var(--ease-out);
   }
 
   .product__variant-label:hover {
@@ -628,16 +629,22 @@
   }
 
   .product__variant-title {
+    font-family: var(--font-display--family);
     font-size: var(--text-sm);
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
   .product__variant-meta {
     color: var(--color-foreground-muted);
-    font-size: var(--text-sm);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
     letter-spacing: 0.04em;
+  }
+
+  .product__variant-price {
+    color: var(--color-foreground);
   }
 
   .product__variant-meta--sold {
@@ -647,15 +654,13 @@
     font-weight: 700;
   }
 
-  /* Selected edition is marked in the accent so the choice is unmistakable. */
   .product__variant-input:checked + .product__variant-label {
-    border-color: var(--color-accent);
-    box-shadow: inset 0 0 0 1px var(--color-accent);
-    background: var(--color-accent-soft);
+    border-color: var(--color-foreground);
+    box-shadow: inset 0 0 0 1px var(--color-foreground);
   }
 
   .product__variant-input:focus-visible + .product__variant-label {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-foreground);
     outline-offset: 3px;
   }
 
@@ -663,238 +668,87 @@
     color: var(--color-foreground-muted);
   }
 
-  /* Quantity stepper. The number input stays the submitted source of truth. */
-  .product__quantity-control {
-    display: grid;
-    grid-template-columns: 3rem minmax(3.25rem, 4rem) 3rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-  }
-
-  .product__quantity-step {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 3rem;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--color-foreground);
-    font-size: 1rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .product__quantity-step:hover {
-    background: var(--color-surface);
-  }
-
-  .product__quantity {
-    min-height: 3rem;
-    padding: 0.5rem 0.25rem;
-    border: 0;
-    background: transparent;
-    color: var(--color-foreground);
-    font-size: var(--text-base);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-align: center;
-    appearance: textfield;
-  }
-
-  .product__quantity::-webkit-outer-spin-button,
-  .product__quantity::-webkit-inner-spin-button {
-    appearance: none;
-    margin: 0;
-  }
-
   .product__submit {
     width: 100%;
-    min-height: 3.75rem;
+    min-height: 3.6rem;
+    justify-content: space-between;
+    padding-inline: 1.25rem;
+    border-color: var(--color-foreground);
+    background: color-mix(in srgb, var(--color-foreground) 88%, var(--color-background));
+    color: var(--color-background);
     letter-spacing: var(--tracking-wider);
   }
 
-  /* Trust signals sit directly under add to cart. */
+  .product__submit:hover,
+  .product__submit:focus-visible {
+    background: var(--color-foreground);
+    border-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .product__submit-arrow {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+
   .product__trust {
     display: grid;
-    gap: 0.45rem;
-    margin: 1.1rem 0 0;
+    grid-template-columns: 1fr;
+    gap: 0.85rem 1.25rem;
+    margin: 0.25rem 0 0;
     padding: 0;
     list-style: none;
   }
 
   .product__trust-item {
     display: flex;
-    align-items: baseline;
-    gap: 0.55rem;
-    color: var(--color-foreground-muted);
-    font-size: var(--text-sm);
-    letter-spacing: 0.02em;
-  }
-
-  .product__trust-item::before {
-    content: '✓';
-    flex: 0 0 auto;
-    color: var(--color-accent);
-    font-weight: 700;
-    font-size: 0.8em;
-  }
-
-  /* Custom sizing is an enquiry, not a purchase, so it is visually separated
-     from the add-to-cart path. */
-  .product__custom {
-    display: grid;
-    justify-items: start;
-    gap: 0.6rem;
-    margin-top: clamp(1.75rem, 3vw, 2.25rem);
-    padding: clamp(1.25rem, 2.5vw, 1.6rem);
-    background: var(--color-surface);
-    border-left: 2px solid var(--color-accent);
-  }
-
-  .product__custom-heading {
-    margin: 0;
-    font-size: var(--text-xs);
-    font-weight: 700;
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-  }
-
-  .product__custom-text {
-    margin: 0;
-    color: var(--color-foreground-muted);
-    font-size: var(--text-sm);
-    line-height: 1.6;
-  }
-
-  .product__custom-cta {
-    margin-top: 0.4rem;
-  }
-
-  .product__accordions {
-    display: grid;
-    margin-top: clamp(2rem, 3.5vw, 2.75rem);
-    border-top: 1px solid var(--color-border);
-  }
-
-  .product__accordion {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .product__accordion-summary {
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 3.25rem;
-    padding-block: 0.85rem;
-    cursor: pointer;
-    font-size: var(--text-xs);
-    font-weight: 700;
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    list-style: none;
-  }
-
-  .product__accordion-summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .product__accordion-summary::after {
-    content: '+';
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--color-accent);
-    line-height: 1;
-  }
-
-  .product__accordion[open] .product__accordion-summary::after {
-    content: '–';
-  }
-
-  .product__accordion-summary:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-  }
-
-  .product__accordion-body {
-    padding-bottom: 1.25rem;
-  }
-
-  .product__description {
-    font-size: var(--text-base);
-    line-height: 1.75;
-  }
-
-  .product__details {
-    display: grid;
-    gap: 0;
-    margin: 0;
-  }
-
-  .product__description + .product__details {
-    margin-top: clamp(1.75rem, 3vw, 2.25rem);
-  }
-
-  .product__detail {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding-block: 0.95rem;
-    border-bottom: 1px solid var(--color-border);
-    font-size: var(--text-sm);
-  }
-
-  .product__detail:first-child {
-    border-top: 1px solid var(--color-border);
-  }
-
-  .product__detail dt {
+    gap: 0.65rem;
     color: var(--color-foreground-muted);
-    font-size: var(--text-xs);
-    font-weight: 700;
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
   }
 
-  .product__detail dd {
-    margin: 0;
-    text-align: right;
-    letter-spacing: 0.02em;
+  .product__trust-icon {
+    display: grid;
+    width: 1.35rem;
+    height: 1.35rem;
+    flex: 0 0 auto;
+    color: var(--color-foreground);
+  }
+
+  .product__trust-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .product__variant-grid {
+      grid-template-columns: repeat(var(--variant-count, 3), minmax(0, 1fr));
+    }
+
+    .product__trust {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   @media (min-width: 900px) {
     .product__layout {
-      grid-template-columns: minmax(0, 1fr) clamp(22rem, 27vw, 30rem);
-    }
-
-    .product__gallery--thumbs {
-      grid-template-columns: 4.75rem minmax(0, 1fr);
-      grid-template-areas: 'thumbs stage';
-      align-items: start;
-    }
-
-    .product__thumbs {
-      flex-direction: column;
-      overflow-x: visible;
-      overflow-y: auto;
-      max-height: min(70vh, 36rem);
-    }
-
-    .product__info {
-      align-self: stretch;
+      grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
     }
 
     .product__info-sticky {
       position: sticky;
-      top: calc(var(--header-height) + 2rem);
+      top: calc(var(--header-height) + 1.5rem);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .product__breadcrumb-link,
-    .product__variant-label {
+    .product__variant-label,
+    .product__submit {
       transition: none;
     }
   }
@@ -902,19 +756,31 @@
 
 {% javascript %}
   (function () {
+    function padIndex(value) {
+      const number = Number(value) || 0;
+      return number < 10 ? '0' + number : String(number);
+    }
+
     document.querySelectorAll('[data-product-gallery]').forEach(function (gallery) {
+      const root = gallery.closest('[data-product-root]');
       const slides = gallery.querySelectorAll('[data-gallery-slide]');
       const thumbs = gallery.querySelectorAll('[data-gallery-thumb]');
+      const counter = root ? root.querySelector('[data-gallery-counter]') : null;
+      const total = slides.length;
       if (!slides.length) return;
 
       function showImage(imageId) {
         if (!imageId) return;
         let matched = false;
+        let visibleIndex = 1;
 
         slides.forEach(function (slide) {
           const on = slide.getAttribute('data-image-id') === imageId;
           slide.hidden = !on;
-          if (on) matched = true;
+          if (on) {
+            matched = true;
+            visibleIndex = parseInt(slide.getAttribute('data-image-index'), 10) || 1;
+          }
         });
 
         if (!matched) return;
@@ -925,6 +791,10 @@
             thumb.getAttribute('data-image-id') === imageId ? 'true' : 'false'
           );
         });
+
+        if (counter) {
+          counter.textContent = padIndex(visibleIndex) + ' / ' + padIndex(total);
+        }
       }
 
       thumbs.forEach(function (thumb) {
@@ -936,15 +806,13 @@
       gallery.showImage = showImage;
     });
 
-    const roots = document.querySelectorAll('[data-product-purchase]');
-
-    roots.forEach(function (root) {
+    document.querySelectorAll('[data-product-purchase]').forEach(function (root) {
       const variantInputs = root.querySelectorAll('[data-product-variant]');
       const priceEl = root.querySelector('[data-product-price]');
       const compareEl = root.querySelector('[data-product-compare]');
       const saleLabelEl = root.querySelector('[data-product-sale-label]');
       const submitEl = root.querySelector('[data-product-submit]');
-      const quantityEl = root.querySelector('[data-quantity-input]');
+      const submitLabelEl = root.querySelector('[data-product-submit-label]');
       const gallery = root.closest('[data-product-root]')
         ? root.closest('[data-product-root]').querySelector('[data-product-gallery]')
         : null;
@@ -964,6 +832,9 @@
         const price = input.getAttribute('data-price') || '';
         const compare = input.getAttribute('data-compare') || '';
         const imageId = input.getAttribute('data-image-id');
+        const addLabel = submitEl ? submitEl.getAttribute('data-add-label') : '';
+        const soldLabel = submitEl ? submitEl.getAttribute('data-sold-label') : '';
+        const label = available ? addLabel : soldLabel;
 
         if (priceEl) priceEl.textContent = price;
 
@@ -980,9 +851,11 @@
 
         if (submitEl) {
           submitEl.disabled = !available;
-          submitEl.textContent = available
-            ? submitEl.getAttribute('data-add-label')
-            : submitEl.getAttribute('data-sold-label');
+          if (submitLabelEl) {
+            submitLabelEl.textContent = label;
+          } else {
+            submitEl.textContent = label;
+          }
         }
 
         if (imageId && gallery && typeof gallery.showImage === 'function') {
@@ -999,20 +872,6 @@
       variantInputs.forEach(function (input) {
         input.addEventListener('change', syncVariant);
       });
-
-      if (quantityEl) {
-        root.querySelectorAll('[data-quantity-step]').forEach(function (button) {
-          button.addEventListener('click', function () {
-            const step = parseInt(button.getAttribute('data-quantity-step'), 10) || 0;
-            const min = parseInt(quantityEl.getAttribute('min'), 10) || 1;
-            const current = parseInt(quantityEl.value, 10) || min;
-            const next = current + step;
-
-            quantityEl.value = next < min ? min : next;
-            quantityEl.dispatchEvent(new Event('change', { bubbles: true }));
-          });
-        });
-      }
     });
   })();
 {% endjavascript %}
@@ -1029,6 +888,18 @@
       "default": "DROP 001"
     },
     {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "AUTOMOTIVE WALL ART"
+    },
+    {
+      "type": "text",
+      "id": "origin_label",
+      "label": "t:labels.origin_label",
+      "default": "DESIGNED & MADE IN INDIA"
+    },
+    {
       "type": "header",
       "content": "t:general.assurances"
     },
@@ -1037,112 +908,19 @@
       "id": "assurance_1",
       "label": "t:labels.assurance",
       "info": "t:info.assurances",
-      "default": "Secure checkout"
+      "default": "Free shipping"
     },
     {
       "type": "text",
       "id": "assurance_2",
       "label": "t:labels.assurance",
-      "default": "Tracked dispatch"
+      "default": "Cash on delivery"
     },
     {
       "type": "text",
       "id": "assurance_3",
       "label": "t:labels.assurance",
-      "default": "Damaged in transit? We replace it."
-    },
-    {
-      "type": "text",
-      "id": "assurance_4",
-      "label": "t:labels.assurance"
-    },
-    {
-      "type": "header",
-      "content": "t:general.accordions"
-    },
-    {
-      "type": "text",
-      "id": "materials_heading",
-      "label": "t:labels.materials_heading",
-      "default": "Materials & Specs"
-    },
-    {
-      "type": "text",
-      "id": "shipping_heading",
-      "label": "t:labels.shipping_heading",
-      "default": "Shipping & Fulfillment"
-    },
-    {
-      "type": "richtext",
-      "id": "shipping_content",
-      "label": "t:labels.shipping_content",
-      "info": "t:info.accordion_content"
-    },
-    {
-      "type": "text",
-      "id": "warranty_heading",
-      "label": "t:labels.warranty_heading",
-      "default": "Warranty & Returns"
-    },
-    {
-      "type": "richtext",
-      "id": "warranty_content",
-      "label": "t:labels.warranty_content",
-      "info": "t:info.accordion_content"
-    },
-    {
-      "type": "header",
-      "content": "t:general.custom_edition"
-    },
-    {
-      "type": "text",
-      "id": "custom_heading",
-      "label": "t:labels.heading",
-      "default": "Want it bigger?"
-    },
-    {
-      "type": "text",
-      "id": "custom_text",
-      "label": "t:labels.description",
-      "default": "Have a specific wall in mind? Send us your dimensions and we will quote a custom size."
-    },
-    {
-      "type": "text",
-      "id": "custom_label",
-      "label": "t:labels.button_label",
-      "default": "Request custom size"
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_number",
-      "label": "t:labels.whatsapp_number",
-      "info": "t:info.whatsapp_number",
-      "default": "917988355887"
-    },
-    {
-      "type": "text",
-      "id": "custom_message",
-      "label": "t:labels.whatsapp_message",
-      "info": "t:info.whatsapp_message",
-      "default": "Hi KOVA, I would like a custom size for"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "detail",
-      "name": "t:general.detail",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "t:labels.detail_label"
-        },
-        {
-          "type": "text",
-          "id": "value",
-          "label": "t:labels.detail_value"
-        }
-      ]
+      "default": "Made to order"
     }
   ],
   "disabled_on": {

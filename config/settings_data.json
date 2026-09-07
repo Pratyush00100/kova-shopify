@@ -1,22 +1,15 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
-    "type_primary_font": "archivo_n4",
+    "type_display_font": "oswald_n7",
+    "type_mono_font": "ibm_plex_mono_n4",
+    "type_primary_font": "inter_n4",
     "max_page_width": "110rem",
     "min_page_margin": 28,
-    "background_color": "#F1EFEA",
-    "foreground_color": "#12161A",
-    "dark_color": "#0E1215",
-    "accent_color": "#C0431C",
-    "accent_contrast_color": "#FFFFFF",
+    "background_color": "#000000",
+    "foreground_color": "#F4F4F4",
+    "dark_color": "#000000",
+    "accent_color": "#E4E4E4",
+    "accent_contrast_color": "#000000",
     "input_corner_radius": 0
   }
 }

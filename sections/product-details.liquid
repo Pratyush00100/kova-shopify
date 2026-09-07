@@ -1,0 +1,199 @@
+<section class="product-details full-width section-pad">
+  <div class="product-details__inner page-inner">
+    <div class="product-details__copy">
+      {% if section.settings.heading != blank %}
+        <h2 class="product-details__heading">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+
+      {% if section.settings.body != blank %}
+        <div class="rte product-details__body">{{ section.settings.body }}</div>
+      {% endif %}
+    </div>
+
+    <div class="product-details__media">
+      {% if section.settings.image != blank %}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'product-details__image',
+            widths: '600, 900, 1200, 1600',
+            sizes: '(min-width: 1100px) 38vw, 100vw',
+            loading: 'lazy'
+        }}
+      {% else %}
+        <span class="product-details__placeholder" aria-hidden="true"></span>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <dl class="product-details__specs">
+        {% for block in section.blocks %}
+          {% if block.settings.label != blank and block.settings.value != blank %}
+            <div class="product-details__spec" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label | escape }}</dt>
+              <dd>{{ block.settings.value | escape }}</dd>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </dl>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-details {
+    border-top: 1px solid var(--color-border);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 36rem;
+  }
+
+  .product-details__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .product-details__copy {
+    display: grid;
+    gap: 1.15rem;
+    max-width: 28rem;
+  }
+
+  .product-details__heading {
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .product-details__body {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .product-details__media {
+    min-width: 0;
+    overflow: hidden;
+    background: var(--color-surface);
+    aspect-ratio: 16 / 9;
+  }
+
+  .product-details__image,
+  .product-details__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-details__placeholder {
+    background: var(--color-surface-strong);
+  }
+
+  .product-details__specs {
+    display: grid;
+    gap: 0;
+    margin: 0;
+  }
+
+  .product-details__spec {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .product-details__spec:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-details__spec dt {
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product-details__spec dd {
+    margin: 0;
+    text-align: right;
+    font-size: var(--text-sm);
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 900px) {
+    .product-details__inner {
+      grid-template-columns: minmax(14rem, 0.7fr) minmax(0, 1.3fr) minmax(16rem, 0.85fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .product-details__media {
+      aspect-ratio: 5 / 3;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_details",
+  "tag": "div",
+  "class": "section-product-details",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "IT'S ALL IN THE DETAILS."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "t:labels.description",
+      "default": "<p>Cut from 2 mm stainless steel, finished matte black, and built to sit 15 mm off the wall. The bracket is formed into the piece, not welded on afterwards.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:info.pdp_image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "detail",
+      "name": "t:general.detail",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:labels.detail_label"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "t:labels.detail_value"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.product_details"
+    }
+  ]
+}
+{% endschema %}

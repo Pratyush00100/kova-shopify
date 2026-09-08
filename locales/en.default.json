@@ -8,6 +8,7 @@
     "home": "Home"
   },
   "accessibility": {
+    "account": "Account",
     "breadcrumb": "Breadcrumb",
     "cart_count": "{{ count }} items in cart",
     "footer_navigation": "Footer",
@@ -48,6 +49,10 @@
     "update": "Update"
   },
   "customers": {
+    "account": {
+      "sign_in": "Sign in",
+      "title": "Account"
+    },
     "login": {
       "email": "Email",
       "password": "Password",

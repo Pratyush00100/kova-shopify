@@ -20,6 +20,73 @@
     id="{{ section.settings.anchor_id | handle }}"
   {% endif %}
 >
+  <div class="hero__media">
+    {% if has_image %}
+      {% if has_desktop_image and has_mobile_image %}
+        <picture>
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ section.settings.image_mobile | image_url: width: 750 }} 750w,
+              {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w,
+              {{ section.settings.image_mobile | image_url: width: 1400 }} 1400w
+            "
+            sizes="100vw"
+          >
+          {{
+            section.settings.image
+            | image_url: width: 3200
+            | image_tag:
+              class: 'hero__image',
+              widths: '750, 1100, 1400, 1800, 2400, 3200',
+              sizes: '100vw',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        </picture>
+      {% elsif has_desktop_image %}
+        {{
+          section.settings.image
+          | image_url: width: 3200
+          | image_tag:
+            class: 'hero__image',
+            widths: '750, 1100, 1400, 1800, 2400, 3200',
+            sizes: '100vw',
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {% else %}
+        {{
+          section.settings.image_mobile
+          | image_url: width: 1800
+          | image_tag:
+            class: 'hero__image',
+            widths: '480, 750, 1100, 1400, 1800',
+            sizes: '100vw',
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {% endif %}
+    {% else %}
+      <div class="hero__placeholder" aria-hidden="true"></div>
+    {% endif %}
+
+    {% if section.settings.badge_image != blank %}
+      <div class="hero__badge">
+        {{
+          section.settings.badge_image
+          | image_url: width: 280
+          | image_tag:
+            class: 'hero__badge-image',
+            widths: '120, 180, 240, 280',
+            sizes: '120px',
+            loading: 'eager',
+            alt: ''
+        }}
+      </div>
+    {% endif %}
+  </div>
+
   <div class="hero__inner">
     <div class="hero__copy">
       {% if section.settings.eyebrow != blank %}
@@ -43,88 +110,105 @@
         </a>
       {% endif %}
     </div>
-
-    <div class="hero__media">
-      {% if has_image %}
-        {% if has_desktop_image and has_mobile_image %}
-          <picture>
-            <source
-              media="(max-width: 749px)"
-              srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}"
-            >
-            {{
-              section.settings.image
-              | image_url: width: 1800
-              | image_tag:
-                class: 'hero__image',
-                widths: '750, 1100, 1400, 1800',
-                sizes: '(min-width: 900px) 52vw, 100vw',
-                loading: 'eager',
-                fetchpriority: 'high'
-            }}
-          </picture>
-        {% elsif has_desktop_image %}
-          {{
-            section.settings.image
-            | image_url: width: 1800
-            | image_tag:
-              class: 'hero__image',
-              widths: '750, 1100, 1400, 1800',
-              sizes: '(min-width: 900px) 52vw, 100vw',
-              loading: 'eager',
-              fetchpriority: 'high'
-          }}
-        {% else %}
-          {{
-            section.settings.image_mobile
-            | image_url: width: 1200
-            | image_tag:
-              class: 'hero__image',
-              widths: '480, 750, 1100, 1200',
-              sizes: '100vw',
-              loading: 'eager',
-              fetchpriority: 'high'
-          }}
-        {% endif %}
-      {% else %}
-        <div class="hero__placeholder" aria-hidden="true"></div>
-      {% endif %}
-
-      {% if section.settings.badge_image != blank %}
-        <div class="hero__badge">
-          {{
-            section.settings.badge_image
-            | image_url: width: 280
-            | image_tag:
-              class: 'hero__badge-image',
-              widths: '120, 180, 240, 280',
-              sizes: '120px',
-              loading: 'eager',
-              alt: ''
-          }}
-        </div>
-      {% endif %}
-    </div>
   </div>
 </section>
 
 {% stylesheet %}
   .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: calc(100svh - var(--header-height));
     border-bottom: 1px solid var(--color-border);
   }
 
-  .hero__inner {
-    display: grid;
-    width: 100%;
-    max-width: var(--page-width);
-    margin-inline: auto;
-    min-height: calc(100svh - var(--header-height));
-  }
-
   @supports (height: 100dvh) {
-    .hero__inner {
+    .hero {
       min-height: calc(100dvh - var(--header-height));
     }
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: var(--color-background);
+  }
+
+  .hero--media .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgb(0 0 0 / 62%) 0%,
+      rgb(0 0 0 / 28%) 34%,
+      rgb(0 0 0 / 8%) 62%,
+      rgb(0 0 0 / 0%) 100%
+    );
+  }
+
+  .hero__media picture,
+  .hero__image,
+  .hero__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+
+  .hero__media picture {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__image,
+  .hero__media picture img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero__placeholder {
+    min-height: 100%;
+    background:
+      linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 55%) 100%),
+      repeating-linear-gradient(
+        -18deg,
+        var(--color-surface) 0 1px,
+        transparent 1px 18px
+      );
+  }
+
+  .hero__badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 1;
+    width: min(7.5rem, 28vw);
+    pointer-events: none;
+  }
+
+  .hero__badge-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    width: 100%;
+    max-width: var(--page-width);
+    min-height: inherit;
+    margin-inline: auto;
   }
 
   .hero__copy {
@@ -163,79 +247,14 @@
     margin-top: 0.5rem;
   }
 
-  .hero__media {
-    position: relative;
-    min-height: 22rem;
-    overflow: hidden;
-    background: var(--color-surface);
-  }
-
-  .hero__media picture,
-  .hero__image,
-  .hero__placeholder {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .hero__media picture {
-    height: 100%;
-  }
-
-  .hero__media picture img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .hero__placeholder {
-    min-height: inherit;
-    background:
-      linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 55%) 100%),
-      repeating-linear-gradient(
-        -18deg,
-        var(--color-surface) 0 1px,
-        transparent 1px 18px
+  @media (max-width: 749px) {
+    .hero--media .hero__media::after {
+      background: linear-gradient(
+        180deg,
+        rgb(0 0 0 / 58%) 0%,
+        rgb(0 0 0 / 28%) 48%,
+        rgb(0 0 0 / 12%) 100%
       );
-  }
-
-  .hero__badge {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    width: min(7.5rem, 28vw);
-    pointer-events: none;
-  }
-
-  .hero__badge-image {
-    width: 100%;
-    height: auto;
-  }
-
-  @media (min-width: 900px) {
-    .hero__inner {
-      grid-template-columns: minmax(18rem, 0.92fr) minmax(0, 1.08fr);
-    }
-
-    .hero__media,
-    .hero__placeholder {
-      min-height: 100%;
-    }
-
-    .hero__copy {
-      padding-inline-end: clamp(1.5rem, 4vw, 3.5rem);
-    }
-  }
-
-  @media (max-width: 899px) {
-    .hero__inner {
-      min-height: 0;
-    }
-
-    .hero__media {
-      min-height: min(70vw, 28rem);
-      aspect-ratio: 4 / 5;
     }
   }
 {% endstylesheet %}

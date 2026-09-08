@@ -29,6 +29,19 @@
     </nav>
 
     <div class="header__actions">
+      {% if shop.customer_accounts_enabled %}
+        {% liquid
+          assign account_menu_handle = section.settings.customer_account_menu.handle | default: 'customer-account-main-menu'
+        %}
+        <shopify-account
+          class="header__account"
+          menu="{{ account_menu_handle }}"
+          aria-label="{{ 'accessibility.account' | t }}"
+        >
+          <span slot="signed-out-avatar">{{ 'customers.account.sign_in' | t }}</span>
+        </shopify-account>
+      {% endif %}
+
       <a class="header__cart" href="{{ routes.cart_url }}">
         <span>{{ section.settings.cart_label | escape }} ({{ cart.item_count }})</span>
         <span class="visually-hidden">{{ 'accessibility.cart_count' | t: count: cart.item_count }}</span>
@@ -118,7 +131,8 @@
   .header__nav-link,
   .header__cart,
   .header__mobile-cart,
-  .header__menu-toggle {
+  .header__menu-toggle,
+  .header__account {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -139,7 +153,8 @@
   }
 
   .header__cart,
-  .header__menu-toggle {
+  .header__menu-toggle,
+  .header__account {
     color: var(--color-foreground);
   }
 
@@ -160,6 +175,9 @@
   .header__nav-link:focus-visible,
   .header__cart:hover,
   .header__cart:focus-visible,
+  .header__account:hover,
+  .header__account:focus-visible,
+  .header__account:focus-within,
   .header__menu-toggle:hover,
   .header__menu-toggle:focus-visible {
     color: var(--color-foreground);
@@ -180,6 +198,42 @@
     align-items: center;
     gap: 1.1rem;
     justify-self: end;
+  }
+
+  .header__account {
+    --shopify-account-color-background: var(--color-background);
+    --shopify-account-color-text: var(--color-foreground);
+    --shopify-account-color-accent: var(--color-accent);
+    --shopify-account-color-accent-text: var(--color-accent-contrast);
+    --shopify-account-font-heading: var(--font-display--family);
+    --shopify-account-font-body: var(--font-primary--family);
+    --shopify-account-radius-base: 0;
+    --shopify-account-dialog-position-top: var(--header-height);
+  }
+
+  .header__account:not(:defined) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  .header__account [slot='signed-out-avatar'] {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .header__account::part(signed-out-avatar) {
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: uppercase;
+    cursor: pointer;
   }
 
   .header__menu-icon {
@@ -284,6 +338,7 @@
     .header__nav-link,
     .header__nav-link::after,
     .header__cart,
+    .header__account,
     .header__menu-toggle {
       transition: none;
     }

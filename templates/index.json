@@ -17,7 +17,8 @@
         "heading": "METAL, REIMAGINED.",
         "body": "<p>Metal art for your space. Designed to stand out.</p>",
         "button_label": "EXPLORE COLLECTIONS",
-        "button_link": "/collections/drop-001"
+        "button_link": "/collections/drop-001",
+        "image": "shopify://shop_images/hero1.png"
       }
     },
     "drop_intro": {
@@ -30,7 +31,8 @@
         "description": "<p>Eight automotive silhouettes created for people who don't just like cars, but genuinely care about them.</p>",
         "button_label": "VIEW COLLECTION",
         "button_link": "/collections/drop-001",
-        "pagination": "01 —— 05"
+        "pagination": "01 —— 05",
+        "image": "shopify://shop_images/hero2.png"
       }
     },
     "features": {
@@ -39,6 +41,7 @@
         "material": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/logo1.png",
             "title": "PREMIUM MATERIAL",
             "text": "2mm Stainless Steel. Built to last."
           }
@@ -46,6 +49,7 @@
         "precision": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/cut.png",
             "title": "PRECISION CUT",
             "text": "Laser cut with extreme precision."
           }
@@ -53,6 +57,7 @@
         "elevation": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/elevation.png",
             "title": "15MM ELEVATION",
             "text": "Stands off the wall for a bold shadow."
           }
@@ -60,6 +65,7 @@
         "longevity": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/trust.png",
             "title": "BUILT TO LAST",
             "text": "Rust-resistant. Timeless finish."
           }
@@ -79,41 +85,55 @@
         "automotive": {
           "type": "teaser",
           "settings": {
+            "image": "shopify://shop_images/hero2.png",
             "title": "AUTOMOTIVE",
             "status": "VELOCITY // 001",
+            "collection": "",
             "link": "/collections/drop-001",
             "coming_soon": false
           }
         },
         "teaser_2": {
           "type": "teaser",
+          "disabled": true,
           "settings": {
             "title": "COLLECTION 02",
             "status": "COMING SOON",
+            "collection": "",
+            "link": "",
             "coming_soon": true
           }
         },
         "teaser_3": {
           "type": "teaser",
+          "disabled": true,
           "settings": {
             "title": "COLLECTION 03",
             "status": "COMING SOON",
+            "collection": "",
+            "link": "",
             "coming_soon": true
           }
         },
         "teaser_4": {
           "type": "teaser",
+          "disabled": true,
           "settings": {
             "title": "COLLECTION 04",
             "status": "COMING SOON",
+            "collection": "",
+            "link": "",
             "coming_soon": true
           }
         },
         "teaser_5": {
           "type": "teaser",
+          "disabled": true,
           "settings": {
             "title": "COLLECTION 05",
             "status": "COMING SOON",
+            "collection": "",
+            "link": "",
             "coming_soon": true
           }
         }
@@ -138,7 +158,9 @@
         "heading": "BUILT DIFFERENT. MADE FOR YOU.",
         "description": "<p>Designed and made in India. Cut from stainless steel, finished by hand, and built to hold a room.</p>",
         "button_label": "OUR STORY",
-        "button_link": "/pages/about"
+        "button_link": "/pages/about",
+        "media_caption": "",
+        "image": "shopify://shop_images/kova.png"
       }
     },
     "contact": {

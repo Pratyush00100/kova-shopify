@@ -8,6 +8,7 @@
     "blog": "Blog",
     "custom_edition": "Custom size enquiry",
     "build_commerce": "BUILD commerce",
+    "build_gallery": "BUILD gallery",
     "cart": "Cart",
     "collection": "Collection",
     "about_close": "About closer",
@@ -56,6 +57,7 @@
     "password": "Password",
     "pathway": "Pathway",
     "pathways": "Pathways",
+    "photo": "Photo",
     "primary": "Primary",
     "process_steps": "Process steps",
     "product": "Product",
@@ -78,7 +80,8 @@
     "theme": "Theme",
     "trust_bar": "Trust bar",
     "trust_item": "Trust item",
-    "typography": "Typography"
+    "typography": "Typography",
+    "youtube": "YouTube"
   },
   "labels": {
     "accent_color": "Accent",
@@ -207,7 +210,9 @@
     "text": "Text",
     "title": "Title",
     "view_all": "View all label",
-    "wordmark": "Wordmark"
+    "wordmark": "Wordmark",
+    "youtube": "YouTube",
+    "youtube_url": "YouTube URL"
   },
   "info": {
     "accent_color": "Used for selected states and small emphasis. Buttons stay outlined in white by default.",
@@ -239,6 +244,7 @@
     "header_menu": "Optional. If empty, fallback links below are used.",
     "hero_image": "Optional desktop image. Displays full-bleed behind the hero copy from left to right. Assign in the theme editor. Leave empty for a copy-only hero.",
     "hero_image_mobile": "Optional. Used below 750px instead of the desktop image. Leave empty to reuse the desktop image.",
+    "youtube_url": "Paste a YouTube watch, youtu.be, or Shorts link. The video plays here when the visitor taps Play. It is not uploaded to the theme.",
     "hero_placeholder_label": "Shown only while no hero image is selected. Leave empty to hide.",
     "overlay_image": "Optional graphic layered on the section. Hidden until an image is selected.",
     "badge_image": "Optional stamp or badge over the hero image. Hidden until selected.",

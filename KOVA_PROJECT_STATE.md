@@ -27,7 +27,7 @@ Shopify remains the source of truth for products, variants, prices, inventory, c
 - PDP section order (`templates/product.json`): product → details → sizes → lifestyle → mounting. Related products are not on the product page.
 - Drop 001 order: banner → product grid → notify
 - BUILD order: page hero → process steps → Drop 001 commerce bridge
-- Manifesto order: page hero → statements → Drop 001 commerce bridge
+- Manifesto order: about hero → story → pillars → statement → close → Drop 001 commerce bridge
 - Cart: native Shopify POST form, no AJAX drawer or custom backend
 - Global nav destinations: `/collections/drop-001`, `/pages/build`, `/pages/manifesto`
 - Shopify as source of truth for catalog, price, inventory, cart, checkout
@@ -86,10 +86,12 @@ No longer locked: stacked PDP photography. Multi-image gallery with thumbnails i
 
 **Manifesto** (`templates/page.manifesto.json`)
 
-- Order: page hero → statements → Drop 001 commerce bridge
-- Hero: `MANIFESTO` / `STEEL. DESIGNED & REIMAGINED.`
-- Four statements from approved manifesto + Made in India origin copy
-- Unresolved: whether this heading/statement set is final
+- This is the brand story page. There is no separate About template or About nav item.
+- Order: about hero → story → pillars → statement → close → Drop 001 commerce bridge
+- Hero: `MANIFESTO` / `WE SAW SOMETHING MISSING.`
+- Story includes unique manifesto copy that was not already on About (obsession off-screen, no disposable materials, India production path)
+- Close still carries `METAL, REIMAGINED. DESIGNED AND MADE IN INDIA.`
+- Unresolved: whether this heading/copy set is final
 
 **Cart** (`templates/cart.json`)
 
@@ -99,8 +101,8 @@ No longer locked: stacked PDP photography. Multi-image gallery with thumbnails i
 
 **Global header / footer**
 
-- Header: DROP / BUILD / MANIFESTO / NOTIFY / CART (n), with the KOVA logo asset as fallback
-- Footer: logo, DROP / BUILD / MANIFESTO, muted INSTAGRAM (no URL)
+- Header: DROP / BUILD / MANIFESTO / FAQ / CONTACT / CART (n), with the KOVA logo asset as fallback
+- Footer: logo, DROP / BUILD / MANIFESTO / FAQ, muted INSTAGRAM (no URL)
 - Trust bar above the footer (theme-editor items; empty lines hide): Pan India shipping / COD / 7 day returns / Secure payments
 - Policy links section under the footer (`sections/policy-links.liquid`): Terms, Privacy, Shipping, Returns. Uses Shopify Settings → Policies when URLs are empty; otherwise theme-editor URLs. Hidden until at least one destination exists. Privacy currently resolves from the store
 - `/collections/all` is not linked from V1 navigation

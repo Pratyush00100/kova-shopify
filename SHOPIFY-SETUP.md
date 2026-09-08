@@ -53,6 +53,8 @@ Admin → Content → Pages. These are required because the navigation links to 
 | Manifesto | `manifesto` | `manifesto` |
 | FAQ | `faq` | `faq` |
 
+Do not create a separate About page. Manifesto is the brand story page. If an About page already exists in Admin, unpublish or delete it so navigation only uses `/pages/manifesto`.
+
 On each page, set Theme template to the matching name. If BUILD stays on the default page template, the factory video slots will not appear. If FAQ stays on the default page template, the accordion layout will not appear.
 
 If the header uses a Shopify navigation menu instead of the fallback links, add FAQ between Manifesto and Notify in that menu.

@@ -1,28 +1,5 @@
-{% comment %}
-  Numbered process steps used on the BUILD page. Each step is a block so the
-  merchant can add, remove and reorder stages from the theme editor.
-
-  Factory video is Shopify-hosted only: one optional main clip at the top, plus
-  an optional clip on each step. Nothing is bundled in the theme.
-{% endcomment %}
-
 <section class="process full-width section-pad">
   <div class="process__inner page-inner">
-    {% if section.settings.video != blank %}
-      <div class="process__video" data-kova-factory-video>
-        {{
-          section.settings.video
-          | video_tag:
-            autoplay: false,
-            muted: true,
-            loop: true,
-            controls: false,
-            playsinline: true,
-            preload: 'metadata'
-        }}
-      </div>
-    {% endif %}
-
     {% if section.settings.eyebrow != blank or section.settings.heading != blank %}
       <header class="process__header">
         {% if section.settings.eyebrow != blank %}
@@ -42,33 +19,6 @@
             <p class="process__number" aria-hidden="true">
               {{ forloop.index | prepend: '0' | slice: -2, 2 }}
             </p>
-
-            {% if block.settings.video != blank %}
-              <div class="process__media process__media--video" data-kova-factory-video>
-                {{
-                  block.settings.video
-                  | video_tag:
-                    autoplay: false,
-                    muted: true,
-                    loop: true,
-                    controls: false,
-                    playsinline: true,
-                    preload: 'metadata'
-                }}
-              </div>
-            {% elsif block.settings.image != blank %}
-              <div class="process__media">
-                {{
-                  block.settings.image
-                  | image_url: width: 1000
-                  | image_tag:
-                    class: 'process__image',
-                    widths: '400, 600, 800, 1000',
-                    sizes: '(min-width: 1100px) 18vw, 88vw',
-                    loading: 'lazy'
-                }}
-              </div>
-            {% endif %}
 
             {% if block.settings.title != blank %}
               <h3 class="process__title">{{ block.settings.title | escape }}</h3>
@@ -92,22 +42,6 @@
 
   .process__heading {
     margin-top: 0.6rem;
-  }
-
-  .process__video {
-    overflow: hidden;
-    background: var(--color-inverse);
-    border: 1px solid var(--color-border);
-  }
-
-  .process__video video {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    max-height: min(70vh, 40rem);
-    object-fit: cover;
-    background: var(--color-inverse);
   }
 
   .process__list {
@@ -135,26 +69,6 @@
     letter-spacing: var(--tracking-wider);
   }
 
-  .process__media {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: var(--color-inverse);
-  }
-
-  .process__image,
-  .process__media--video video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .process__media--video :is(video, .deferred-media, .video-wrapper),
-  .process__media--video > * {
-    width: 100%;
-    height: 100%;
-  }
-
   .process__title {
     margin: 0;
     font-family: var(--font-display--family);
@@ -168,8 +82,6 @@
     font-size: var(--text-sm);
   }
 
-  /* The step a visitor is reading gets the ember rule, so the row of stages
-     reads as a sequence rather than five equal columns. */
   .process__step:hover {
     border-top-color: var(--color-foreground);
   }
@@ -180,62 +92,6 @@
     }
   }
 {% endstylesheet %}
-
-{% javascript %}
-  (function () {
-    const roots = document.querySelectorAll('[data-kova-factory-video]');
-    if (!roots.length) return;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function bindVideo(video) {
-      if (!video || video.dataset.kovaBound === 'true') return;
-      video.dataset.kovaBound = 'true';
-      video.muted = true;
-      video.loop = true;
-      video.playsInline = true;
-
-      if (reduceMotion) {
-        video.controls = true;
-        video.pause();
-        return;
-      }
-
-      const observer = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              video.play().catch(function () {});
-            } else {
-              video.pause();
-            }
-          });
-        },
-        { threshold: 0.35 }
-      );
-
-      observer.observe(video);
-    }
-
-    roots.forEach(function (root) {
-      const existing = root.querySelector('video');
-      if (existing) {
-        bindVideo(existing);
-        return;
-      }
-
-      const ready = new MutationObserver(function () {
-        const found = root.querySelector('video');
-        if (found) {
-          ready.disconnect();
-          bindVideo(found);
-        }
-      });
-
-      ready.observe(root, { childList: true, subtree: true });
-    });
-  })();
-{% endjavascript %}
 
 {% schema %}
 {
@@ -254,12 +110,6 @@
       "id": "heading",
       "label": "t:labels.heading",
       "default": "CAD TO PACKAGING"
-    },
-    {
-      "type": "video",
-      "id": "video",
-      "label": "t:labels.video",
-      "info": "t:info.factory_video"
     }
   ],
   "blocks": [
@@ -277,18 +127,6 @@
           "type": "richtext",
           "id": "description",
           "label": "t:labels.description"
-        },
-        {
-          "type": "video",
-          "id": "video",
-          "label": "t:labels.step_video",
-          "info": "t:info.step_video"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "t:labels.image",
-          "info": "t:info.assigned_image_only"
         }
       ]
     }

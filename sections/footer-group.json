@@ -50,7 +50,9 @@
     "footer": {
       "type": "footer",
       "settings": {
+        "logo": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_10_33_41_AM.png",
         "brand_label": "KOVA",
+        "menu": "",
         "link_1_label": "DROP",
         "link_1_url": "/collections/drop-001",
         "link_2_label": "BUILD",
@@ -62,6 +64,7 @@
         "link_5_label": "FAQ",
         "link_5_url": "/pages/faq",
         "instagram_label": "INSTAGRAM",
+        "instagram_url": "",
         "copyright_text": "KOVA",
         "show_payment_icons": false
       }
@@ -71,9 +74,13 @@
       "settings": {
         "heading": "Policies",
         "terms_label": "Terms of Service",
+        "terms_url": "",
         "privacy_label": "Privacy Policy",
+        "privacy_url": "",
         "shipping_label": "Shipping",
-        "returns_label": "Returns"
+        "shipping_url": "",
+        "returns_label": "Returns",
+        "returns_url": ""
       }
     }
   },

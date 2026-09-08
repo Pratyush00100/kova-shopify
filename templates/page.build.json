@@ -15,7 +15,43 @@
         "eyebrow": "BUILD",
         "heading": "HOW KOVA IS MADE",
         "description": "<p>From design and fiber-laser cutting to finishing, mounting and packaging, KOVA products are developed and produced in India.</p>",
+        "background_image": "shopify://shop_images/photo-collage.png_1.png",
         "show_image": false
+      }
+    },
+    "gallery": {
+      "type": "build-gallery",
+      "blocks": {
+        "youtube_Q3DimY": {
+          "type": "youtube",
+          "settings": {
+            "video_url": "",
+            "alt": ""
+          }
+        },
+        "photo_1": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/photo-collage.png_1.png",
+            "alt": ""
+          }
+        },
+        "video_1": {
+          "type": "youtube",
+          "settings": {
+            "video_url": "https://youtu.be/kx999daRoKU",
+            "alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "youtube_Q3DimY",
+        "photo_1",
+        "video_1"
+      ],
+      "settings": {
+        "eyebrow": "BUILD",
+        "heading": ""
       }
     },
     "process": {
@@ -73,6 +109,7 @@
       "type": "build-commerce",
       "settings": {
         "heading": "DROP 001 // VELOCITY",
+        "collection": "",
         "button_label": "EXPLORE DROP 001",
         "button_link": "/collections/drop-001"
       }
@@ -80,6 +117,7 @@
   },
   "order": [
     "hero",
+    "gallery",
     "process",
     "commerce"
   ]

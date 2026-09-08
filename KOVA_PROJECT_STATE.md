@@ -77,10 +77,11 @@ No longer locked: stacked PDP photography. Multi-image gallery with thumbnails i
 
 **BUILD** (`templates/page.build.json`)
 
-- Order: page hero → process steps → Drop 001 commerce bridge
+- Order: page hero → gallery → process steps → Drop 001 commerce bridge
 - Hero: `BUILD` / `HOW KOVA IS MADE` plus Made in India description; image off
+- Gallery: merchant-managed Photo, YouTube, and YouTube Shorts slides. Empty URLs and images do not render. Shorts play in portrait.
 - Process: CAD / DESIGN → LASER CUTTING → FINISHING → INSPECTION → PACKAGING
-- Videos are Shopify-hosted only: one main clip plus optional per-step clips. Hidden until assigned. No bundled factory mp4
+- Process videos are Shopify-hosted only: one main clip plus optional per-step clips. Hidden until assigned. No bundled factory mp4
 - The live BUILD **page** must use the `build` theme template in Admin, or the process/video slots will not appear
 - Unresolved: assign factory files in the theme editor; empty step descriptions (CAD, inspection)
 

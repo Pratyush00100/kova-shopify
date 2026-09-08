@@ -78,6 +78,8 @@ Online Store → Themes → Customize.
   photos as product images.
 - **Home → Featured products** — select the `DROP 001 // VELOCITY` collection.
 - **Drop template → Collection banner** — leave "Show image" on; it uses the collection image.
+- **BUILD → Gallery** — add Photo, YouTube, and YouTube Shorts blocks. Watch/youtu.be links go in
+  YouTube. `youtube.com/shorts/...` links go in YouTube Shorts. Empty blocks stay hidden.
 - **BUILD → Process steps** — upload factory clips under Content → Files. Pick the main clip in
   Factory video, then optional short clips on each process step. Nothing plays until you assign a file.
 - **Product page** — order is buy box → details → sizes → in your space → mounting.

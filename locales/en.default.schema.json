@@ -81,7 +81,8 @@
     "trust_bar": "Trust bar",
     "trust_item": "Trust item",
     "typography": "Typography",
-    "youtube": "YouTube"
+    "youtube": "YouTube",
+    "youtube_shorts": "YouTube Shorts"
   },
   "labels": {
     "accent_color": "Accent",
@@ -212,7 +213,8 @@
     "view_all": "View all label",
     "wordmark": "Wordmark",
     "youtube": "YouTube",
-    "youtube_url": "YouTube URL"
+    "youtube_url": "YouTube URL",
+    "youtube_shorts_url": "YouTube Shorts URL"
   },
   "info": {
     "accent_color": "Used for selected states and small emphasis. Buttons stay outlined in white by default.",
@@ -244,7 +246,8 @@
     "header_menu": "Optional. If empty, fallback links below are used.",
     "hero_image": "Optional desktop image. Displays full-bleed behind the hero copy from left to right. Assign in the theme editor. Leave empty for a copy-only hero.",
     "hero_image_mobile": "Optional. Used below 750px instead of the desktop image. Leave empty to reuse the desktop image.",
-    "youtube_url": "Paste a YouTube watch, youtu.be, or Shorts link. The video plays here when the visitor taps Play. It is not uploaded to the theme.",
+    "youtube_url": "Paste a YouTube watch or youtu.be link. The video plays here when the visitor taps Play. Use a YouTube Shorts block for shorts. It is not uploaded to the theme.",
+    "youtube_shorts_url": "Paste a youtube.com/shorts/... link. Shorts play in portrait when the visitor taps Play. They are not uploaded to the theme.",
     "hero_placeholder_label": "Shown only while no hero image is selected. Leave empty to hide.",
     "overlay_image": "Optional graphic layered on the section. Hidden until an image is selected.",
     "badge_image": "Optional stamp or badge over the hero image. Hidden until selected.",

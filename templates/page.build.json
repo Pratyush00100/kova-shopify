@@ -22,8 +22,8 @@
     "gallery": {
       "type": "build-gallery",
       "blocks": {
-        "youtube_Q3DimY": {
-          "type": "youtube",
+        "shorts_1": {
+          "type": "youtube_short",
           "settings": {
             "video_url": "",
             "alt": ""
@@ -45,9 +45,9 @@
         }
       },
       "block_order": [
-        "youtube_Q3DimY",
         "photo_1",
-        "video_1"
+        "video_1",
+        "shorts_1"
       ],
       "settings": {
         "eyebrow": "BUILD",

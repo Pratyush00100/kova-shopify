@@ -5,7 +5,7 @@
       if block.settings.image != blank
         assign slide_count = slide_count | plus: 1
       endif
-    elsif block.type == 'youtube'
+    elsif block.type == 'youtube' or block.type == 'youtube_short'
       if block.settings.video_url != blank
         assign slide_count = slide_count | plus: 1
       endif
@@ -59,21 +59,29 @@
             {% liquid
               assign youtube_id = blank
               assign video_url = block.settings.video_url
+              assign is_short = false
               assign show_slide = false
 
               if block.type == 'photo' and block.settings.image != blank
                 assign show_slide = true
               endif
 
-              if block.type == 'youtube' and video_url != blank
-                if video_url contains 'youtu.be/'
-                  assign youtube_id = video_url | split: 'youtu.be/' | last | split: '?' | first | split: '/' | first
-                elsif video_url contains '/embed/'
-                  assign youtube_id = video_url | split: 'embed/' | last | split: '?' | first | split: '/' | first
-                elsif video_url contains '/shorts/'
-                  assign youtube_id = video_url | split: 'shorts/' | last | split: '?' | first | split: '/' | first
-                elsif video_url contains 'v='
-                  assign youtube_id = video_url | split: 'v=' | last | split: '&' | first
+              if block.type == 'youtube' or block.type == 'youtube_short'
+                if block.type == 'youtube_short'
+                  assign is_short = true
+                endif
+
+                if youtube_id == blank and video_url != blank
+                  if video_url contains 'youtu.be/'
+                    assign youtube_id = video_url | split: 'youtu.be/' | last | split: '?' | first | split: '/' | first
+                  elsif video_url contains '/embed/'
+                    assign youtube_id = video_url | split: 'embed/' | last | split: '?' | first | split: '/' | first
+                  elsif video_url contains '/shorts/'
+                    assign youtube_id = video_url | split: 'shorts/' | last | split: '?' | first | split: '/' | first
+                    assign is_short = true
+                  elsif video_url contains 'v='
+                    assign youtube_id = video_url | split: 'v=' | last | split: '&' | first
+                  endif
                 endif
 
                 if youtube_id != blank
@@ -85,7 +93,7 @@
             {% if show_slide %}
               {% assign slide_index = slide_index | plus: 1 %}
               <li
-                class="build-gallery__slide"
+                class="build-gallery__slide{% if is_short %} build-gallery__slide--short{% endif %}"
                 id="Gallery-{{ section.id }}-{{ slide_index }}"
                 {{ block.shopify_attributes }}
               >
@@ -102,7 +110,7 @@
                   }}
                 {% else %}
                   <div
-                    class="build-gallery__video"
+                    class="build-gallery__video{% if is_short %} build-gallery__video--short{% endif %}"
                     data-youtube-id="{{ youtube_id | escape }}"
                     {% if block.settings.alt != blank %}
                       data-video-title="{{ block.settings.alt | escape }}"
@@ -115,8 +123,8 @@
                       class="build-gallery__poster"
                       src="https://i.ytimg.com/vi/{{ youtube_id | escape }}/hqdefault.jpg"
                       alt="{{ block.settings.alt | escape }}"
-                      width="1280"
-                      height="720"
+                      width="{% if is_short %}360{% else %}1280{% endif %}"
+                      height="{% if is_short %}640{% else %}720{% endif %}"
                       loading="lazy"
                     >
                     {% # theme-check-enable RemoteAsset %}
@@ -195,8 +203,12 @@
   .build-gallery__slide {
     flex: 0 0 100%;
     min-width: 0;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
     scroll-snap-align: start;
     container-type: scroll-state;
+    background: var(--color-inverse);
   }
 
   .build-gallery__image,
@@ -205,15 +217,36 @@
     display: block;
     width: 100%;
     height: 100%;
-    aspect-ratio: 16 / 9;
     object-fit: cover;
     background: var(--color-inverse);
   }
 
+  .build-gallery__image {
+    aspect-ratio: 16 / 9;
+  }
+
   .build-gallery__video {
     position: relative;
+    width: 100%;
+    height: 100%;
     aspect-ratio: 16 / 9;
     background: var(--color-inverse);
+  }
+
+  .build-gallery__video--short {
+    width: auto;
+    max-width: 100%;
+    aspect-ratio: 9 / 16;
+  }
+
+  .build-gallery__poster,
+  .build-gallery__video iframe {
+    aspect-ratio: 16 / 9;
+  }
+
+  .build-gallery__video--short .build-gallery__poster,
+  .build-gallery__video--short iframe {
+    aspect-ratio: 9 / 16;
   }
 
   .build-gallery__video iframe {
@@ -397,12 +430,15 @@
           const title = holder.getAttribute('data-video-title') || '';
           if (!id || holder.querySelector('iframe')) return;
 
+          const isShort = holder.classList.contains('build-gallery__video--short');
           const iframe = document.createElement('iframe');
           iframe.src =
             'https://www.youtube-nocookie.com/embed/' +
             encodeURIComponent(id) +
-            '?autoplay=1&rel=0';
+            '?autoplay=1&rel=0&playsinline=1';
           iframe.title = title;
+          iframe.width = isShort ? '360' : '1280';
+          iframe.height = isShort ? '640' : '720';
           iframe.allow =
             'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
           iframe.allowFullscreen = true;
@@ -468,6 +504,23 @@
           "label": "t:labels.accessibility_label"
         }
       ]
+    },
+    {
+      "type": "youtube_short",
+      "name": "t:general.youtube_shorts",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "t:labels.youtube_shorts_url",
+          "info": "t:info.youtube_shorts_url"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "t:labels.accessibility_label"
+        }
+      ]
     }
   ],
   "presets": [
@@ -475,7 +528,8 @@
       "name": "t:general.build_gallery",
       "blocks": [
         { "type": "photo" },
-        { "type": "youtube" }
+        { "type": "youtube" },
+        { "type": "youtube_short" }
       ]
     }
   ]

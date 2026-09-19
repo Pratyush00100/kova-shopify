@@ -11,10 +11,16 @@
   if grid_description == blank
     assign grid_description = collection.description
   endif
-  assign catalog_drop = nil
-  unless collection.handle == 'all'
-    assign catalog_drop = collection.title
-  endunless
+  assign drop_heading = section.settings.heading
+  if drop_heading == blank
+    assign drop_heading = collection.title
+  endif
+  assign catalog_drop = section.settings.heading
+  if catalog_drop == blank
+    unless collection.handle == 'all'
+      assign catalog_drop = collection.title
+    endunless
+  endif
   assign show_toolbar = false
   if section.blocks.size > 0
     assign show_toolbar = true
@@ -22,9 +28,13 @@
   if section.settings.show_sort
     assign show_toolbar = true
   endif
+  assign featured_header = false
+  unless section.settings.show_count
+    assign featured_header = true
+  endunless
 %}
 
-<div class="collection full-width">
+<div class="collection full-width{% if featured_header %} collection--featured{% endif %}">
   <div class="collection__inner page-inner">
     {% if show_toolbar %}
       <div class="collection-toolbar">
@@ -95,25 +105,50 @@
     {% endif %}
 
     <header class="collection__header">
-      <div class="collection__header-row">
-        {% if section.settings.current_drop != blank %}
-          <p class="collection__kicker">
-            <span>{{ section.settings.current_drop | escape }}</span>
-            <span class="collection__rule" aria-hidden="true"></span>
-          </p>
-        {% endif %}
+      {% if section.settings.current_drop != blank or section.settings.show_count %}
+        <div class="collection__header-row">
+          {% if section.settings.current_drop != blank %}
+            <p class="collection__kicker">
+              <span>{{ section.settings.current_drop | escape }}</span>
+              {% unless featured_header %}
+                <span class="collection__rule" aria-hidden="true"></span>
+              {% endunless %}
+            </p>
+          {% endif %}
 
-        <p class="collection__count">
-          {{- 'collections.catalog_count' | t: count: collection.products_count -}}
-        </p>
-      </div>
+          {% if section.settings.show_count %}
+            <p class="collection__count">
+              {{- 'collections.catalog_count' | t: count: collection.products_count -}}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
 
-      {% if collection.title != blank %}
-        <h2 class="collection__title">{{ collection.title | escape }}</h2>
+      {% if drop_heading != blank %}
+        <h2 class="collection__title">{{ drop_heading | escape }}</h2>
       {% endif %}
 
       {% if grid_description != blank %}
         <div class="rte collection__description">{{ grid_description }}</div>
+      {% endif %}
+
+      {% if section.settings.meta != blank %}
+        <p class="collection__meta">
+          <svg
+            class="collection__meta-icon"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect x="1" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.25"></rect>
+            <rect x="9" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.25"></rect>
+            <rect x="1" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.25"></rect>
+            <rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.25"></rect>
+          </svg>
+          <span>{{ section.settings.meta | escape }}</span>
+        </p>
       {% endif %}
     </header>
 
@@ -353,6 +388,46 @@
     max-width: 46ch;
   }
 
+  .collection__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0.2rem 0 0;
+    color: var(--color-foreground-muted);
+    font-family: var(--font-mono--family);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .collection__meta-icon {
+    display: block;
+    flex: 0 0 auto;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .collection--featured {
+    padding-block: clamp(2.5rem, 6vw, 4.75rem) var(--space-section);
+  }
+
+  .collection--featured .collection__header {
+    gap: 1.1rem;
+  }
+
+  .collection--featured .collection__title {
+    font-size: clamp(2.75rem, 8vw, 6.25rem);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+  }
+
+  .collection--featured .collection__description {
+    max-width: 28ch;
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+
   .collection__grid {
     display: grid;
     gap: clamp(1.5rem, 3vw, 2.5rem) clamp(0.85rem, 1.8vw, 1.5rem);
@@ -435,10 +510,27 @@
       "default": "CURRENT DROP"
     },
     {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "info": "t:info.heading_fallback_collection"
+    },
+    {
       "type": "richtext",
       "id": "description",
       "label": "t:labels.description",
       "info": "t:info.description_fallback_collection"
+    },
+    {
+      "type": "text",
+      "id": "meta",
+      "label": "t:labels.meta"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "t:labels.show_count",
+      "default": true
     },
     {
       "type": "checkbox",

@@ -1,0 +1,179 @@
+{% comment %}
+  Full-bleed coming-soon band for the Drop page. Image is assigned in the
+  Shopify theme editor. No product data is hardcoded here.
+{% endcomment %}
+
+{% liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+%}
+
+<section
+  class="drop-coming-soon full-width{% if has_image %} drop-coming-soon--media{% endif %}"
+  {% if section.settings.anchor_id != blank %}
+    id="{{ section.settings.anchor_id | handle }}"
+  {% endif %}
+>
+  <div class="drop-coming-soon__media" aria-hidden="true">
+    {% if has_image %}
+      {{
+        section.settings.image
+        | image_url: width: 3200
+        | image_tag:
+          class: 'drop-coming-soon__image',
+          widths: '750, 1100, 1400, 1800, 2400, 3200',
+          sizes: '100vw',
+          loading: 'lazy',
+          alt: ''
+      }}
+    {% else %}
+      <div class="drop-coming-soon__placeholder"></div>
+    {% endif %}
+  </div>
+
+  <div class="drop-coming-soon__inner">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <h2 class="drop-coming-soon__title">
+        {% if section.settings.heading != blank %}
+          <span>{{ section.settings.heading | escape }}</span>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <span>{{ section.settings.subheading | escape }}</span>
+        {% endif %}
+      </h2>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .drop-coming-soon {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: min(70svh, 36rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .drop-coming-soon__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .drop-coming-soon--media .drop-coming-soon__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 18%) 0%,
+      rgb(0 0 0 / 8%) 42%,
+      rgb(0 0 0 / 55%) 100%
+    );
+  }
+
+  .drop-coming-soon__image,
+  .drop-coming-soon__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+
+  .drop-coming-soon__image {
+    position: absolute;
+    inset: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .drop-coming-soon__placeholder {
+    min-height: 100%;
+    background:
+      linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 55%) 100%),
+      repeating-linear-gradient(
+        -18deg,
+        var(--color-surface-strong) 0 1px,
+        transparent 1px 16px
+      );
+  }
+
+  .drop-coming-soon__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    max-width: var(--page-width);
+    min-height: inherit;
+    margin-inline: auto;
+    padding: clamp(2.5rem, 7vw, 5rem) var(--page-margin);
+  }
+
+  .drop-coming-soon__title {
+    display: grid;
+    margin: 0;
+    font-family: var(--font-display--family);
+    font-style: var(--font-display--style);
+    font-weight: var(--font-display--weight);
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .drop-coming-soon {
+      min-height: min(78svh, 42rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drop-coming-soon__image {
+      object-position: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.drop_coming_soon",
+  "tag": "div",
+  "class": "section-drop-coming-soon",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "t:labels.anchor_id"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "MORE DROPS."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "COMING SOON."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:info.drop_coming_soon_image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.drop_coming_soon"
+    }
+  ]
+}
+{% endschema %}

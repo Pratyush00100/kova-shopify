@@ -12,65 +12,41 @@
     "banner": {
       "type": "collection-banner",
       "settings": {
-        "eyebrow": "01 // DROP",
-        "heading": "DROP",
-        "description": "",
-        "pagination": "01 —— 05",
-        "show_image": true
+        "eyebrow": "",
+        "heading": "DROPS",
+        "description": "<p>Limited. Intentional.<br/>Objects for your space.</p>",
+        "quote": "MACHINES,\nMYTHS,\nSTORIES,\nON YOUR WALLS.",
+        "show_image": true,
+        "image": "shopify://shop_images/drop_hero.png"
       }
     },
     "main": {
       "type": "collection",
-      "blocks": {
-        "filter_all": {
-          "type": "filter",
-          "settings": {
-            "label": "ALL"
-          }
-        },
-        "filter_drop": {
-          "type": "filter",
-          "settings": {
-            "label": "DROP 001 // VELOCITY",
-            "url": "/collections/drop-001"
-          }
-        }
-      },
-      "block_order": [
-        "filter_all",
-        "filter_drop"
-      ],
       "settings": {
-        "current_drop": "CURRENT DROP",
+        "current_drop": "CURRENT DROP —",
+        "heading": "VELOCITY // 001",
+        "description": "<p>A drop built around machines. For those who live the obsession.</p>",
+        "meta": "SILHOUETTES • 3 SIZES",
+        "show_count": false,
+        "show_sort": false,
         "columns": 4,
         "products_per_page": 12,
-        "show_sort": true,
         "show_price": true
       }
     },
-    "teasers": {
-      "type": "collection-teasers",
+    "coming_soon": {
+      "type": "drop-coming-soon",
       "settings": {
-        "heading": "UPCOMING",
-        "link_label": ""
-      }
-    },
-    "notify": {
-      "type": "notify",
-      "settings": {
-        "anchor_id": "notify",
-        "eyebrow": "NOTIFY",
-        "heading": "BE FIRST ON DROP 002",
-        "description": "<p>Drops are small and they move fast. Get the release time before it goes public.</p>",
-        "button_label": "NOTIFY ME",
-        "customer_tag": "drop-notify"
+        "anchor_id": "",
+        "heading": "MORE DROPS.",
+        "subheading": "COMING SOON.",
+        "image": "shopify://shop_images/drop2.png"
       }
     }
   },
   "order": [
     "banner",
     "main",
-    "teasers",
-    "notify"
+    "coming_soon"
   ]
 }

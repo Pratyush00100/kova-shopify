@@ -11,9 +11,113 @@
   "sections": {
     "faq": {
       "type": "faq",
+      "blocks": {
+        "entry_TNCA7y": {
+          "type": "entry",
+          "settings": {
+            "category": "Support",
+            "question": "How can I contact KOVA?",
+            "answer": "<p>You can reach out to the KOVA team through our contact page. We're happy to help with product, order, installation, or shipping questions.</p>"
+          }
+        },
+        "entry_zgDP6r": {
+          "type": "entry",
+          "settings": {
+            "category": "Customization",
+            "question": "Do you offer custom designs or sizes?",
+            "answer": "<p>KOVA focuses on curated designs rather than mass customization. For specific sizes, projects, or larger installations, you can contact us to discuss what may be possible.</p>"
+          }
+        },
+        "entry_KTBUXi": {
+          "type": "entry",
+          "settings": {
+            "category": "Returns & Exchanges",
+            "question": "What if my artwork arrives damaged?",
+            "answer": "<p>Contact us as soon as possible with photographs of the artwork and packaging. We'll review the damage and help resolve the issue according to our damage policy.</p>"
+          }
+        },
+        "entry_qwLQ3j": {
+          "type": "entry",
+          "settings": {
+            "category": "Returns & Exchanges",
+            "question": "Can I return or exchange my order?",
+            "answer": "<p>Returns and exchanges are subject to KOVA’s return policy. Please review the policy before placing your order, especially for made-to-order or customized pieces.</p>"
+          }
+        },
+        "entry_pRi7AC": {
+          "type": "entry",
+          "settings": {
+            "category": "Installation",
+            "question": "Can I install it on any wall?",
+            "answer": "<p>KOVA pieces can be installed on most standard interior walls. The appropriate mounting method may vary depending on your wall type and the weight of the artwork.</p>"
+          }
+        },
+        "entry_eX9q9A": {
+          "type": "entry",
+          "settings": {
+            "category": "Installation",
+            "question": "Can I install KOVA artwork myself?",
+            "answer": "<p>Yes. Most pieces can be installed at home using basic tools. Installation guidance is provided with your order.</p>"
+          }
+        },
+        "entry_MGe9Tq": {
+          "type": "entry",
+          "settings": {
+            "category": "Products",
+            "question": "Is the artwork ready to hang?",
+            "answer": "<p>Yes. KOVA pieces are designed with installation in mind and include the necessary mounting hardware or installation guidance, depending on the product.</p>"
+          }
+        },
+        "entry_ApbigV": {
+          "type": "entry",
+          "settings": {
+            "category": "Products",
+            "question": "What sizes are available?",
+            "answer": "<p>Available sizes vary by design. Each product page includes the exact dimensions and specifications before purchase.</p>"
+          }
+        },
+        "entry_EzinNk": {
+          "type": "entry",
+          "settings": {
+            "category": "ABOUT KOVA",
+            "question": "What is Drop 001 — VELOCITY?",
+            "answer": "<p>VELOCITY is KOVA’s first collection — a series of metal artworks inspired by motion, energy, and the visual language of speed.</p>"
+          }
+        },
+        "entry_rdGxbx": {
+          "type": "entry",
+          "settings": {
+            "category": "About KOVA",
+            "question": "What is KOVA?",
+            "answer": "<p>KOVA is a design-led wall art brand creating sculptural pieces in precision-cut metal, designed to bring depth, movement, and character to modern spaces.</p>"
+          }
+        },
+        "entry_6mMG9Q": {
+          "type": "entry",
+          "settings": {
+            "category": "Products",
+            "question": "What are KOVA artworks made from?",
+            "answer": "<p>KOVA artworks are crafted from precision-cut metal and finished to create a clean, architectural aesthetic while maintaining durability.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "entry_TNCA7y",
+        "entry_zgDP6r",
+        "entry_KTBUXi",
+        "entry_qwLQ3j",
+        "entry_pRi7AC",
+        "entry_eX9q9A",
+        "entry_MGe9Tq",
+        "entry_ApbigV",
+        "entry_EzinNk",
+        "entry_rdGxbx",
+        "entry_6mMG9Q"
+      ],
       "settings": {
         "eyebrow": "KOVA // FAQ",
         "heading": "QUESTIONS? GOOD. WE'VE GOT ANSWERS.",
+        "faq_categories": [],
         "diagram_title": "SIDE ELEVATION",
         "wall_label": "WALL",
         "offset_label": "15mm",
@@ -24,5 +128,7 @@
       }
     }
   },
-  "order": ["faq"]
+  "order": [
+    "faq"
+  ]
 }

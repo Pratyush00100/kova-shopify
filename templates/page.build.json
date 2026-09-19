@@ -22,17 +22,38 @@
     "gallery": {
       "type": "build-gallery",
       "blocks": {
-        "shorts_1": {
+        "youtube_short_fLUdYV": {
           "type": "youtube_short",
           "settings": {
-            "video_url": "",
+            "video_url": "https://youtube.com/shorts/rFXFvu1CZ3U?feature=share",
             "alt": ""
           }
         },
-        "photo_1": {
-          "type": "photo",
+        "youtube_short_teyHGi": {
+          "type": "youtube_short",
           "settings": {
-            "image": "shopify://shop_images/photo-collage.png_1.png",
+            "video_url": "https://youtube.com/shorts/pw66heJPGTM?feature=share",
+            "alt": ""
+          }
+        },
+        "youtube_short_CTRCXF": {
+          "type": "youtube_short",
+          "settings": {
+            "video_url": "https://youtube.com/shorts/jbAy1s_kIVg?feature=share",
+            "alt": ""
+          }
+        },
+        "youtube_short_GUkhdT": {
+          "type": "youtube_short",
+          "settings": {
+            "video_url": "https://youtube.com/shorts/TpHSAWX7TdI?feature=share",
+            "alt": ""
+          }
+        },
+        "shorts_1": {
+          "type": "youtube_short",
+          "settings": {
+            "video_url": "https://youtube.com/shorts/RisjyMh7Ioc?feature=share",
             "alt": ""
           }
         },
@@ -42,12 +63,23 @@
             "video_url": "https://youtu.be/kx999daRoKU",
             "alt": ""
           }
+        },
+        "photo_1": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/photo-collage.png_1.png",
+            "alt": ""
+          }
         }
       },
       "block_order": [
-        "photo_1",
+        "youtube_short_fLUdYV",
+        "youtube_short_teyHGi",
+        "youtube_short_CTRCXF",
+        "youtube_short_GUkhdT",
+        "shorts_1",
         "video_1",
-        "shorts_1"
+        "photo_1"
       ],
       "settings": {
         "eyebrow": "BUILD",

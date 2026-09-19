@@ -99,7 +99,7 @@
                     | image_tag:
                       class: 'product__image',
                       widths: '600, 800, 1000, 1200, 1500, 1800',
-                      sizes: '(min-width: 900px) 52vw, 100vw',
+                      sizes: '(min-width: 900px) min(32rem, 45vw), 100vw',
                       loading: 'eager',
                       fetchpriority: 'high'
                   }}
@@ -110,7 +110,7 @@
                     | image_tag:
                       class: 'product__image',
                       widths: '600, 800, 1000, 1200, 1500, 1800',
-                      sizes: '(min-width: 900px) 52vw, 100vw',
+                      sizes: '(min-width: 900px) min(32rem, 45vw), 100vw',
                       loading: 'lazy',
                       fetchpriority: 'low'
                   }}
@@ -184,10 +184,6 @@
               <p class="product__subtitle">{{ section.settings.subtitle | escape }}</p>
             {% endif %}
 
-            {% if product.description != blank %}
-              <div class="rte product__description">{{ product.description }}</div>
-            {% endif %}
-
             <p class="product__price" aria-live="polite">
               <span
                 class="visually-hidden"
@@ -219,9 +215,15 @@
               <fieldset class="product__variants">
                 <legend class="visually-hidden">{{ product.options | join: ' / ' | escape }}</legend>
 
-                <div class="product__variant-grid" style="--variant-count: {{ product.variants.size }}">
+                <div class="product__variant-grid">
                   {% for variant in product.variants %}
-                    {% assign variant_dimensions = variant.metafields.custom.dimensions.value %}
+                    {% liquid
+                      assign size_name = variant.metafields.custom.size_name.value
+                      if size_name == blank
+                        assign size_name = variant.title
+                      endif
+                      assign variant_dimensions = variant.metafields.custom.dimensions.value
+                    %}
 
                     <div class="product__variant">
                       <input
@@ -246,11 +248,12 @@
                         class="product__variant-label"
                         for="ProductVariant-{{ section.id }}-{{ variant.id }}"
                       >
-                        <span class="product__variant-title">{{ variant.title | escape }}</span>
-
-                        {% if variant_dimensions != blank %}
-                          <span class="product__variant-meta">{{ variant_dimensions | escape }}</span>
-                        {% endif %}
+                        <span class="product__variant-heading">
+                          <span class="product__variant-title">{{ size_name | escape }}</span>
+                          {% if variant_dimensions != blank %}
+                            <span class="product__variant-meta">{{ variant_dimensions | escape }}</span>
+                          {% endif %}
+                        </span>
 
                         <span class="product__variant-meta product__variant-price">{{ variant.price | money }}</span>
 
@@ -266,78 +269,60 @@
               </fieldset>
             {% endif %}
 
-            <button
-              class="btn product__submit"
-              type="submit"
-              name="add"
-              data-product-submit
-              data-add-label="{{ 'products.add_to_cart' | t | escape }}"
-              data-sold-label="{{ 'products.sold_out' | t | escape }}"
-              {% unless current_variant.available %}
-                disabled
-              {% endunless %}
-            >
-              <span data-product-submit-label>
-                {% if current_variant.available %}
-                  {{ 'products.add_to_cart' | t }}
-                {% else %}
-                  {{ 'products.sold_out' | t }}
-                {% endif %}
-              </span>
-              <span class="product__submit-arrow" aria-hidden="true">→</span>
-            </button>
+            <input type="hidden" name="return_to" value="{{ routes.root_url }}checkout" disabled data-product-return>
+
+            <div class="product__actions">
+              <button
+                class="btn product__submit"
+                type="submit"
+                name="add"
+                data-product-submit
+                data-add-label="{{ 'products.add_to_cart' | t | escape }}"
+                data-sold-label="{{ 'products.sold_out' | t | escape }}"
+                {% unless current_variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                <span data-product-submit-label>
+                  {% if current_variant.available %}
+                    {{ 'products.add_to_cart' | t }}
+                  {% else %}
+                    {{ 'products.sold_out' | t }}
+                  {% endif %}
+                </span>
+                <span class="product__submit-arrow" aria-hidden="true">→</span>
+              </button>
+
+              <button
+                class="btn btn--ghost product__buy-now"
+                type="submit"
+                name="add"
+                data-product-buy-now
+                data-buy-label="{{ 'products.buy_now' | t | escape }}"
+                data-sold-label="{{ 'products.sold_out' | t | escape }}"
+                data-cart-add="{{ routes.cart_add_url }}.js"
+                data-checkout="{{ routes.root_url }}checkout"
+                {% unless current_variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                <span data-product-buy-now-label>
+                  {% if current_variant.available %}
+                    {{ 'products.buy_now' | t }}
+                  {% else %}
+                    {{ 'products.sold_out' | t }}
+                  {% endif %}
+                </span>
+                <span class="product__submit-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
           {% endform %}
-
-          {% liquid
-            assign has_assurances = false
-            if section.settings.assurance_1 != blank or section.settings.assurance_2 != blank or section.settings.assurance_3 != blank
-              assign has_assurances = true
-            endif
-          %}
-
-          {% if has_assurances %}
-            <ul class="product__trust" role="list">
-              {% if section.settings.assurance_1 != blank %}
-                <li class="product__trust-item">
-                  <span class="product__trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                      <path d="M3 7h11v8H3z"></path>
-                      <path d="M14 10h4l3 3v2h-7"></path>
-                      <circle cx="7" cy="17" r="1.6"></circle>
-                      <circle cx="17.5" cy="17" r="1.6"></circle>
-                    </svg>
-                  </span>
-                  <span>{{ section.settings.assurance_1 | escape }}</span>
-                </li>
-              {% endif %}
-
-              {% if section.settings.assurance_2 != blank %}
-                <li class="product__trust-item">
-                  <span class="product__trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                      <circle cx="12" cy="12" r="8.5"></circle>
-                      <path d="M12 7.5v9M9.5 9.2c.6-.8 1.5-1.2 2.6-1.2 1.6 0 2.6.8 2.6 2 0 2.6-5.2 1.5-5.2 4.2 0 1.2 1.1 2.1 2.8 2.1 1.2 0 2.1-.5 2.7-1.3"></path>
-                    </svg>
-                  </span>
-                  <span>{{ section.settings.assurance_2 | escape }}</span>
-                </li>
-              {% endif %}
-
-              {% if section.settings.assurance_3 != blank %}
-                <li class="product__trust-item">
-                  <span class="product__trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.4 6.4l1.6 1.6M16 16l1.6 1.6M17.6 6.4 16 8M8 16l-1.6 1.6"></path>
-                    </svg>
-                  </span>
-                  <span>{{ section.settings.assurance_3 | escape }}</span>
-                </li>
-              {% endif %}
-            </ul>
-          {% endif %}
         </div>
       </div>
+
+      {% if product.description != blank %}
+        <div class="rte product__description">{{ product.description }}</div>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -395,24 +380,38 @@
     display: grid;
     gap: clamp(2.25rem, 5vw, 4.5rem);
     align-items: start;
+    grid-template-areas:
+      'gallery'
+      'info'
+      'description';
   }
 
   .product__gallery {
     display: grid;
     gap: 0.85rem;
     min-width: 0;
+    grid-area: gallery;
+  }
+
+  .product__info {
+    grid-area: info;
+    min-width: 0;
   }
 
   .product__stage {
     position: relative;
+    display: grid;
+    place-items: center;
     min-width: 0;
     background: var(--color-surface);
   }
 
   .product__stage-frame {
-    aspect-ratio: 4 / 5;
-    margin: 0;
-    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    inline-size: min(100%, 32rem, 70dvb);
+    block-size: auto;
+    margin: 0 auto;
+    overflow: clip;
   }
 
   .product__stage-frame[hidden] {
@@ -421,9 +420,10 @@
 
   .product__image,
   .product__placeholder {
+    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .product__stamp {
@@ -489,8 +489,8 @@
   .product__thumb-image {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
   }
 
   .product__thumb[aria-pressed='true'] {
@@ -550,6 +550,8 @@
   }
 
   .product__description {
+    grid-area: description;
+    min-width: 0;
     max-width: 38rem;
     font-size: var(--text-sm);
     line-height: 1.7;
@@ -560,7 +562,7 @@
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.55rem 0.7rem;
-    margin: 0.35rem 0 0;
+    margin: 0;
   }
 
   .product__price-current {
@@ -596,13 +598,14 @@
 
   .product__variant-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.65rem;
   }
 
   .product__variant {
     position: relative;
     display: grid;
+    min-width: 0;
   }
 
   .product__variant-input {
@@ -615,9 +618,10 @@
 
   .product__variant-label {
     display: grid;
+    align-content: start;
     gap: 0.28rem;
-    min-height: 5.25rem;
-    padding: 0.95rem 1rem;
+    min-height: 0;
+    padding: 0.85rem 0.9rem;
     border: 1px solid var(--color-border);
     background: var(--color-background);
     cursor: pointer;
@@ -626,6 +630,13 @@
 
   .product__variant-label:hover {
     border-color: var(--color-border-strong);
+  }
+
+  .product__variant-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.65rem;
   }
 
   .product__variant-title {
@@ -691,52 +702,25 @@
     line-height: 1;
   }
 
-  .product__trust {
+  .product__actions {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.85rem 1.25rem;
-    margin: 0.25rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .product__trust-item {
-    display: flex;
-    align-items: center;
     gap: 0.65rem;
-    color: var(--color-foreground-muted);
-    font-family: var(--font-mono--family);
-    font-size: var(--text-2xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
   }
 
-  .product__trust-icon {
-    display: grid;
-    width: 1.35rem;
-    height: 1.35rem;
-    flex: 0 0 auto;
-    color: var(--color-foreground);
-  }
-
-  .product__trust-icon svg {
+  .product__buy-now {
     width: 100%;
-    height: 100%;
-  }
-
-  @media (min-width: 640px) {
-    .product__variant-grid {
-      grid-template-columns: repeat(var(--variant-count, 3), minmax(0, 1fr));
-    }
-
-    .product__trust {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    min-height: 3.6rem;
+    justify-content: space-between;
+    padding-inline: 1.25rem;
+    letter-spacing: var(--tracking-wider);
   }
 
   @media (min-width: 900px) {
     .product__layout {
       grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
+      grid-template-areas:
+        'gallery info'
+        'description info';
     }
 
     .product__info-sticky {
@@ -748,7 +732,8 @@
   @media (prefers-reduced-motion: reduce) {
     .product__breadcrumb-link,
     .product__variant-label,
-    .product__submit {
+    .product__submit,
+    .product__buy-now {
       transition: none;
     }
   }
@@ -813,6 +798,9 @@
       const saleLabelEl = root.querySelector('[data-product-sale-label]');
       const submitEl = root.querySelector('[data-product-submit]');
       const submitLabelEl = root.querySelector('[data-product-submit-label]');
+      const buyNowEl = root.querySelector('[data-product-buy-now]');
+      const buyNowLabelEl = root.querySelector('[data-product-buy-now-label]');
+      const returnToEl = root.querySelector('[data-product-return]');
       const gallery = root.closest('[data-product-root]')
         ? root.closest('[data-product-root]').querySelector('[data-product-gallery]')
         : null;
@@ -834,7 +822,10 @@
         const imageId = input.getAttribute('data-image-id');
         const addLabel = submitEl ? submitEl.getAttribute('data-add-label') : '';
         const soldLabel = submitEl ? submitEl.getAttribute('data-sold-label') : '';
+        const buyLabel = buyNowEl ? buyNowEl.getAttribute('data-buy-label') : '';
+        const buySoldLabel = buyNowEl ? buyNowEl.getAttribute('data-sold-label') : soldLabel;
         const label = available ? addLabel : soldLabel;
+        const buyNowLabel = available ? buyLabel : buySoldLabel;
 
         if (priceEl) priceEl.textContent = price;
 
@@ -858,6 +849,13 @@
           }
         }
 
+        if (buyNowEl) {
+          buyNowEl.disabled = !available;
+          if (buyNowLabelEl) {
+            buyNowLabelEl.textContent = buyNowLabel;
+          }
+        }
+
         if (imageId && gallery && typeof gallery.showImage === 'function') {
           gallery.showImage(imageId);
         }
@@ -867,6 +865,44 @@
           url.searchParams.set('variant', input.value);
           window.history.replaceState({}, '', url.toString());
         }
+      }
+
+      if (submitEl && returnToEl) {
+        submitEl.addEventListener('click', function () {
+          returnToEl.disabled = true;
+        });
+      }
+
+      if (buyNowEl) {
+        buyNowEl.addEventListener('click', function (event) {
+          const form = buyNowEl.closest('form');
+          const addUrl = buyNowEl.getAttribute('data-cart-add');
+          const checkoutUrl = buyNowEl.getAttribute('data-checkout');
+
+          if (returnToEl) returnToEl.disabled = false;
+
+          if (!form || !addUrl || !checkoutUrl) return;
+
+          event.preventDefault();
+          buyNowEl.disabled = true;
+
+          const formData = new FormData(form);
+          formData.delete('return_to');
+
+          fetch(addUrl, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: formData
+          })
+            .then(function (response) {
+              if (!response.ok) throw new Error('Add failed');
+              window.location.href = checkoutUrl;
+            })
+            .catch(function () {
+              buyNowEl.disabled = false;
+              form.submit();
+            });
+        });
       }
 
       variantInputs.forEach(function (input) {
@@ -900,27 +936,8 @@
       "default": "DESIGNED & MADE IN INDIA"
     },
     {
-      "type": "header",
-      "content": "t:general.assurances"
-    },
-    {
-      "type": "text",
-      "id": "assurance_1",
-      "label": "t:labels.assurance",
-      "info": "t:info.assurances",
-      "default": "Free shipping"
-    },
-    {
-      "type": "text",
-      "id": "assurance_2",
-      "label": "t:labels.assurance",
-      "default": "Cash on delivery"
-    },
-    {
-      "type": "text",
-      "id": "assurance_3",
-      "label": "t:labels.assurance",
-      "default": "Made to order"
+      "type": "paragraph",
+      "content": "t:info.variant_size_fields"
     }
   ],
   "disabled_on": {

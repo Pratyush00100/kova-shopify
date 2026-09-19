@@ -106,6 +106,7 @@
   },
   "products": {
     "add_to_cart": "Add to cart",
+    "buy_now": "Buy now",
     "image_counter": "{{ index }} / {{ count }}",
     "incl_taxes": "(Incl. of all taxes)",
     "coming_soon": "Coming soon",

@@ -263,6 +263,7 @@
     "related_collection": "Leave empty to use the first collection this product belongs to.",
     "product_drop_fallback": "Used only when the product is not in a drop collection.",
     "pdp_image": "Assign in the theme editor. Leave empty to keep a placeholder frame until photography is ready. Connect a product metafield if this image should change per product.",
+    "variant_size_fields": "Write each edition’s name and measurement on the variant: custom.size_name (Studio, Signature, Collector) and custom.dimensions. Size name shows in bold; dimensions sit beside or below it.",
     "reduce_motion": "Also respects the visitor's system reduced-motion preference."
   },
   "options": {

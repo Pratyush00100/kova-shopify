@@ -42,10 +42,15 @@
           }
         }
       },
-      "block_order": ["material", "finish", "elevation"],
+      "block_order": [
+        "material",
+        "finish",
+        "elevation"
+      ],
       "settings": {
         "heading": "IT'S ALL IN THE DETAILS.",
-        "body": "<p>Cut from 2 mm stainless steel, finished matte black, and built to sit 15 mm off the wall. The bracket is formed into the piece, not welded on afterwards.</p>"
+        "body": "<p>Cut from 2 mm stainless steel, finished matte black, and built to sit 15 mm off the wall. The bracket is formed into the piece, not welded on afterwards.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_11_47_PM.png"
       }
     },
     "sizes": {
@@ -60,18 +65,28 @@
       "blocks": {
         "space_1": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "label": ""
+          }
         },
         "space_2": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "label": ""
+          }
         },
         "space_3": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "label": ""
+          }
         }
       },
-      "block_order": ["space_1", "space_2", "space_3"],
+      "block_order": [
+        "space_1",
+        "space_2",
+        "space_3"
+      ],
       "settings": {
         "heading": "IN YOUR SPACE.",
         "subheading": "Real spaces. Real stories."
@@ -83,6 +98,7 @@
         "drill": {
           "type": "step",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_10_44_PM.png",
             "title": "DRILL",
             "text": "Make a hole at the marked position."
           }
@@ -90,6 +106,7 @@
         "insert": {
           "type": "step",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_09_30_PM.png",
             "title": "INSERT",
             "text": "Insert the wall plug (provided)."
           }
@@ -97,6 +114,7 @@
         "screw": {
           "type": "step",
           "settings": {
+            "image": "shopify://shop_images/a9df6430-10bf-471e-ab4f-61cffedae673.png",
             "title": "SCREW",
             "text": "Fix the screw, leaving a small gap."
           }
@@ -104,12 +122,18 @@
         "hang": {
           "type": "step",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_11_47_PM.png",
             "title": "HANG",
             "text": "Place the piece on the screw and it is ready."
           }
         }
       },
-      "block_order": ["drill", "insert", "screw", "hang"],
+      "block_order": [
+        "drill",
+        "insert",
+        "screw",
+        "hang"
+      ],
       "settings": {
         "eyebrow": "MOUNTING",
         "heading": "15MM OFF THE WALL",
@@ -117,6 +141,7 @@
         "feature_1": "Easy installation",
         "feature_2": "Floating 15mm gap",
         "feature_3": "Strong & secure",
+        "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_06_58_PM.png",
         "caption": "→ KOVA // DETAIL",
         "image_note": "PRECISION IN EVERY DETAIL.",
         "steps_heading": "INSTALLATION STEPS —",
@@ -125,5 +150,11 @@
       }
     }
   },
-  "order": ["main", "details", "sizes", "lifestyle", "mounting"]
+  "order": [
+    "main",
+    "details",
+    "sizes",
+    "lifestyle",
+    "mounting"
+  ]
 }

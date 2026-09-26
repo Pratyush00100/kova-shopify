@@ -32,8 +32,8 @@
           "type": "entry",
           "settings": {
             "category": "Returns & Exchanges",
-            "question": "What if my artwork arrives damaged?",
-            "answer": "<p>Contact us as soon as possible with photographs of the artwork and packaging. We'll review the damage and help resolve the issue according to our damage policy.</p>"
+            "question": "What if my piece arrives damaged?",
+            "answer": "<p>Contact us as soon as possible with photographs of the piece and packaging. We'll review the damage and help resolve the issue according to our damage policy.</p>"
           }
         },
         "entry_qwLQ3j": {
@@ -49,14 +49,14 @@
           "settings": {
             "category": "Installation",
             "question": "Can I install it on any wall?",
-            "answer": "<p>KOVA pieces can be installed on most standard interior walls. The appropriate mounting method may vary depending on your wall type and the weight of the artwork.</p>"
+            "answer": "<p>KOVA pieces can be installed on most standard interior walls. The appropriate mounting method may vary depending on your wall type and the weight of the piece.</p>"
           }
         },
         "entry_eX9q9A": {
           "type": "entry",
           "settings": {
             "category": "Installation",
-            "question": "Can I install KOVA artwork myself?",
+            "question": "Can I install a KOVA piece myself?",
             "answer": "<p>Yes. Most pieces can be installed at home using basic tools. Installation guidance is provided with your order.</p>"
           }
         },
@@ -64,7 +64,7 @@
           "type": "entry",
           "settings": {
             "category": "Products",
-            "question": "Is the artwork ready to hang?",
+            "question": "Is the piece ready to hang?",
             "answer": "<p>Yes. KOVA pieces are designed with installation in mind and include the necessary mounting hardware or installation guidance, depending on the product.</p>"
           }
         },
@@ -80,8 +80,8 @@
           "type": "entry",
           "settings": {
             "category": "ABOUT KOVA",
-            "question": "What is Drop 001 — VELOCITY?",
-            "answer": "<p>VELOCITY is KOVA’s first collection — a series of metal artworks inspired by motion, energy, and the visual language of speed.</p>"
+            "question": "What is Drop 001 // VELOCITY?",
+            "answer": "<p>DROP 001 // VELOCITY is KOVA’s first collection — a series of precision-cut metal silhouettes inspired by motion, energy, and the visual language of speed.</p>"
           }
         },
         "entry_rdGxbx": {
@@ -89,15 +89,15 @@
           "settings": {
             "category": "About KOVA",
             "question": "What is KOVA?",
-            "answer": "<p>KOVA is a design-led wall art brand creating sculptural pieces in precision-cut metal, designed to bring depth, movement, and character to modern spaces.</p>"
+            "answer": "<p>KOVA is a design-led brand creating sculptural pieces in precision-cut metal, designed to bring depth, movement, and character to modern spaces.</p>"
           }
         },
         "entry_6mMG9Q": {
           "type": "entry",
           "settings": {
             "category": "Products",
-            "question": "What are KOVA artworks made from?",
-            "answer": "<p>KOVA artworks are crafted from precision-cut metal and finished to create a clean, architectural aesthetic while maintaining durability.</p>"
+            "question": "What are KOVA pieces made from?",
+            "answer": "<p>KOVA pieces are crafted from precision-cut metal and finished to create a clean, architectural aesthetic while maintaining durability.</p>"
           }
         }
       },
@@ -121,7 +121,7 @@
         "diagram_title": "SIDE ELEVATION",
         "wall_label": "WALL",
         "offset_label": "15mm",
-        "artwork_label": "ARTWORK",
+        "artwork_label": "PIECE",
         "coord_north": "N 28.6139°",
         "coord_east": "E 77.2098°",
         "slogan": "IDEAS SHAPED IN STEEL."

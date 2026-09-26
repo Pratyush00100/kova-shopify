@@ -13,12 +13,12 @@
       "type": "hero",
       "settings": {
         "anchor_id": "top",
-        "eyebrow": "KOVA // METAL ART",
-        "heading": "METAL, REIMAGINED.",
-        "body": "<p>Metal art for your space. Designed to stand out.</p>",
+        "eyebrow": "KOVA // DROP 001",
+        "heading": "Metal, reimagined.",
+        "body": "",
         "button_label": "EXPLORE COLLECTIONS",
         "button_link": "/collections/drop-001",
-        "image": "shopify://shop_images/hero1.png"
+        "image": "shopify://shop_images/fin1.png"
       }
     },
     "drop_intro": {
@@ -158,7 +158,7 @@
         "heading": "BUILT DIFFERENT. MADE FOR YOU.",
         "description": "<p>Designed and made in India. Cut from stainless steel, finished by hand, and built to hold a room.</p>",
         "button_label": "OUR STORY",
-        "button_link": "/pages/about",
+        "button_link": "/pages/manifesto",
         "media_caption": "",
         "image": "shopify://shop_images/kova.png"
       }

@@ -121,7 +121,7 @@
           "type": "step",
           "settings": {
             "title": "PACKAGING",
-            "description": "<p>Every KOVA artwork is packed carefully before dispatch.</p>"
+            "description": "<p>Every KOVA piece is packed carefully before dispatch.</p>"
           }
         }
       },
@@ -141,7 +141,7 @@
       "type": "build-commerce",
       "settings": {
         "heading": "DROP 001 // VELOCITY",
-        "collection": "",
+        "collection": "drop-001",
         "button_label": "EXPLORE DROP 001",
         "button_link": "/collections/drop-001"
       }
